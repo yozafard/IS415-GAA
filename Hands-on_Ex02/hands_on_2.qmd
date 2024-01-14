@@ -1,13 +1,14 @@
 ---
-
 title: "Hands On Exercise 2: Thematic Mapping and GeoVisualisation with R"
-
-author: 'Yozafard Harold Siauheming'
-
-publish date: '13 January 2024'
-
+author: "Yozafard Harold Siauheming"
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      eval = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
+```
 ## Overview
 
 Let's start with learning what a choropleth map is. A choropleth map is a thematic map that uses shades or patterns to visualize measurement of variables. For example, a choropleth map can be used to visualize population density or crime rate in a certain area.
@@ -470,7 +471,3 @@ tm_shape(mpsz_pop2020[mpsz_pop2020$REGION_N=="CENTRAL REGION", ])+
 <!-- Tidy data -->
 
 <!-- tidyr: Easily Tidy Data with ‘spread()’ and ‘gather()’ Functions -->
-
-```{r}
-
-```

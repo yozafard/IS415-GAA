@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
-<head>
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
 
-<meta charset="utf-8" />
-<meta name="generator" content="quarto-1.3.353" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<meta name="author" content="Yozafard Harold Siauheming">
 
-<meta name="author" content="Yozafard Harold Siauheming" />
-
-<title>IS415-GAA – Hands On Exercise 1</title>
+<title>IS415-GAA - Hands On Exercise 1: Geospatial Data Science with R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -59,7 +57,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
-<!-- htmldependencies:E3FAD763 -->
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -81,24 +95,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body>
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="/index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">IS415-GAA</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-  aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"
-  onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -109,11 +121,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercise">    
         <li>
-    <a class="dropdown-item" href="/Hands-on_Ex01/hands_on_1.html" rel="" target="">
+    <a class="dropdown-item" href="../Hands-on_Ex01/hands_on_1.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 1</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="/Hands-on_Ex02/hands_on_2.html" rel="" target="">
+    <a class="dropdown-item" href="../Hands-on_Ex02/hands_on_2.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 2</span></a>
   </li>  
     </ul>
@@ -130,14 +142,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <div id="quarto-toc-target"></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#dataset" id="toc-dataset" class="nav-link" data-scroll-target="#dataset">Dataset</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a>
+  <ul class="collapse">
+  <li><a href="#package-import" id="toc-package-import" class="nav-link" data-scroll-target="#package-import">Package Import</a></li>
+  <li><a href="#data-loading" id="toc-data-loading" class="nav-link" data-scroll-target="#data-loading">Data Loading</a></li>
+  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a></li>
+  </ul></li>
+  <li><a href="#projecting-geospatial-data" id="toc-projecting-geospatial-data" class="nav-link" data-scroll-target="#projecting-geospatial-data">Projecting Geospatial Data</a></li>
+  <li><a href="#geoprocessing-with-sf-package" id="toc-geoprocessing-with-sf-package" class="nav-link" data-scroll-target="#geoprocessing-with-sf-package">Geoprocessing with sf package</a>
+  <ul class="collapse">
+  <li><a href="#buffering" id="toc-buffering" class="nav-link" data-scroll-target="#buffering">Buffering</a></li>
+  <li><a href="#point-in-polygon-count" id="toc-point-in-polygon-count" class="nav-link" data-scroll-target="#point-in-polygon-count">Point-in-polygon Count</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Hands On Exercise 1</h1>
+<h1 class="title">Hands On Exercise 1: Geospatial Data Science with R</h1>
 </div>
 
 
@@ -157,79 +188,60 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
 
 </header>
-<nav id="TOC" role="doc-toc">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#overview" id="toc-overview">Overview</a></li>
-  <li><a href="#dataset" id="toc-dataset">Dataset</a></li>
-  <li><a href="#setup" id="toc-setup">Setup</a>
-  <ul>
-  <li><a href="#package-import" id="toc-package-import">Package Import</a></li>
-  <li><a href="#data-loading" id="toc-data-loading">Data Loading</a></li>
-  <li><a href="#eda" id="toc-eda">EDA</a></li>
-  </ul></li>
-  <li><a href="#projecting-geospatial-data" id="toc-projecting-geospatial-data">Projecting Geospatial Data</a></li>
-  <li><a href="#geoprocessing-with-sf-package" id="toc-geoprocessing-with-sf-package">Geoprocessing with sf package</a>
-  <ul>
-  <li><a href="#buffering" id="toc-buffering">Buffering</a></li>
-  <li><a href="#point-in-polygon-count" id="toc-point-in-polygon-count">Point-in-polygon Count</a></li>
-  </ul></li>
-  </ul>
-</nav>
+
 <section id="overview" class="level2">
-<h2>Overview</h2>
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>In this course, we are learning about Geospatial Analytics and Applications. Geospatial Data Science is the process of importing, wrangling, integrating, and processing geographic datasets.</p>
 <p>In this exercise, we are looking into some geospatial data science tasks using R, specifically the sf packages.</p>
 </section>
 <section id="dataset" class="level2">
-<h2>Dataset</h2>
-<p>We will be using 4 publicly available datasets: - Master Plan 2014 Subzone Boundary (Web) from <a href="&#39;https://data.gov.sg/&#39;">data.gov.sg</a> - Pre-Schools Location from <a href="&#39;https://data.gov.sg/&#39;">data.gov.sg</a> - Cycling Path from <a href="&#39;https://www.mytransport.sg/content/mytransport/home/dataMall.html&#39;">LTADataMall</a> - Latest version of Singapore Airbnb listing data from <a href="&#39;http://insideairbnb.com/get-the-data.html&#39;">Inside Airbnb</a></p>
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p>We will be using 4 publicly available datasets: - Master Plan 2014 Subzone Boundary (Web) from <a href="https://data.gov.sg/">data.gov.sg</a> - Pre-Schools Location from <a href="https://data.gov.sg/">data.gov.sg</a> - Cycling Path from <a href="https://www.mytransport.sg/content/mytransport/home/dataMall.html">LTADataMall</a> - Latest version of Singapore Airbnb listing data from <a href="http://insideairbnb.com/get-the-data.html">Inside Airbnb</a></p>
 </section>
 <section id="setup" class="level2">
-<h2>Setup</h2>
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <section id="package-import" class="level3">
-<h3>Package Import</h3>
+<h3 class="anchored" data-anchor-id="package-import">Package Import</h3>
 <p>We will be using sf to process geospatial data, along with tidyverse for data wrangling</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Importing Packages</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(sf, tidyverse)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Importing Packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(sf, tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="data-loading" class="level3">
-<h3>Data Loading</h3>
+<h3 class="anchored" data-anchor-id="data-loading">Data Loading</h3>
 <p>We can load data using the st_read() function</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Loading data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>mpsz <span class="ot">=</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">&quot;./data/geospatial&quot;</span>, </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">layer =</span> <span class="st">&quot;MP14_SUBZONE_WEB_PL&quot;</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Loading data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>mpsz <span class="ot">=</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"./data/geospatial"</span>, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">layer =</span> <span class="st">"MP14_SUBZONE_WEB_PL"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Reading layer `MP14_SUBZONE_WEB_PL&#39; from data source 
-  `C:\Users\yozaf\SMUY3S2\Geospatial\IS415-GAA\Hands-on_Ex01\data\geospatial&#39; 
-  using driver `ESRI Shapefile&#39;
+<pre><code>Reading layer `MP14_SUBZONE_WEB_PL' from data source 
+  `C:\Users\yozaf\SMUY3S2\Geospatial\IS415-GAA\Hands-on_Ex01\data\geospatial' 
+  using driver `ESRI Shapefile'
 Simple feature collection with 323 features and 15 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: 2667.538 ymin: 15748.72 xmax: 56396.44 ymax: 50256.33
 Projected CRS: SVY21</code></pre>
 </div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cyclingpath <span class="ot">=</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">&quot;./data/geospatial&quot;</span>, </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">layer =</span> <span class="st">&quot;CyclingPathGazette&quot;</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cyclingpath <span class="ot">=</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"./data/geospatial"</span>, </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">layer =</span> <span class="st">"CyclingPathGazette"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Reading layer `CyclingPathGazette&#39; from data source 
-  `C:\Users\yozaf\SMUY3S2\Geospatial\IS415-GAA\Hands-on_Ex01\data\geospatial&#39; 
-  using driver `ESRI Shapefile&#39;
+<pre><code>Reading layer `CyclingPathGazette' from data source 
+  `C:\Users\yozaf\SMUY3S2\Geospatial\IS415-GAA\Hands-on_Ex01\data\geospatial' 
+  using driver `ESRI Shapefile'
 Simple feature collection with 2558 features and 2 fields
 Geometry type: MULTILINESTRING
 Dimension:     XY
 Bounding box:  xmin: 11854.32 ymin: 28347.98 xmax: 42626.09 ymax: 48948.15
 Projected CRS: SVY21</code></pre>
 </div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>preschool <span class="ot">=</span> <span class="fu">st_read</span>(<span class="st">&quot;data/geospatial/PreSchoolsLocation.kml&quot;</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>preschool <span class="ot">=</span> <span class="fu">st_read</span>(<span class="st">"data/geospatial/PreSchoolsLocation.kml"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Reading layer `PRESCHOOLS_LOCATION&#39; from data source 
-  `C:\Users\yozaf\SMUY3S2\Geospatial\IS415-GAA\Hands-on_Ex01\data\geospatial\PreSchoolsLocation.kml&#39; 
-  using driver `KML&#39;
+<pre><code>Reading layer `PRESCHOOLS_LOCATION' from data source 
+  `C:\Users\yozaf\SMUY3S2\Geospatial\IS415-GAA\Hands-on_Ex01\data\geospatial\PreSchoolsLocation.kml' 
+  using driver `KML'
 Simple feature collection with 2290 features and 2 fields
 Geometry type: POINT
 Dimension:     XYZ
@@ -240,11 +252,11 @@ Geodetic CRS:  WGS 84</code></pre>
 </div>
 </section>
 <section id="eda" class="level3">
-<h3>EDA</h3>
+<h3 class="anchored" data-anchor-id="eda">EDA</h3>
 <p>It is good practice to explore the dataset to understand more about its characteristic before performing deep analysis</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exploring mpsz data</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">st_geometry</span>(mpsz)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exploring mpsz data</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">st_geometry</span>(mpsz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Geometry set for 323 features 
 Geometry type: MULTIPOLYGON
@@ -253,35 +265,20 @@ Bounding box:  xmin: 2667.538 ymin: 15748.72 xmax: 56396.44 ymax: 50256.33
 Projected CRS: SVY21
 First 5 geometries:</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>MULTIPOLYGON (((31495.56 30140.01, 31980.96 296...</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>MULTIPOLYGON (((29092.28 30021.89, 29119.64 300...</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>MULTIPOLYGON (((29932.33 29879.12, 29947.32 298...</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>MULTIPOLYGON (((27131.28 30059.73, 27088.33 297...</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>MULTIPOLYGON (((26451.03 30396.46, 26440.47 303...</code></pre>
-</div>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(mpsz)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(mpsz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 323
 Columns: 16
 $ OBJECTID   &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
 $ SUBZONE_NO &lt;int&gt; 1, 1, 3, 8, 3, 7, 9, 2, 13, 7, 12, 6, 1, 5, 1, 1, 3, 2, 2, …
-$ SUBZONE_N  &lt;chr&gt; &quot;MARINA SOUTH&quot;, &quot;PEARL&#39;S HILL&quot;, &quot;BOAT QUAY&quot;, &quot;HENDERSON HIL…
-$ SUBZONE_C  &lt;chr&gt; &quot;MSSZ01&quot;, &quot;OTSZ01&quot;, &quot;SRSZ03&quot;, &quot;BMSZ08&quot;, &quot;BMSZ03&quot;, &quot;BMSZ07&quot;,…
-$ CA_IND     &lt;chr&gt; &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;Y&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;, &quot;N&quot;,…
-$ PLN_AREA_N &lt;chr&gt; &quot;MARINA SOUTH&quot;, &quot;OUTRAM&quot;, &quot;SINGAPORE RIVER&quot;, &quot;BUKIT MERAH&quot;,…
-$ PLN_AREA_C &lt;chr&gt; &quot;MS&quot;, &quot;OT&quot;, &quot;SR&quot;, &quot;BM&quot;, &quot;BM&quot;, &quot;BM&quot;, &quot;BM&quot;, &quot;SR&quot;, &quot;QT&quot;, &quot;QT&quot;,…
-$ REGION_N   &lt;chr&gt; &quot;CENTRAL REGION&quot;, &quot;CENTRAL REGION&quot;, &quot;CENTRAL REGION&quot;, &quot;CENT…
-$ REGION_C   &lt;chr&gt; &quot;CR&quot;, &quot;CR&quot;, &quot;CR&quot;, &quot;CR&quot;, &quot;CR&quot;, &quot;CR&quot;, &quot;CR&quot;, &quot;CR&quot;, &quot;CR&quot;, &quot;CR&quot;,…
-$ INC_CRC    &lt;chr&gt; &quot;5ED7EB253F99252E&quot;, &quot;8C7149B9EB32EEFC&quot;, &quot;C35FEFF02B13E0E5&quot;,…
+$ SUBZONE_N  &lt;chr&gt; "MARINA SOUTH", "PEARL'S HILL", "BOAT QUAY", "HENDERSON HIL…
+$ SUBZONE_C  &lt;chr&gt; "MSSZ01", "OTSZ01", "SRSZ03", "BMSZ08", "BMSZ03", "BMSZ07",…
+$ CA_IND     &lt;chr&gt; "Y", "Y", "Y", "N", "N", "N", "N", "Y", "N", "N", "N", "N",…
+$ PLN_AREA_N &lt;chr&gt; "MARINA SOUTH", "OUTRAM", "SINGAPORE RIVER", "BUKIT MERAH",…
+$ PLN_AREA_C &lt;chr&gt; "MS", "OT", "SR", "BM", "BM", "BM", "BM", "SR", "QT", "QT",…
+$ REGION_N   &lt;chr&gt; "CENTRAL REGION", "CENTRAL REGION", "CENTRAL REGION", "CENT…
+$ REGION_C   &lt;chr&gt; "CR", "CR", "CR", "CR", "CR", "CR", "CR", "CR", "CR", "CR",…
+$ INC_CRC    &lt;chr&gt; "5ED7EB253F99252E", "8C7149B9EB32EEFC", "C35FEFF02B13E0E5",…
 $ FMEL_UPD_D &lt;date&gt; 2014-12-05, 2014-12-05, 2014-12-05, 2014-12-05, 2014-12-05…
 $ X_ADDR     &lt;dbl&gt; 31595.84, 28679.06, 29654.96, 26782.83, 26201.96, 25358.82,…
 $ Y_ADDR     &lt;dbl&gt; 29220.19, 29782.05, 29974.66, 29933.77, 30005.70, 29991.38,…
@@ -289,7 +286,7 @@ $ SHAPE_Leng &lt;dbl&gt; 5267.381, 3506.107, 1740.926, 3313.625, 2825.594, 4428.
 $ SHAPE_Area &lt;dbl&gt; 1630379.27, 559816.25, 160807.50, 595428.89, 387429.44, 103…
 $ geometry   &lt;MULTIPOLYGON [m]&gt; MULTIPOLYGON (((31495.56 30..., MULTIPOLYGON (…</code></pre>
 </div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mpsz, <span class="at">n=</span><span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mpsz, <span class="at">n=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 5 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -298,7 +295,7 @@ Bounding box:  xmin: 25867.68 ymin: 28369.47 xmax: 32362.39 ymax: 30435.54
 Projected CRS: SVY21
   OBJECTID SUBZONE_NO      SUBZONE_N SUBZONE_C CA_IND      PLN_AREA_N
 1        1          1   MARINA SOUTH    MSSZ01      Y    MARINA SOUTH
-2        2          1   PEARL&#39;S HILL    OTSZ01      Y          OUTRAM
+2        2          1   PEARL'S HILL    OTSZ01      Y          OUTRAM
 3        3          3      BOAT QUAY    SRSZ03      Y SINGAPORE RIVER
 4        4          8 HENDERSON HILL    BMSZ08      N     BUKIT MERAH
 5        5          3        REDHILL    BMSZ03      N     BUKIT MERAH
@@ -317,141 +314,122 @@ Projected CRS: SVY21
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb19"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plotting mpsz data</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mpsz)</span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: plotting the first 9 out of 15 attributes; use max.plot = 15 to plot
-all</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plotting mpsz data</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mpsz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_1_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672" /></p>
+<p><img src="hands_on_1_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(mpsz))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(mpsz))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_1_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid" width="672" /></p>
+<p><img src="hands_on_1_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mpsz[<span class="st">&quot;PLN_AREA_N&quot;</span>])</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mpsz[<span class="st">"PLN_AREA_N"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_1_files/figure-html/unnamed-chunk-4-3.png" class="img-fluid" width="672" /></p>
+<p><img src="hands_on_1_files/figure-html/unnamed-chunk-4-3.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
 </section>
 <section id="projecting-geospatial-data" class="level2">
-<h2>Projecting Geospatial Data</h2>
+<h2 class="anchored" data-anchor-id="projecting-geospatial-data">Projecting Geospatial Data</h2>
 <p>To perform geoprocessing using two geospatial data, we need to ensure that both geospatial data are projected using similar coordinate system. That’s where projection comes into play</p>
 <div class="cell">
-<div class="sourceCode" id="cb23"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Projecing mpsz data</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(mpsz)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Projecing mpsz data</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(mpsz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Coordinate Reference System:
   User input: SVY21 
   wkt:
-PROJCRS[&quot;SVY21&quot;,
-    BASEGEOGCRS[&quot;SVY21[WGS84]&quot;,
-        DATUM[&quot;World Geodetic System 1984&quot;,
-            ELLIPSOID[&quot;WGS 84&quot;,6378137,298.257223563,
-                LENGTHUNIT[&quot;metre&quot;,1]],
-            ID[&quot;EPSG&quot;,6326]],
-        PRIMEM[&quot;Greenwich&quot;,0,
-            ANGLEUNIT[&quot;Degree&quot;,0.0174532925199433]]],
-    CONVERSION[&quot;unnamed&quot;,
-        METHOD[&quot;Transverse Mercator&quot;,
-            ID[&quot;EPSG&quot;,9807]],
-        PARAMETER[&quot;Latitude of natural origin&quot;,1.36666666666667,
-            ANGLEUNIT[&quot;Degree&quot;,0.0174532925199433],
-            ID[&quot;EPSG&quot;,8801]],
-        PARAMETER[&quot;Longitude of natural origin&quot;,103.833333333333,
-            ANGLEUNIT[&quot;Degree&quot;,0.0174532925199433],
-            ID[&quot;EPSG&quot;,8802]],
-        PARAMETER[&quot;Scale factor at natural origin&quot;,1,
-            SCALEUNIT[&quot;unity&quot;,1],
-            ID[&quot;EPSG&quot;,8805]],
-        PARAMETER[&quot;False easting&quot;,28001.642,
-            LENGTHUNIT[&quot;metre&quot;,1],
-            ID[&quot;EPSG&quot;,8806]],
-        PARAMETER[&quot;False northing&quot;,38744.572,
-            LENGTHUNIT[&quot;metre&quot;,1],
-            ID[&quot;EPSG&quot;,8807]]],
+PROJCRS["SVY21",
+    BASEGEOGCRS["SVY21[WGS84]",
+        DATUM["World Geodetic System 1984",
+            ELLIPSOID["WGS 84",6378137,298.257223563,
+                LENGTHUNIT["metre",1]],
+            ID["EPSG",6326]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["Degree",0.0174532925199433]]],
+    CONVERSION["unnamed",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",1.36666666666667,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",103.833333333333,
+            ANGLEUNIT["Degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",1,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",28001.642,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",38744.572,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
     CS[Cartesian,2],
-        AXIS[&quot;(E)&quot;,east,
+        AXIS["(E)",east,
             ORDER[1],
-            LENGTHUNIT[&quot;metre&quot;,1,
-                ID[&quot;EPSG&quot;,9001]]],
-        AXIS[&quot;(N)&quot;,north,
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["(N)",north,
             ORDER[2],
-            LENGTHUNIT[&quot;metre&quot;,1,
-                ID[&quot;EPSG&quot;,9001]]]]</code></pre>
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]</code></pre>
 </div>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>mpsz3414 <span class="ot">&lt;-</span> <span class="fu">st_set_crs</span>(mpsz, <span class="dv">3414</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform for
-that</code></pre>
-</div>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(mpsz3414)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mpsz3414 <span class="ot">&lt;-</span> <span class="fu">st_set_crs</span>(mpsz, <span class="dv">3414</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(mpsz3414)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Coordinate Reference System:
   User input: EPSG:3414 
   wkt:
-PROJCRS[&quot;SVY21 / Singapore TM&quot;,
-    BASEGEOGCRS[&quot;SVY21&quot;,
-        DATUM[&quot;SVY21&quot;,
-            ELLIPSOID[&quot;WGS 84&quot;,6378137,298.257223563,
-                LENGTHUNIT[&quot;metre&quot;,1]]],
-        PRIMEM[&quot;Greenwich&quot;,0,
-            ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],
-        ID[&quot;EPSG&quot;,4757]],
-    CONVERSION[&quot;Singapore Transverse Mercator&quot;,
-        METHOD[&quot;Transverse Mercator&quot;,
-            ID[&quot;EPSG&quot;,9807]],
-        PARAMETER[&quot;Latitude of natural origin&quot;,1.36666666666667,
-            ANGLEUNIT[&quot;degree&quot;,0.0174532925199433],
-            ID[&quot;EPSG&quot;,8801]],
-        PARAMETER[&quot;Longitude of natural origin&quot;,103.833333333333,
-            ANGLEUNIT[&quot;degree&quot;,0.0174532925199433],
-            ID[&quot;EPSG&quot;,8802]],
-        PARAMETER[&quot;Scale factor at natural origin&quot;,1,
-            SCALEUNIT[&quot;unity&quot;,1],
-            ID[&quot;EPSG&quot;,8805]],
-        PARAMETER[&quot;False easting&quot;,28001.642,
-            LENGTHUNIT[&quot;metre&quot;,1],
-            ID[&quot;EPSG&quot;,8806]],
-        PARAMETER[&quot;False northing&quot;,38744.572,
-            LENGTHUNIT[&quot;metre&quot;,1],
-            ID[&quot;EPSG&quot;,8807]]],
+PROJCRS["SVY21 / Singapore TM",
+    BASEGEOGCRS["SVY21",
+        DATUM["SVY21",
+            ELLIPSOID["WGS 84",6378137,298.257223563,
+                LENGTHUNIT["metre",1]]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["degree",0.0174532925199433]],
+        ID["EPSG",4757]],
+    CONVERSION["Singapore Transverse Mercator",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",1.36666666666667,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",103.833333333333,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",1,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",28001.642,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",38744.572,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
     CS[Cartesian,2],
-        AXIS[&quot;northing (N)&quot;,north,
+        AXIS["northing (N)",north,
             ORDER[1],
-            LENGTHUNIT[&quot;metre&quot;,1]],
-        AXIS[&quot;easting (E)&quot;,east,
+            LENGTHUNIT["metre",1]],
+        AXIS["easting (E)",east,
             ORDER[2],
-            LENGTHUNIT[&quot;metre&quot;,1]],
+            LENGTHUNIT["metre",1]],
     USAGE[
-        SCOPE[&quot;Cadastre, engineering survey, topographic mapping.&quot;],
-        AREA[&quot;Singapore - onshore and offshore.&quot;],
+        SCOPE["Cadastre, engineering survey, topographic mapping."],
+        AREA["Singapore - onshore and offshore."],
         BBOX[1.13,103.59,1.47,104.07]],
-    ID[&quot;EPSG&quot;,3414]]</code></pre>
+    ID["EPSG",3414]]</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb29"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Transforming preschool data to syv21</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>preschool3414 <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(preschool, <span class="at">crs =</span> <span class="dv">3414</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Transforming preschool data to syv21</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>preschool3414 <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(preschool, <span class="at">crs =</span> <span class="dv">3414</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb30"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Importing and converting aspatial data</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>listings <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/aspatial/listings.csv&quot;</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Rows: 3457 Columns: 18
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: &quot;,&quot;
-chr   (6): name, host_name, neighbourhood_group, neighbourhood, room_type, l...
-dbl  (11): id, host_id, latitude, longitude, price, minimum_nights, number_o...
-date  (1): last_review
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-</div>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(listings)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Importing and converting aspatial data</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>listings <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/aspatial/listings.csv"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(listings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 # A tibble: 3,457 × 18
@@ -475,19 +453,19 @@ date  (1): last_review
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb34"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Creating simple feature data frame</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>listings_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(listings, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>), <span class="at">crs=</span><span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">3414</span>)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(listings_sf)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Creating simple feature data frame</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>listings_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(listings, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"longitude"</span>, <span class="st">"latitude"</span>), <span class="at">crs=</span><span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">3414</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(listings_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 3,457
 Columns: 17
 $ id                             &lt;dbl&gt; 71609, 71896, 71903, 275343, 275344, 28…
-$ name                           &lt;chr&gt; &quot;Villa in Singapore · ★4.44 · 2 bedroom…
+$ name                           &lt;chr&gt; "Villa in Singapore · ★4.44 · 2 bedroom…
 $ host_id                        &lt;dbl&gt; 367042, 367042, 367042, 1439258, 143925…
-$ host_name                      &lt;chr&gt; &quot;Belinda&quot;, &quot;Belinda&quot;, &quot;Belinda&quot;, &quot;Kay&quot;,…
-$ neighbourhood_group            &lt;chr&gt; &quot;East Region&quot;, &quot;East Region&quot;, &quot;East Reg…
-$ neighbourhood                  &lt;chr&gt; &quot;Tampines&quot;, &quot;Tampines&quot;, &quot;Tampines&quot;, &quot;Bu…
-$ room_type                      &lt;chr&gt; &quot;Private room&quot;, &quot;Private room&quot;, &quot;Privat…
+$ host_name                      &lt;chr&gt; "Belinda", "Belinda", "Belinda", "Kay",…
+$ neighbourhood_group            &lt;chr&gt; "East Region", "East Region", "East Reg…
+$ neighbourhood                  &lt;chr&gt; "Tampines", "Tampines", "Tampines", "Bu…
+$ room_type                      &lt;chr&gt; "Private room", "Private room", "Privat…
 $ price                          &lt;dbl&gt; 150, 80, 80, 64, 78, 220, 85, 75, 69, 7…
 $ minimum_nights                 &lt;dbl&gt; 92, 92, 92, 60, 60, 92, 92, 60, 60, 92,…
 $ number_of_reviews              &lt;dbl&gt; 19, 24, 46, 20, 16, 12, 131, 17, 5, 81,…
@@ -496,44 +474,44 @@ $ reviews_per_month              &lt;dbl&gt; 0.13, 0.16, 0.30, 0.15, 0.11, 0.09,
 $ calculated_host_listings_count &lt;dbl&gt; 5, 5, 5, 51, 51, 5, 7, 51, 51, 7, 7, 1,…
 $ availability_365               &lt;dbl&gt; 55, 91, 91, 183, 183, 54, 365, 183, 183…
 $ number_of_reviews_ltm          &lt;dbl&gt; 0, 0, 0, 0, 3, 0, 0, 1, 2, 0, 0, 0, 0, …
-$ license                        &lt;chr&gt; NA, NA, NA, &quot;S0399&quot;, &quot;S0399&quot;, NA, NA, &quot;…
+$ license                        &lt;chr&gt; NA, NA, NA, "S0399", "S0399", NA, NA, "…
 $ geometry                       &lt;POINT [m]&gt; POINT (41972.5 36390.05), POINT (…</code></pre>
 </div>
 </div>
 </section>
 <section id="geoprocessing-with-sf-package" class="level2">
-<h2>Geoprocessing with sf package</h2>
+<h2 class="anchored" data-anchor-id="geoprocessing-with-sf-package">Geoprocessing with sf package</h2>
 <section id="buffering" class="level3">
-<h3>Buffering</h3>
+<h3 class="anchored" data-anchor-id="buffering">Buffering</h3>
 <p>The scenario:</p>
 <p>The authority is planning to upgrade the exiting cycling path. To do so, they need to acquire 5 metres of reserved land on the both sides of the current cycling path. You are tasked to determine the extend of the land need to be acquired and their total area.</p>
 <p>The solution:</p>
 <p>Firstly, st_buffer() of sf package is used to compute the 5-meter buffers around cycling paths</p>
 <div class="cell">
-<div class="sourceCode" id="cb36"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Buffering</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>buffer_cycling <span class="ot">&lt;-</span> <span class="fu">st_buffer</span>(cyclingpath, <span class="at">dist=</span><span class="dv">5</span>, <span class="at">nQuadSegs =</span> <span class="dv">30</span>)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>buffer_cycling<span class="sc">$</span>AREA <span class="ot">&lt;-</span> <span class="fu">st_area</span>(buffer_cycling)</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(buffer_cycling<span class="sc">$</span>AREA)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Buffering</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>buffer_cycling <span class="ot">&lt;-</span> <span class="fu">st_buffer</span>(cyclingpath, <span class="at">dist=</span><span class="dv">5</span>, <span class="at">nQuadSegs =</span> <span class="dv">30</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>buffer_cycling<span class="sc">$</span>AREA <span class="ot">&lt;-</span> <span class="fu">st_area</span>(buffer_cycling)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(buffer_cycling<span class="sc">$</span>AREA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>1774367 [m^2]</code></pre>
 </div>
 </div>
 </section>
 <section id="point-in-polygon-count" class="level3">
-<h3>Point-in-polygon Count</h3>
+<h3 class="anchored" data-anchor-id="point-in-polygon-count">Point-in-polygon Count</h3>
 <p>The scenario:</p>
 <p>A pre-school service group want to find out the numbers of pre-schools in each Planning Subzone.</p>
 <p>The solution:</p>
 <p>The code chunk below performs two operations at one go. Firstly, identify pre-schools located inside each Planning Subzone by using st_intersects(). Next, length() of Base R is used to calculate numbers of pre-schools that fall inside each planning subzone.</p>
 <div class="cell">
-<div class="sourceCode" id="cb38"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Counting points in polygon</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>mpsz3414<span class="sc">$</span><span class="st">`</span><span class="at">PreSch Count</span><span class="st">`</span><span class="ot">&lt;-</span> <span class="fu">lengths</span>(<span class="fu">st_intersects</span>(mpsz3414, preschool3414))</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mpsz3414<span class="sc">$</span><span class="st">`</span><span class="at">PreSch Count</span><span class="st">`</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Counting points in polygon</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>mpsz3414<span class="sc">$</span><span class="st">`</span><span class="at">PreSch Count</span><span class="st">`</span><span class="ot">&lt;-</span> <span class="fu">lengths</span>(<span class="fu">st_intersects</span>(mpsz3414, preschool3414))</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mpsz3414<span class="sc">$</span><span class="st">`</span><span class="at">PreSch Count</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
    0.00    0.00    4.00    7.09   10.00   72.00 </code></pre>
 </div>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">top_n</span>(mpsz3414, <span class="dv">1</span>, <span class="st">`</span><span class="at">PreSch Count</span><span class="st">`</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">top_n</span>(mpsz3414, <span class="dv">1</span>, <span class="st">`</span><span class="at">PreSch Count</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 1 feature and 16 fields
 Geometry type: MULTIPOLYGON
@@ -549,38 +527,31 @@ Projected CRS: SVY21 / Singapore TM
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb42"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Density of pre-school by planning subzone</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Derive each area of each planning subzone</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>mpsz3414<span class="sc">$</span>Area <span class="ot">&lt;-</span> mpsz3414 <span class="sc">|&gt;</span> <span class="fu">st_area</span>()</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Compute density with mutate</span></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>mpsz3414 <span class="ot">&lt;-</span> mpsz3414 <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="st">`</span><span class="at">PreSch Density</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">PreSch Count</span><span class="st">`</span><span class="sc">/</span>Area <span class="sc">*</span> <span class="dv">1000000</span>)</span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Plotting mpsz3414</span></span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>mpsz3414, <span class="fu">aes</span>(<span class="at">x=</span> <span class="fu">as.numeric</span>(<span class="st">`</span><span class="at">PreSch Density</span><span class="st">`</span>)))<span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">20</span>, <span class="at">color=</span><span class="st">&quot;black&quot;</span>, <span class="at">fill=</span><span class="st">&quot;light blue&quot;</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Are pre-school even distributed in Singapore?&quot;</span>, <span class="at">subtitle=</span> <span class="st">&quot;There are many planning sub-zones with a single pre-school, on the other hand, </span><span class="sc">\n</span><span class="st">there are two planning sub-zones with at least 20 pre-schools&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Pre-school density (per km sq)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Frequency&quot;</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Density of pre-school by planning subzone</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Derive each area of each planning subzone</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>mpsz3414<span class="sc">$</span>Area <span class="ot">&lt;-</span> mpsz3414 <span class="sc">|&gt;</span> <span class="fu">st_area</span>()</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Compute density with mutate</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>mpsz3414 <span class="ot">&lt;-</span> mpsz3414 <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="st">`</span><span class="at">PreSch Density</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">PreSch Count</span><span class="st">`</span><span class="sc">/</span>Area <span class="sc">*</span> <span class="dv">1000000</span>)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Plotting mpsz3414</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>mpsz3414, <span class="fu">aes</span>(<span class="at">x=</span> <span class="fu">as.numeric</span>(<span class="st">`</span><span class="at">PreSch Density</span><span class="st">`</span>)))<span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">20</span>, <span class="at">color=</span><span class="st">"black"</span>, <span class="at">fill=</span><span class="st">"light blue"</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Are pre-school even distributed in Singapore?"</span>, <span class="at">subtitle=</span> <span class="st">"There are many planning sub-zones with a single pre-school, on the other hand, </span><span class="sc">\n</span><span class="st">there are two planning sub-zones with at least 20 pre-schools"</span>, <span class="at">x =</span> <span class="st">"Pre-school density (per km sq)"</span>, <span class="at">y =</span> <span class="st">"Frequency"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_1_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672" /></p>
+<p><img src="hands_on_1_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r cell-code"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>mpsz3414, <span class="fu">aes</span>(<span class="at">y =</span> <span class="st">`</span><span class="at">PreSch Count</span><span class="st">`</span>, <span class="at">x=</span> <span class="fu">as.numeric</span>(<span class="st">`</span><span class="at">PreSch Density</span><span class="st">`</span>)))<span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">color=</span><span class="st">&quot;black&quot;</span>, <span class="at">fill=</span><span class="st">&quot;light blue&quot;</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">40</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">40</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Pre-school density (per km sq)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Pre-school count&quot;</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 2 rows containing missing values (`geom_point()`).</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>mpsz3414, <span class="fu">aes</span>(<span class="at">y =</span> <span class="st">`</span><span class="at">PreSch Count</span><span class="st">`</span>, <span class="at">x=</span> <span class="fu">as.numeric</span>(<span class="st">`</span><span class="at">PreSch Density</span><span class="st">`</span>)))<span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">color=</span><span class="st">"black"</span>, <span class="at">fill=</span><span class="st">"light blue"</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">40</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">40</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">""</span>, <span class="at">x =</span> <span class="st">"Pre-school density (per km sq)"</span>, <span class="at">y =</span> <span class="st">"Pre-school count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_1_files/figure-html/unnamed-chunk-11-2.png" class="img-fluid" width="672" /></p>
+<p><img src="hands_on_1_files/figure-html/unnamed-chunk-11-2.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<div id="quarto-navigation-envelope" class="hidden">
-<p><span class="hidden" data-render-id="quarto-int-sidebar-title">IS415-GAA</span> <span class="hidden" data-render-id="quarto-int-navbar-title">IS415-GAA</span> <span class="hidden" data-render-id="quarto-int-navbar:Hands-on Exercise">Hands-on Exercise</span> <span class="hidden" data-render-id="quarto-int-navbar:Hands-on Exercise 1">Hands-on Exercise 1</span> <span class="hidden" data-render-id="quarto-int-navbar:/Hands-on_Ex01/hands_on_1.html">/Hands-on_Ex01/hands_on_1.html</span> <span class="hidden" data-render-id="quarto-int-navbar:Hands-on Exercise 2">Hands-on Exercise 2</span> <span class="hidden" data-render-id="quarto-int-navbar:/Hands-on_Ex02/hands_on_2.html">/Hands-on_Ex02/hands_on_2.html</span></p>
-</div>
-<div id="quarto-meta-markdown" class="hidden">
-<p><span class="hidden" data-render-id="quarto-metatitle">IS415-GAA - Hands On Exercise 1</span> <span class="hidden" data-render-id="quarto-twittercardtitle">IS415-GAA - Hands On Exercise 1</span> <span class="hidden" data-render-id="quarto-ogcardtitle">IS415-GAA - Hands On Exercise 1</span> <span class="hidden" data-render-id="quarto-metasitename">IS415-GAA</span> <span class="hidden" data-render-id="quarto-twittercarddesc"></span> <span class="hidden" data-render-id="quarto-ogcardddesc"></span></p>
-</div>
+
+
 </section>
 </section>
 
 </main> <!-- /main -->
-<script id = "quarto-html-after-body" type="application/javascript">
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -815,6 +786,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 </div> <!-- /content -->
 
-</body>
 
-</html>
+
+</body></html>

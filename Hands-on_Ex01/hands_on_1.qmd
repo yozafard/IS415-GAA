@@ -1,10 +1,14 @@
-------------------------------------------------------------------------
-Geospatial Data Science with R
+---
+title: "Hands On Exercise 1: Geospatial Data Science with R"
+author: "Yozafard Harold Siauheming"
+---
 
-author: Yozafard Harold Siauheming
-
-publish date: 8 January 2024
-------------------------------------------------------------------------
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      eval = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
+```
 
 ## Overview
 
@@ -14,17 +18,14 @@ In this exercise, we are looking into some geospatial data science tasks using R
 
 ## Dataset
 
-We will be using 4 publicly available datasets:
-- Master Plan 2014 Subzone Boundary (Web) from [data.gov.sg](https://data.gov.sg/)
-- Pre-Schools Location from [data.gov.sg](https://data.gov.sg/)
-- Cycling Path from [LTADataMall](https://www.mytransport.sg/content/mytransport/home/dataMall.html)
-- Latest version of Singapore Airbnb listing data from [Inside Airbnb](http://insideairbnb.com/get-the-data.html)
+We will be using 4 publicly available datasets: - Master Plan 2014 Subzone Boundary (Web) from [data.gov.sg](https://data.gov.sg/) - Pre-Schools Location from [data.gov.sg](https://data.gov.sg/) - Cycling Path from [LTADataMall](https://www.mytransport.sg/content/mytransport/home/dataMall.html) - Latest version of Singapore Airbnb listing data from [Inside Airbnb](http://insideairbnb.com/get-the-data.html)
 
 ## Setup
 
 ### Package Import
 
 We will be using sf to process geospatial data, along with tidyverse for data wrangling
+
 ```{r}
 #Importing Packages
 pacman::p_load(sf, tidyverse)
@@ -33,6 +34,7 @@ pacman::p_load(sf, tidyverse)
 ### Data Loading
 
 We can load data using the st_read() function
+
 ```{r}
 #Loading data
 mpsz = st_read(dsn = "./data/geospatial", 
@@ -46,6 +48,7 @@ preschool = st_read("data/geospatial/PreSchoolsLocation.kml")
 ### EDA
 
 It is good practice to explore the dataset to understand more about its characteristic before performing deep analysis
+
 ```{r}
 #Exploring mpsz data
 st_geometry(mpsz)
@@ -53,13 +56,16 @@ glimpse(mpsz)
 head(mpsz, n=5)
 ```
 
+
 ```{r}
 #Plotting mpsz data
 plot(mpsz)
 plot(st_geometry(mpsz))
 plot(mpsz["PLN_AREA_N"])
 ```
+
 ## Projecting Geospatial Data
+
 To perform geoprocessing using two geospatial data, we need to ensure that both geospatial data are projected using similar coordinate system. That's where projection comes into play
 
 ```{r}
@@ -85,6 +91,7 @@ list(listings)
 listings_sf <- st_as_sf(listings, coords = c("longitude", "latitude"), crs=4326) |> st_transform(crs = 3414)
 glimpse(listings_sf)
 ```
+
 ## Geoprocessing with sf package
 
 ### Buffering
@@ -103,7 +110,9 @@ buffer_cycling <- st_buffer(cyclingpath, dist=5, nQuadSegs = 30)
 buffer_cycling$AREA <- st_area(buffer_cycling)
 sum(buffer_cycling$AREA)
 ```
+
 ### Point-in-polygon Count
+
 The scenario:
 
 A pre-school service group want to find out the numbers of pre-schools in each Planning Subzone.

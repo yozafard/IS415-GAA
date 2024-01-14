@@ -2,8 +2,6 @@
 title: "About"
 ---
 
-About this site
+##About Me
+I'm Yozafard Harold Siauheming, or Yoza for short, a Year 3 Information Systems student with a track in Business Analytics and second major in Data Science and Analytics
 
-```{r}
-1 + 1
-```

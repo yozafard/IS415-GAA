@@ -2,4 +2,102 @@
 title: "In-class Exercise 02"
 author: "Yozafard Harold Siauheming"
 publish_date: "15 January 2024"
+execute:
+  eval: true
+  echo: true
+  warning: false
 ---
+
+## Loading packages
+
+In this in-class exercise, we will be using these packages:
+
+-   sf
+-   tmap
+-   tidyverse
+-   arrow
+-   lubridate
+
+```{r}
+pacman::p_load(sf, tmap, tidyverse, arrow, lubridate)
+```
+
+## Loading Data
+
+Using the read_parquet() function from the arrow package to load the .parquet data into a file called df
+
+```{r}
+#| eval: false
+df <- read_parquet('data/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972569.c000.snappy.parquet')
+```
+
+We noticed that pingtimestamp is an integer field, so we need to convert pingtimestamp field to a datetime format (POCIXCT)
+
+```{r}
+#| eval: false
+df$pingtimestamp <- as_datetime(df$pingtimestamp)
+```
+
+Now, we save the df into a .rds file
+
+```{r}
+write_rds(df, 'data/rds/part0.rds')
+```
+
+## Extracting trip starting locations
+
+-   Extract trip origin locations
+-   Derive 3 new columns for weekday, starting hour, and day of the month
+-   Name the output tibble data.frame origin_df
+
+```{r}
+#| eval: false
+
+origin_df <- df |> 
+  group_by(trj_id) |> 
+  arrange(pingtimestamp) |>
+  filter(row_number()==1) |>
+  mutate(weekday = wday(pingtimestamp, 
+                        label = TRUE, 
+                        abbr=TRUE), 
+         starting_hour = factor(hour(pingtimestamp)), 
+         day = factor(mday(pingtimestamp)))
+  
+```
+
+Now we extract the trip's destination locations
+
+```{r}
+#| eval: false
+
+
+#Same approach, but in descending order
+destination_df <- df |> 
+  group_by(trj_id) |> 
+  arrange(desc(pingtimestamp)) |>
+  filter(row_number()==1) |>
+  mutate(weekday = wday(pingtimestamp, 
+                        label = TRUE, 
+                        abbr=TRUE), 
+         ending_hour = factor(hour(pingtimestamp)), 
+         day = factor(mday(pingtimestamp)))
+```
+
+Save the data to .rds
+```{r}
+#| echo: false
+#| eval: false
+
+write_rds(origin_df, 'data/rds/origin_df.rds')
+write_rds(destination_df, 'data/rds/destination_df.rds')
+```
+
+## Import data from RDS if needed
+
+```{r}
+origin_df <- read_rds('data/rds/origin_df.rds')
+destination_df <- read_rds('data/rds/destination_df.rds')
+```
+
+
+

@@ -110,5 +110,47 @@
     "title": "IS415-GAA",
     "section": "",
     "text": "Welcome to IS415 Geospatial Analytics and Applications\nThis is the course website of IS415 I study this term. You will find my course work on this website."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html",
+    "title": "In-class Exercise 02",
+    "section": "",
+    "text": "In this in-class exercise, we will be using these packages:\n\nsf\ntmap\ntidyverse\narrow\nlubridate\n\n\npacman::p_load(sf, tmap, tidyverse, arrow, lubridate)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#getting-started",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#getting-started",
+    "title": "In-class Exercise 02",
+    "section": "",
+    "text": "In this in-class exercise, we will be using these packages:\n\nsf\ntmap\ntidyverse\narrow\nlubridate\n\n\npacman::p_load(sf, tmap, tidyverse, arrow, lubridate)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#loading-packages",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#loading-packages",
+    "title": "In-class Exercise 02",
+    "section": "",
+    "text": "In this in-class exercise, we will be using these packages:\n\nsf\ntmap\ntidyverse\narrow\nlubridate\n\n\npacman::p_load(sf, tmap, tidyverse, arrow, lubridate)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#loading-data",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#loading-data",
+    "title": "In-class Exercise 02",
+    "section": "Loading Data",
+    "text": "Loading Data\nUsing the read_parquet() function from the arrow package to load the .parquet data into a file called df\n\ndf &lt;- read_parquet('data/GrabPosisi/part-00000-8bbff892-97d2-4011-9961-703e38972569.c000.snappy.parquet')\n\nWe noticed that pingtimestamp is an integer field, so we need to convert pingtimestamp field to a datetime format (POCIXCT)\n\ndf$pingtimestamp &lt;- as_datetime(df$pingtimestamp)\n\nNow, we save the df into a .rds file\n\nwrite_rds(df, 'data/rds/part0.rds')"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#extracting-trip-starting-locations",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#extracting-trip-starting-locations",
+    "title": "In-class Exercise 02",
+    "section": "Extracting trip starting locations",
+    "text": "Extracting trip starting locations\n\nExtract trip origin locations\nDerive 3 new columns for weekday, starting hour, and day of the month\nName the output tibble data.frame origin_df\n\n\norigin_df &lt;- df |&gt; \n  group_by(trj_id) |&gt; \n  arrange(pingtimestamp) |&gt;\n  filter(row_number()==1) |&gt;\n  mutate(weekday = wday(pingtimestamp, \n                        label = TRUE, \n                        abbr=TRUE), \n         starting_hour = factor(hour(pingtimestamp)), \n         day = factor(mday(pingtimestamp)))\n\nNow we extract the trip’s destination locations\n\n#Same approach, but in descending order\ndestination_df &lt;- df |&gt; \n  group_by(trj_id) |&gt; \n  arrange(desc(pingtimestamp)) |&gt;\n  filter(row_number()==1) |&gt;\n  mutate(weekday = wday(pingtimestamp, \n                        label = TRUE, \n                        abbr=TRUE), \n         ending_hour = factor(hour(pingtimestamp)), \n         day = factor(mday(pingtimestamp)))\n\nSave the data to .rds"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#import-data-from-rds-if-needed",
+    "href": "In-class_Ex/In-class_Ex02/In-class_Ex02.html#import-data-from-rds-if-needed",
+    "title": "In-class Exercise 02",
+    "section": "Import data from RDS if needed",
+    "text": "Import data from RDS if needed\n\norigin_df &lt;- read_rds('data/rds/origin_df.rds')\ndestination_df &lt;- read_rds('data/rds/destination_df.rds')"
   }
 ]

@@ -6,4 +6,6 @@
 .quarto
 data/
 Data/
+/data/
+/Data/
 /.quarto/

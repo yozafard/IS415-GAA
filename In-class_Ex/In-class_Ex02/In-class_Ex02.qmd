@@ -1,0 +1,5 @@
+---
+title: "In-class Exercise 02"
+author: "Yozafard Harold Siauheming"
+publish_date: "15 January 2024"
+---

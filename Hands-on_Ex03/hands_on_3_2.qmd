@@ -57,6 +57,7 @@ mpsz_sf <- st_read('../Hands-on_Ex03/data', layer='MP14_SUBZONE_WEB_PL')
 ### Retrieve the referencing system information of these geospatial data
 
 We can use st_crs() to retrieve the referencing system information
+
 ```{r}
 st_crs(childcare_sf)
 st_crs(mpsz_sf)
@@ -64,18 +65,21 @@ st_crs(sg_sf)
 ```
 
 We can see that childcare_sf is in WGS84, while mpsz_sf and sg_sf is in SVY21. To address this, we can use the st_transform()
+
 ```{r}
 mpsz_sf <- st_transform(mpsz_sf, crs= 3414)
 sg_sf <- st_transform(sg_sf, crs= 3414)
 ```
 
 Now let's check their new referencing system information
+
 ```{r}
 st_crs(mpsz_sf)
 st_crs(sg_sf)
 ```
 
 ### Mapping The Data
+
 To see their spatial patterns, we can explore plotting the data using tmap functions
 
 ```{r}
@@ -84,10 +88,13 @@ tm_shape(sg_sf) + tm_polygons() +
   tm_shape(mpsz_sf) + tm_polygons() + 
     tm_shape(childcare_sf) + tm_dots()
 ```
-## Geospatial Data Wrangling
-We have experienced the use of simple feature data frames. However, sometimes we need to use the data in a sp's Spatial* classes
 
-### Converting sf data frames to sp's Spatial* class
+## Geospatial Data Wrangling
+
+We have experienced the use of simple feature data frames. However, sometimes we need to use the data in a sp's Spatial\* classes
+
+### Converting sf data frames to sp's Spatial\* class
+
 We will be using as_Spatial() function from sf package
 
 ```{r}
@@ -109,8 +116,10 @@ mpsz
 ```{r}
 sg
 ```
-### Converting Spatial* class to generic sp format
-spatstat requires the data to be in ppp object form. However, there is no direct way to convert Spatial* class to ppp object. So, we need to convert it to Spatial objects first
+
+### Converting Spatial\* class to generic sp format
+
+spatstat requires the data to be in ppp object form. However, there is no direct way to convert Spatial\* class to ppp object. So, we need to convert it to Spatial objects first
 
 ```{r}
 childcare_sp <- as(childcare, "SpatialPoints")
@@ -118,6 +127,7 @@ sg_sp <- as(sg, "SpatialPolygons")
 ```
 
 To show the object properties
+
 ```{r}
 childcare_sp
 ```
@@ -132,29 +142,39 @@ sg_sp
 childcare_ppp <- as(childcare_sp, 'ppp')
 childcare_ppp
 ```
+
 Let's see what the difference is in a plot
+
 ```{r}
 plot(childcare_ppp)
 ```
 
 To get the summary statistics, we can use this code
+
 ```{r}
 summary(childcare_ppp)
 ```
+
 ### Handling duplicated points
 
 We can check if there are any duplicates with this
+
 ```{r}
 any(duplicated(childcare_ppp))
 ```
+
 To count the number of co-incidence points, we can use the multiplicity() function
+
 ```{r}
 multiplicity(childcare_ppp)
 ```
+
 To see how many locations have more than one point event, sum up the multiplicity
+
 ```{r}
 sum(multiplicity(childcare_ppp) > 1)
 ```
+
 Now, we can plot out where these duplicate point events are
 
 ```{r}
@@ -167,12 +187,10 @@ tm_shape(childcare) + tm_dots(alpha=0.4, size=0.05)
 tmap_mode('plot')
 ```
 
-To overcome duplicates, there are three main ways:
-1. Delete the duplicates: loss of useful point events
-2. Jittering: add a small perturbation to the duplicate points so that they do not occupy the exact same space
-3.  Make each point “unique” and then attach the duplicates of the points to the patterns as marks, as attributes of the points. Then you would need analytical techniques that take into account these marks
+To overcome duplicates, there are three main ways: 1. Delete the duplicates: loss of useful point events 2. Jittering: add a small perturbation to the duplicate points so that they do not occupy the exact same space 3. Make each point "unique" and then attach the duplicates of the points to the patterns as marks, as attributes of the points. Then you would need analytical techniques that take into account these marks
 
 This code chunk implements the jittering approach
+
 ```{r}
 childcare_ppp_jit <- rjitter(childcare_ppp, 
                              retry=TRUE, 
@@ -181,21 +199,27 @@ childcare_ppp_jit <- rjitter(childcare_ppp,
 ```
 
 After implementing the jittering approach, let's see if there are still any duplicates
+
 ```{r}
 any(duplicated(childcare_ppp_jit))
 ```
 
 ## owin Object
+
 An owin object is specially designed to represent a certain polygonal region that we are analysing (e.g. Singapore). The code chunk below converts sg SpatialPolygon object into an owin object of spatstat
+
 ```{r}
 sg_owin <- as(sg_sp, 'owin')
 ```
 
 Let's see what it looks like by plotting it
+
 ```{r}
 plot(sg_owin)
 ```
+
 ### Combining point events object and owin object
+
 ```{r}
 childcareSG_ppp = childcare_ppp[sg_owin]
 ```
@@ -205,21 +229,24 @@ summary(childcareSG_ppp)
 ```
 
 Now, we can try to plot it out
+
 ```{r}
 plot(childcareSG_ppp)
 ```
 
-
 ## Second-Order Spatial Point Pattern Analysis
 
 Before going to the analysis, we need to extract the study area
+
 ```{r}
 pg = mpsz[mpsz@data$PLN_AREA_N == "PUNGGOL",]
 tm = mpsz[mpsz@data$PLN_AREA_N == "TAMPINES",]
 ck = mpsz[mpsz@data$PLN_AREA_N == "CHOA CHU KANG",]
 jw = mpsz[mpsz@data$PLN_AREA_N == "JURONG WEST",]
 ```
+
 Plot it to check
+
 ```{r}
 par(mfrow=c(2,2))
 plot(pg, main = "Ponggol")
@@ -227,21 +254,27 @@ plot(tm, main = "Tampines")
 plot(ck, main = "Choa Chu Kang")
 plot(jw, main = "Jurong West")
 ```
+
 Convert it into sp format
+
 ```{r}
 pg_sp = as(pg, "SpatialPolygons")
 tm_sp = as(tm, "SpatialPolygons")
 ck_sp = as(ck, "SpatialPolygons")
 jw_sp = as(jw, "SpatialPolygons")
 ```
+
 Then, create the owin object
+
 ```{r}
 pg_owin = as(pg_sp, "owin")
 tm_owin = as(tm_sp, "owin")
 ck_owin = as(ck_sp, "owin")
 jw_owin = as(jw_sp, "owin")
 ```
+
 And extract the childcare within the region
+
 ```{r}
 childcare_pg_ppp = childcare_ppp_jit[pg_owin]
 childcare_tm_ppp = childcare_ppp_jit[tm_owin]
@@ -250,13 +283,16 @@ childcare_jw_ppp = childcare_ppp_jit[jw_owin]
 ```
 
 Rescale it to kilometre
+
 ```{r}
 childcare_pg_ppp.km = rescale(childcare_pg_ppp, 1000, "km")
 childcare_tm_ppp.km = rescale(childcare_tm_ppp, 1000, "km")
 childcare_ck_ppp.km = rescale(childcare_ck_ppp, 1000, "km")
 childcare_jw_ppp.km = rescale(childcare_jw_ppp, 1000, "km")
 ```
+
 Plot the location of the childcare centres
+
 ```{r}
 par(mfrow=c(2,2))
 plot(childcare_pg_ppp.km, main="Punggol")
@@ -265,17 +301,19 @@ plot(childcare_ck_ppp.km, main="Choa Chu Kang")
 plot(childcare_jw_ppp.km, main="Jurong West")
 ```
 
-
 ### G-Function
+
 The G function measures the distribution of the distances from an arbitrary event to its nearest event. We will be learning how to compute G-function estimation using Gest() from the spatstat package, and perform monte carlo simulation using envelope() from spatstat.
 
 #### Choa Chu Kang Planning Area
 
 First, we use Gest() to compute the G-function
+
 ```{r}
 G_CK = Gest(childcare_ck_ppp, correction = "border")
 plot(G_CK, xlim=c(0,500))
 ```
+
 To confirm the spatial pattern that we observe above, we can do a hypothesis testing
 
 Ho = The distribution of childcare services at Choa Chu Kang are randomly distributed.
@@ -285,9 +323,11 @@ H1= The distribution of childcare services at Choa Chu Kang are not randomly dis
 alpha-value = 0.001
 
 Now we perform a monte carlo test
+
 ```{r}
 G_CK.csr <- envelope(childcare_ck_ppp, Gest, nsim = 999)
 ```
+
 ```{r}
 plot(G_CK.csr)
 ```
@@ -295,6 +335,7 @@ plot(G_CK.csr)
 ### Tampines Planning Area
 
 First, we use Gest() to compute the G-function
+
 ```{r}
 G_tm = Gest(childcare_tm_ppp, correction = "border")
 plot(G_tm, xlim=c(0,500))
@@ -309,6 +350,7 @@ H1= The distribution of childcare services at Tampines are not randomly distribu
 alpha-value = 0.001
 
 Now we perform a monte carlo test
+
 ```{r}
 G_tm.csr <- envelope(childcare_tm_ppp, Gest, nsim = 999)
 ```
@@ -318,11 +360,13 @@ plot(G_tm.csr)
 ```
 
 ### F-Function
+
 The F function estimates the empty space function F(r) or its hazard rate h(r) from a point pattern in a window of arbitrary shape. We will be learning how to compute F-function estimation using Fest() from the spatstat package, and perform monte carlo simulation using envelope() from spatstat.
 
 #### Choa Chu Kang Planning Area
 
 First, we use Fest() to compute the F-function
+
 ```{r}
 F_CK = Fest(childcare_ck_ppp)
 plot(F_CK)
@@ -337,6 +381,7 @@ H1= The distribution of childcare services at Choa Chu Kang are not randomly dis
 alpha-value = 0.001
 
 Now we perform a monte carlo test
+
 ```{r}
 F_CK.csr <- envelope(childcare_ck_ppp, Fest, nsim = 999)
 plot(F_CK.csr)
@@ -345,6 +390,7 @@ plot(F_CK.csr)
 #### Tampines Planning Area
 
 First, we use Fest() to compute the F-function
+
 ```{r}
 F_tm = Fest(childcare_tm_ppp)
 plot(F_tm)
@@ -359,16 +405,20 @@ H1= The distribution of childcare services at Tampines are not randomly distribu
 alpha-value = 0.001
 
 Now we perform a monte carlo test
+
 ```{r}
 F_tm.csr <- envelope(childcare_tm_ppp, Fest, nsim = 999)
 plot(F_tm.csr)
 ```
+
 ### K-Function
+
 K-function measures the number of events found up to a given distance of any particular event. We will be learning how to compute K-function estimation using Kest() from the spatstat package, and perform monte carlo simulation using envelope() from spatstat.
 
 #### Choa Chu Kang Planning Area
 
 First, we use Kest() to compute the K-function
+
 ```{r}
 K_ck = Kest(childcare_ck_ppp, correction = "Ripley")
 plot(K_ck, . -r ~ r, ylab= "K(d)-r", xlab = "d(m)")
@@ -383,6 +433,7 @@ H1= The distribution of childcare services at Choa Chu Kang are not randomly dis
 alpha-value = 0.001
 
 Now we perform a monte carlo test
+
 ```{r}
 K_CK.csr <- envelope(childcare_ck_ppp, Kest, nsim = 999)
 plot(K_CK.csr)
@@ -391,6 +442,7 @@ plot(K_CK.csr)
 #### Tampines Planning Area
 
 First, we use Kest() to compute the K-function
+
 ```{r}
 K_tm = Kest(childcare_tm_ppp, correction = "Ripley")
 plot(K_tm, . -r ~ r, ylab= "K(d)-r", xlab = "d(m)")
@@ -405,18 +457,20 @@ H1= The distribution of childcare services at Tampines are not randomly distribu
 alpha-value = 0.001
 
 Now we perform a monte carlo test
+
 ```{r}
 K_tm.csr <- envelope(childcare_tm_ppp, Kest, nsim = 999)
 plot(K_tm.csr)
 ```
 
-
 ### L-Function
+
 We will be learning how to compute K-function estimation using Lest() from the spatstat package, and perform monte carlo simulation using envelope() from spatstat.
 
 #### Choa Chu Kang Planning Area
 
 First, we use Lest() to compute the L-function
+
 ```{r}
 L_ck = Lest(childcare_ck_ppp, correction = "Ripley")
 plot(L_ck, . -r ~ r, ylab= "L(d)-r", xlab = "d(m)")
@@ -431,6 +485,7 @@ H1= The distribution of childcare services at Choa Chu Kang are not randomly dis
 alpha-value = 0.001
 
 Now we perform a monte carlo test
+
 ```{r}
 L_CK.csr <- envelope(childcare_ck_ppp, Lest, nsim = 999)
 plot(K_CK.csr)
@@ -439,6 +494,7 @@ plot(K_CK.csr)
 #### Tampines Planning Area
 
 First, we use Lest() to compute the K-function
+
 ```{r}
 L_tm = Kest(childcare_tm_ppp, correction = "Ripley")
 plot(L_tm, . -r ~ r, ylab= "L(d)-r", xlab = "d(m)")
@@ -453,6 +509,7 @@ H1= The distribution of childcare services at Tampines are not randomly distribu
 alpha-value = 0.001
 
 Now we perform a monte carlo test
+
 ```{r}
 L_tm.csr <- envelope(childcare_tm_ppp, Lest, nsim = 999)
 plot(L_tm.csr)

@@ -1,7 +1,6 @@
 ---
-title: "In-class Exercise 02"
+title: "In-class Exercise 03"
 author: "Yozafard Harold Siauheming"
-publish_date: "15 January 2024"
 execute:
   eval: true
   echo: false
@@ -44,6 +43,11 @@ sg_sf <- mpsz_sf |> st_union()
 plot(sg_sf)
 ```
 ## Geospatial Data Wrangling
+### Converting to SP from SF
+```{r}
+childcare_sp <- as_Spatial(childcare_sf)
+mpsz_sp <- as_Spatial(mpsz_sf)
+```
 
 ### Converting to PPP from SF
 With as.ppp, we can convert to PPP without manually converting to SP first
@@ -61,7 +65,7 @@ any(duplicated(childcare_ppp))
 ```
 
 To count the number of co-incidence point, we use multiplicity()
-```{r}
+```{r echo=FALSE}
 multiplicity(childcare_ppp)
 ```
 ### Creating owin
@@ -93,13 +97,19 @@ plot(childcareSG_ppp)
 
 ### Extracting region data
 
-```{r}
-pg <- mpsz_sf |> filter(PLN_AREA_N == 'PUNGGOL')
-tm <- mpsz_sf |> filter(PLN_AREA_N == 'TAMPINES')
-ck <- mpsz_sf |> filter(PLN_AREA_N == 'CHOA CHU KANG')
-jw <- mpsz_sf |> filter(PLN_AREA_N == 'JURONG WEST')
-
+```{r eval: FALSE}
+# pg <- mpsz_sf |> filter(PLN_AREA_N == "PUNGGOL")
+# tm <- mpsz_sf |> filter(PLN_AREA_N == 'TAMPINES')
+# ck <- mpsz_sf |> filter(PLN_AREA_N == 'CHOA CHU KANG')
+# jw <- mpsz_sf |> filter(PLN_AREA_N == 'JURONG WEST')
 ```
+```{r}
+pg = mpsz_sp[mpsz_sp@data$PLN_AREA_N == "PUNGGOL",]
+tm = mpsz_sp[mpsz_sp@data$PLN_AREA_N == "TAMPINES",]
+ck = mpsz_sp[mpsz_sp@data$PLN_AREA_N == "CHOA CHU KANG",]
+jw = mpsz_sp[mpsz_sp@data$PLN_AREA_N == "JURONG WEST",]
+```
+
 ```{r}
 plot(pg, main='PUNGGOL')
 plot(tm, main='TAMPINES')
@@ -107,4 +117,5 @@ plot(ck, main='CHOA CHU KANG')
 plot(jw, main='JURONG WEST')
 
 ```
+
 

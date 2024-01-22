@@ -1,0 +1,80 @@
+---
+title: "In-class Exercise 03 - Network Constrained Spatial Point Analysis"
+author: "Yozafard Harold Siauheming"
+execute:
+  eval: true
+  echo: false
+  warning: false
+---
+
+## Loading Packages
+```{r}
+pacman::p_load(sf, spNetwork, tmap, classInt, viridis, tidyverse)
+```
+## Loading Data
+```{r}
+network <- st_read(dsn="data/geospatial", layer="Punggol_St")
+childcare <- st_read(dsn="data/geospatial", layer="Punggol_CC")
+```
+```{r}
+tmap_mode('view')
+tm_shape(childcare) +
+  tm_dots() +
+  tm_shape(network) +
+  tm_lines()
+tmap_mode('plot')
+```
+
+### Lixelize
+```{r}
+lixels <- lixelize_lines(network, 750, mindist=375)
+```
+
+Length of lixel = 750
+Minimum length of lixel = 375
+mindist should be half of length
+
+## Generating line centre points
+We can use lines_center() of spNetwork
+```{r}
+samples <- lines_center(lixels)
+```
+
+## Performing NKDE
+```{r}
+densities <- nkde(network, 
+                  events = childcare,
+                  w = rep(1,nrow(childcare)),
+                  samples = samples,
+                  kernel_name = "quartic",
+                  bw = 300, 
+                  div= "bw", 
+                  method = "simple", 
+                  digits = 1, 
+                  tol = 1,
+                  grid_shape = c(1,1), 
+                  max_depth = 8,
+                  agg = 5, #we aggregate events within a 5m radius (faster calculation)
+                  sparse = TRUE,
+                  verbose = FALSE)
+```
+
+Be careful of kernel methods and bandwidth. They are the most important.
+
+### Visualizing NKDE
+Insert the densities to samples and lixels (with additional rescaling)
+```{r}
+samples$density <- densities*1000
+lixels$density <- densities*1000
+
+```
+
+Then, plot it
+```{r}
+tmap_mode('view')
+tm_shape(lixels)+
+  tm_lines(col="density")+
+tm_shape(childcare)+
+  tm_dots()
+```
+

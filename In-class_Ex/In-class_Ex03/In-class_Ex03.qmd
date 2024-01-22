@@ -1,0 +1,110 @@
+---
+title: "In-class Exercise 02"
+author: "Yozafard Harold Siauheming"
+publish_date: "15 January 2024"
+execute:
+  eval: true
+  echo: false
+  warning: false
+---
+
+## Installing maptools
+```{r}
+#| eval: false
+install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-10-13")
+
+```
+## Loading packages
+```{r}
+pacman::p_load(maptools, sf, raster, spatstat, tmap)
+
+```
+
+## Loading Data
+```{r}
+childcare_sf <- st_read("data/geospatial/ChildCareServices.geojson") |> st_transform(crs=3414)
+mpsz_sf <- st_read('data/geospatial', layer = 'MP14_SUBZONE_WEB_PL') |> st_transform(crs=3414)
+# sg_sf <- st_read('data/geospatial', layer = 'Punggol_CC') |> st_transform(crs=3414)
+```
+```{r}
+st_crs(childcare_sf)
+st_crs(mpsz_sf)
+# st_crs(sg_sf)
+```
+```{r}
+plot(mpsz_sf)
+```
+
+## Creating Coastal outline
+```{r}
+sg_sf <- mpsz_sf |> st_union()
+```
+
+```{r}
+plot(sg_sf)
+```
+## Geospatial Data Wrangling
+
+### Converting to PPP from SF
+With as.ppp, we can convert to PPP without manually converting to SP first
+```{r}
+childcare_ppp <- as.ppp(childcare_sf)
+```
+```{r}
+summary(childcare_ppp)
+```
+### Handling Duplicates
+
+Check for duplication with any(duplicated())
+```{r}
+any(duplicated(childcare_ppp))
+```
+
+To count the number of co-incidence point, we use multiplicity()
+```{r}
+multiplicity(childcare_ppp)
+```
+### Creating owin
+owin confines the data points to a certain area
+```{r}
+sg_owin <- as.owin(sg_sf)
+```
+before using owin, the map is not confined. With owin, we can focus on the land of Singapore
+
+```{r}
+summary(sg_owin)
+```
+```{r}
+plot(sg_owin)
+```
+
+### Combining PPP with OWIN
+
+```{r}
+childcareSG_ppp = childcare_ppp[sg_owin]
+
+```
+
+```{r}
+plot(childcareSG_ppp)
+```
+
+## Comparing Spatial Points by Region
+
+### Extracting region data
+
+```{r}
+pg <- mpsz_sf |> filter(PLN_AREA_N == 'PUNGGOL')
+tm <- mpsz_sf |> filter(PLN_AREA_N == 'TAMPINES')
+ck <- mpsz_sf |> filter(PLN_AREA_N == 'CHOA CHU KANG')
+jw <- mpsz_sf |> filter(PLN_AREA_N == 'JURONG WEST')
+
+```
+```{r}
+plot(pg, main='PUNGGOL')
+plot(tm, main='TAMPINES')
+plot(ck, main='CHOA CHU KANG')
+plot(jw, main='JURONG WEST')
+
+```
+

@@ -24,7 +24,9 @@ website:
         - text: "In-class Exercise 3"
           href: "In-class_Ex/In-class_Ex03/In-class_Ex03.html"
         - text: "In-class Exercise 3 - Network"
-          href: "In-class_Ex/In-class_Ex03/In-class_Ex03-Network.html" 
+          href: "In-class_Ex/In-class_Ex03/In-class_Ex03-Network.html"
+        - text: "In-class Exercise 4"
+          href: "In-class_Ex/In-class_Ex04/In-class_Ex04.qmd" 
 
 format:
   html:

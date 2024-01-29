@@ -99,8 +99,8 @@ str(wm_q)
 Unlike the queen, a rook can only move vertically or horizontally, with no diagonal movement. In this case, using a ROOK based (queen=FALSE) means that regions that only have a single point of contact is not considered a neighbor.
 
 ```{r}
-wm_r <- poly2nb(hunan, queen=FALSE)
-summary(wm_r)
+  wm_r <- poly2nb(hunan, queen=FALSE)
+  summary(wm_r)
 ```
 Here you can see that unlike the queen version, the rook method shows 85 regions with 10 links
 

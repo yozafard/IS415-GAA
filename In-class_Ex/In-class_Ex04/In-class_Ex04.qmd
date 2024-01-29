@@ -1,0 +1,43 @@
+---
+title: "In-Class Exercise 4: Spatial Weights and Applications"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      eval = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
+
+```
+## Installing Packages
+```{r}
+pacman::p_load(sf, spdep, tmap, tidyverse, knitr, GWmodel)
+```
+## Loading Data
+```{r}
+hunan_geospatial <- st_read(dsn="data/geospatial", layer='Hunan')
+hunan_aspatial <- st_read('data/aspatial/Hunan_2012.csv')
+```
+## Combining Geospatial and Aspatial Data
+```{r}
+hunan <- left_join(hunan_geospatial, hunan_aspatial) |>
+  select(1:4, 7, 15) |>
+  mutate(GDPPC = as.numeric(GDPPC))
+```
+
+## Using GWModel
+Since it is an older library, they don't accept sf, so we need to convert to sp
+
+```{r}
+hunan_sp <- hunan |> as_Spatial()
+```
+
+```{r}
+gwstat <- gwss(data=hunan_sp, 
+               vars='GDPPC', 
+               bw=6, 
+               kernel='bisquare', 
+               adaptive = TRUE, 
+               longlat=TRUE)
+```
+

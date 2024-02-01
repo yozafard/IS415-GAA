@@ -24,26 +24,16 @@ Geospatial analytics hold tremendous potential to address complex problems facin
 The specific tasks of this take-home exercise are as follows:
 
 -   Using appropriate function of sf and tidyverse, preparing the following geospatial data layer in sf tibble data.frames:
-    -   
+    -   Grab taxi location points either by origins or destinations.
+    -   Road layer within Singapore excluding outer islands.
+    -   Singapore boundary layer excluding outer islands
 
-        ```         
-        Grab taxi location points either by origins or destinations.
-        ```
-
-    -   
-
-        ```         
-        Road layer within Singapore excluding outer islands.
-        ```
-
-    -   
-
-        ```         
-        Singapore boundary layer excluding outer islands
-        ```
 -   Using the extracted data, derive traditional Kernel Density Estimation layers.
+
 -   Using the extracted data, derive either Network Kernel Density Estimation (NKDE) or Temporal Network Kernel Density Estimation (TNKDE)
+
 -   Using appropriate tmap functions, display the kernel density layers on openstreetmap of Singapore.
+
 -   Describe the spatial patterns revealed by the kernel density maps.
 
 # 2. Packages
@@ -101,7 +91,7 @@ Now, we convert it into a geospatial data and add a coordinate reference system
 
 ```{r}
 # grabposisi_sf <- st_as_sf(grabposisi, coords=c("rawlat", "rawlng"), crs=4326) |> st_transform(crs=3414)
-grabposisi_sf <- st_as_sf(grabposisi, coords=c('rawlat', 'rawlng'), crs=4326)
+grabposisi_sf <- st_as_sf(grabposisi, coords=c('rawlat', 'rawlng'))
 st_crs(grabposisi_sf)
 
 ```
@@ -109,7 +99,7 @@ st_crs(grabposisi_sf)
 Now we can check how it looks like by plotting it
 
 ```{r}
-plot(grabposisi_sf)
+qtm(grabposisi_sf)
 ```
 
 ### 3.1.2 Geospatial Data
@@ -136,14 +126,14 @@ st_crs(road_sf)
 ```
 
 ```{r}
-plot(road_sf)
+tm_shape(road_sf) + tm_lines()
 ```
 
 ```{r}
 tmap_options(check.and.fix = TRUE)
 tm_shape(mpsz2019_sf) + tm_polygons() +
-  tm_shape(road_sf) + tm_polygons() +
-  tm_shape(grabposisi_sf) + tm_dots()
+tm_shape(road_sf) + tm_lines()
+#tm_shape(grabposisi_sf) + tm_dots()
 ```
 
 ## 3.2 Converting to SP and PPP

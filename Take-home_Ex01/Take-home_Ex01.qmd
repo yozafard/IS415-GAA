@@ -69,6 +69,7 @@ Geospatial: - Road data from OpenStreetMap of Geofabrik download server, - Maste
 We can load all the Grab-Posisi datasets with this code chunk:
 
 ```{r}
+
 file_list <- list.files('./data/GrabPosisi')
 
 combined <- list()
@@ -78,7 +79,6 @@ for(i in seq(file_list)) {
   combined[[i]] <- temp
 }
 
-#Combine all datasets
 grabposisi <- bind_rows(combined)
 ```
 
@@ -97,20 +97,19 @@ grabposisi$pingtimestamp <- as_datetime(grabposisi$pingtimestamp)
 ```
 
 
+#### 3.1.1.1 Origin
 Now, we can extract the origin of a ride, based on trajectory id. We will group the rows based on trajectory id, and sort it in ascending order based on the timestamp. The first index of every trajectory id will be the starting point of that ride. After the extraction, we can use use st_as_sf() to convert it into an sf, with the parameter crs=4326 as the dataset is taken from GPS data, which typically uses the WGS-84. However, we need to use st_transform to set the crs to 3414, which is used in Singapore.
 
 ```{r}
-# Convert your df object to a data.table
+
 setDT(grabposisi)
 
-# Pre-calculate date parts to avoid calling them for each row inside mutate
 grabposisi[, `:=`(
   weekday = wday(pingtimestamp),
   starting_hour = factor(hour(pingtimestamp)),
   day = factor(mday(pingtimestamp))
 )]
 
-# Perform the operations (group, arrange, and filter)
 origin <- grabposisi[order(trj_id, pingtimestamp)
   ][, .SD[1], by = .(trj_id)
   ] |> st_as_sf(coords=c("rawlng", "rawlat"), crs=4326) |> st_transform(3414)
@@ -129,20 +128,23 @@ Now, we can see what it looks like
 qtm(origin)
 ```
 
+
+
+
+#### 3.1.1.2 Destination
+
 We can apply a similar logic to get the destination. The difference is that we need to sort it in descending order based on the timestamp.
 
 ```{r}
-# Convert your df object to a data.table
+
 setDT(grabposisi)
 
-# Pre-calculate date parts to avoid calling them for each row inside mutate
 grabposisi[, `:=`(
   weekday = wday(pingtimestamp),
   starting_hour = factor(hour(pingtimestamp)),
   day = factor(mday(pingtimestamp))
 )]
 
-# Perform the operations (group, arrange, and filter)
 destination <- grabposisi[order(trj_id, -pingtimestamp)
   ][, .SD[1], by = .(trj_id)
   ] |> st_as_sf(coords=c("rawlng", "rawlat"), crs=4326) |> st_transform(3414)
@@ -178,6 +180,8 @@ qtm(mpsz2019_sf)
 ```
 Notice that this includes the surrounding islands. To extract only the main island, we can filter out the surrounding islands with this code chunk below. The !grepl() function will find any of the rows that doesn't include "ISLAND" in their PLN_AREA_N column. You can see the difference between the plots
 
+Notice that this includes the surrounding islands. To extract only the main island, we can filter out the surrounding islands with this code chunk below
+
 ```{r}
 mpsz2019_sf <- mpsz2019_sf[!grepl("ISLAND", mpsz2019_sf$PLN_AREA_N, ignore.case = TRUE), ]
 qtm(mpsz2019_sf)
@@ -194,13 +198,17 @@ plot(sg_sf)
 After the Master Plan, we can move on to the Road Data Set
 
 ```{r}
+
 road_sf <- st_read(dsn = 'data/Geospatial/malaysia-singapore-brunei-latest-free.shp', layer='gis_osm_roads_free_1') |> st_transform(crs=3414)
 st_crs(road_sf)
 glimpse(road_sf)
 ```
+
+
 ## 3.2 Converting to PPP
 
 Since KDE requires the point data to be in ppp format, we will convert our origin and destination to ppp. To do this, we can convert it into a Spatial* object with as_Spatial(), then to an sp object with as(x, 'SpatialPoints'), then finally to ppp with as(x, 'ppp')
+
 ```{r}
 origin_spatial <- as_Spatial(origin)
 origin_sp <- as(origin_spatial, 'SpatialPoints')
@@ -228,6 +236,7 @@ any(duplicated(origin_ppp))
 any(duplicated(destination_ppp))
 ```
 Since both origin_ppp and destination_ppp doesn't have duplicates, we can move on to the next step
+
 
 ## 3.3 Converting to OWIN Object
 
@@ -266,6 +275,7 @@ We will compare computations using these method:
 
 #### Origin
 ```{r}
+
 kde_origin_diggle <- density(origin_sg_km,
                               sigma=bw.diggle,
                               edge=TRUE,
@@ -276,10 +286,12 @@ kde_origin_cvl <- density(origin_sg_km,
                               edge=TRUE,
                               kernel="gaussian")
 
+
 kde_origin_scott <- density(origin_sg_km,
                               sigma=bw.scott,
                               edge=TRUE,
                               kernel="gaussian")
+
 
 kde_origin_ppl <- density(origin_sg_km,
                               sigma=bw.ppl,
@@ -287,7 +299,9 @@ kde_origin_ppl <- density(origin_sg_km,
                               kernel="gaussian")
 
 ```
+
 Now we can see the plot for comparison
+
 ```{r}
 par(mfrow=c(2,2))
 plot(kde_origin_diggle, main = "bw.diggle")
@@ -295,9 +309,11 @@ plot(kde_origin_cvl, main = "bw.cvl")
 plot(kde_origin_scott, main = "bw.scott")
 plot(kde_origin_ppl, main = "bw.ppl")
 ```
+
 #### Destination
 
 ```{r}
+
 kde_destination_diggle <- density(destination_sg_km,
                               sigma=bw.diggle,
                               edge=TRUE,
@@ -335,20 +351,21 @@ plot(kde_destination_ppl, main = "bw.ppl")
 
 The issue about fixed bandwidth is that less crowded areas, such as countrysides, tends to be less dense compared to more crowded areas like CBDs or city centres. Thus, we can use the adaptive.density() to help overcome this.
 
+
 ```{r}
+
 kde_origin_adaptive <- adaptive.density(origin_sg_km, method="kernel")
 
 kde_destination_adaptive <- adaptive.density(destination_sg_km, method="kernel")
 ```
+
 We can see the KDE through these plots
 ```{r}
 plot(kde_origin_adaptive)
-
 ```
 
 ```{r}
 plot(kde_destination_adaptive)
-
 ```
 
 
@@ -364,7 +381,9 @@ spplot(grid_kde_origin)
 grid_kde_destination <- as.SpatialGridDataFrame.im(kde_destination_adaptive)
 spplot(grid_kde_destination)
 ```
+
 ### 4.1.4 Converting Grid to Raster
+
 Next, we will conver the grid to a RasterLayer object using the raster() function
 
 ```{r}
@@ -374,7 +393,8 @@ kde_origin_raster
 kde_destination_raster <- raster(kde_destination_adaptive)
 kde_destination_raster
 ```
-Since there is no crs property on the raster, we can assign it
+
+Since there is no crs property when we first make a RasterLayer object, we can assign it
 ```{r}
 projection(kde_origin_raster) <- CRS("+init=EPSG:3414")
 kde_origin_raster
@@ -382,6 +402,7 @@ kde_origin_raster
 projection(kde_destination_raster) <- CRS("+init=EPSG:3414")
 kde_destination_raster
 ```
+
 
 ### 4.1.5 Visualization
 ```{r}
@@ -396,6 +417,7 @@ tm_shape(kde_destination_raster) +
   tm_layout(legend.position = c("right", "bottom"), frame = FALSE)
 ```
 
+
 ### 4.1.6 Testing Spatial Point Patterns Using Clark and Evans Test
 
 #### Origin
@@ -409,6 +431,7 @@ The 95% confident interval will be used.
 
 
 We can use the CLark-Evans test of aggregation using clarkevans.test() from statspat
+
 ```{r}
 origin_clarkevans <- clarkevans.test(origin_ppp,
                 correction="none",
@@ -416,7 +439,9 @@ origin_clarkevans <- clarkevans.test(origin_ppp,
                 alternative=c("clustered"))
 origin_clarkevans
 ```
+
 The Clark-Evans test shows an R value that is much smaller than 1. This means that the points are very close to each other, implying that the points are clustered. The p-value also shows that we can reject the null hyphotesis that the distribution of grab origin points are randomly distributed
+
 
 
 #### Destination
@@ -440,7 +465,7 @@ The Clark-Evans test shows an R value that is much smaller than 1. This means th
 
 ## 4.2 Network Constrained Spatial Point Pattern Analysis
 
-For Network Constrained Spatial Point Pattern Analysis, we are taking into account only the roads in Singapore.
+For Network Constrained Spatial Point Pattern Analysis, we are taking into account the roads in Singapore.
 
 ### 4.2.1 Preparing Road Objects
 
@@ -469,7 +494,9 @@ origin_events <- origin[st_contains(sg_sf, origin, sparse = FALSE), ]
 origin_events <- data.frame(origin_events$trj_id, origin_events$geometry) |> st_as_sf(crs=3414)
 st_crs(origin_events)
 ```
+
 Before performing NKDE, we need to cut the sg_road into lixels. In this example, our lixels will have a length of 700 and minimum length of 350
+
 ```{r}
 origin_lixels <- lixelize_lines(sg_road, 
                          700, 
@@ -484,7 +511,10 @@ origin_samples <- lines_center(origin_lixels)
 
 We will be using nkde.mc(), instead of the usual nkde(). The difference between the two functions is that when paired with the future package, nkde.mc allows for multiple workers to compute the nkde at the same time. We will also set the agg value to 20, which means that points within 20 metres of each other will be aggregrated. The grid_shape will also be set to c(16, 16) to indicate that we are splitting the data to a 16x16 grid that will be computated separately and combined together in the end. All these steps will help in making the runtime of the code a bit faster compared to using the usual default setup.
 
+
 ```{r}
+#| eval: false
+
 future::plan(future::multisession(workers=4))
 
 
@@ -514,11 +544,13 @@ if (!inherits(future::plan(), "sequential")) future::plan(future::sequential)
 
 After finishing the computation, we need to put the density value into the samples and lixels. Don't forget to adjust the scale to kilometer
 
+
 ```{r}
+#| eval: false
+
 origin_samples$density <- origin_densities$k
 origin_lixels$density <- origin_densities$k
 
-# Rescaling to kilometer
 origin_samples$density <- origin_samples$density*1000
 origin_lixels$density <- origin_lixels$density*1000
 ```
@@ -526,76 +558,18 @@ origin_lixels$density <- origin_lixels$density*1000
 #### 4.2.2.4 Visualization
 We can use tmaps to visualize the result of our NKDE
 ```{r}
+#| eval: false
+
 tm_shape(origin_lixels)+
-  tm_lines(col=density)+
-tm_shape(origin)+
-  tm_dots()
+  tm_lines()+
+tm_shape(origin_samples)+
+  tm_dots("density", style="kmeans", palette="GnBu", n=7, size=0.2)
 ```
 
 ### 4.2.3 NKDE for Destination
 
-For destination, we are doing the exact same process, but changing the event points to the destination points.
+For destination, we are doing the exact same process, but changing the event points to the destination points. To get the NKDE for Destination points, simply use the code for the Origin points, but change the dataset to the Destination dataset.
 
-#### 4.2.3.1 Preparing Destination Lixels and Line Centre Points
-```{r}
-destination_lixels <- lixelize_lines(sg_road, 
-                         700, 
-                         mindist = 350)
-
-
-destination_samples <- lines_center(destination_lixels)
-```
-
-```{r}
-destination_events <- destination[st_contains(sg_sf, destination, sparse = FALSE), ]
-destination_events <- data.frame(destination_events$trj_id, destination_events$geometry) |> st_as_sf(crs=3414)
-st_crs(destination_events)
-```
-
-
-#### 4.2.3.2 Performing NKDE
-```{r}
-future::plan(future::multisession(workers=2))
-
-
-destination_densities <- nkde.mc(sg_road, 
-                      events = destination_events,
-                      w = rep(1,nrow(destination_events)),
-                      samples = destination_samples,
-                      kernel_name = "quartic",
-                      bw = 300,
-                      adaptive = TRUE, # we use here an adaptive bandwidth
-                      trim_bw = 600, # the maximum local values of bandwidth will be 600m
-                      div= "bw",
-                      method = "simple", 
-                      digits = 1, 
-                      tol = 1,
-                      grid_shape = c(16,16), 
-                      max_depth = 8,
-                      agg = 20,
-                      sparse = TRUE,
-                      verbose = FALSE)
-
-if (!inherits(future::plan(), "sequential")) future::plan(future::sequential)
-```
-
-#### 4.2.3.3 Insert Densities to Lixel and Sample
-```{r}
-destination_samples$density <- destination_densities$k
-destination_lixels$density <- destination_densities$k
-
-# Rescaling to kilometer
-destination_samples$density <- destination_samples$density*1000
-destination_lixels$density <- destination_lixels$density*1000
-```
-
-#### 4.2.3.4 Visualization
-```{r}
-tm_shape(destination_lixels)+
-  tm_lines()+
-tm_shape(destination_samples)+
-  tm_dots(density)
-```
 
 
 
@@ -606,6 +580,7 @@ Now we are aiming to plot our kernel density maps on OpenStreetMap to make descr
 ## 5.1 Defining a Kernel Density Map Function
 
 First, we can create a function called density_map, which can be called later on to visualize our maps.
+
 ```{r}
 density_map <- function(raster_object, map_title) {
   tm_basemap("OpenStreetMap") +
@@ -645,7 +620,10 @@ destination_density_map
 ## Saving data to RDS
 
 We can use write_rds() to save our loaded data into an RDS file, making it easier to reload any data we might need again
+
 ```{r}
+#| eval: false
+
 write_rds(origin, 'data/rds/origin.rds')
 write_rds(destination, 'data/rds/destination.rds')
 write_rds(road_sf, 'data/rds/road_sf.rds')
@@ -663,8 +641,9 @@ write_rds(destination_densities, 'data/rds/destination_densities.rds')
 
 ## Loading data from RDS
 
-We can se read_rds() to reload any saved RDS file
+We can use read_rds() to reload any saved RDS file
 ```{r}
+#| eval: false
 origin <- read_rds('data/rds/origin.rds')
 destination <- read_rds('data/rds/destination.rds')
 road_sf <- read_rds('data/rds/road_sf.rds')

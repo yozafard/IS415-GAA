@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -131,6 +165,17 @@ ul.task-list li input[type="checkbox"] {
   </li>  
     </ul>
   </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-take-home-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Take Home Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercise">    
+        <li>
+    <a class="dropdown-item" href="../Take-home_Ex01/Take-home_Ex01.html" rel="" target="">
+ <span class="dropdown-text">Take Home Exercise 1</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
             <div class="quarto-navbar-tools ms-auto">
 </div>
@@ -147,7 +192,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#objectives" id="toc-objectives" class="nav-link active" data-scroll-target="#objectives">1.2 Objectives</a></li>
+  <li><a href="#background-human-mobility-the-movement-of-human-beings-in-space-and-time-reflects-the-spatial-temporal-characteristics-of-human-behavior.-with-the-advancement-information-and-communication-technologies-ict-especially-smart-phone-a-large-volume-of-data-related-to-human-mobility-have-been-collected.-by-using-appropriate-gis-analysis-methods-these-data-are-potentially-useful-in-supporting-smart-city-planning-and-management." id="toc-background-human-mobility-the-movement-of-human-beings-in-space-and-time-reflects-the-spatial-temporal-characteristics-of-human-behavior.-with-the-advancement-information-and-communication-technologies-ict-especially-smart-phone-a-large-volume-of-data-related-to-human-mobility-have-been-collected.-by-using-appropriate-gis-analysis-methods-these-data-are-potentially-useful-in-supporting-smart-city-planning-and-management." class="nav-link active" data-scroll-target="#background-human-mobility-the-movement-of-human-beings-in-space-and-time-reflects-the-spatial-temporal-characteristics-of-human-behavior.-with-the-advancement-information-and-communication-technologies-ict-especially-smart-phone-a-large-volume-of-data-related-to-human-mobility-have-been-collected.-by-using-appropriate-gis-analysis-methods-these-data-are-potentially-useful-in-supporting-smart-city-planning-and-management.">1.1 Background Human mobility, the movement of human beings in space and time, reflects the spatial-temporal characteristics of human behavior. With the advancement Information and Communication Technologies (ICT) especially smart phone, a large volume of data related to human mobility have been collected. By using appropriate GIS analysis methods, these data are potentially useful in supporting smart city planning and management.</a></li>
+  <li><a href="#objectives" id="toc-objectives" class="nav-link" data-scroll-target="#objectives">1.2 Objectives</a></li>
   <li><a href="#tasks" id="toc-tasks" class="nav-link" data-scroll-target="#tasks">1.3 Tasks</a></li>
   <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">2. Packages</a></li>
   <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">3. Data</a>
@@ -157,7 +203,38 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#grab-posisi" id="toc-grab-posisi" class="nav-link" data-scroll-target="#grab-posisi">3.1.1 Grab-Posisi</a></li>
   <li><a href="#geospatial-data" id="toc-geospatial-data" class="nav-link" data-scroll-target="#geospatial-data">3.1.2 Geospatial Data</a></li>
   </ul></li>
-  <li><a href="#converting-to-sp-and-ppp" id="toc-converting-to-sp-and-ppp" class="nav-link" data-scroll-target="#converting-to-sp-and-ppp">3.2 Converting to SP and PPP</a></li>
+  <li><a href="#converting-to-ppp" id="toc-converting-to-ppp" class="nav-link" data-scroll-target="#converting-to-ppp">3.2 Converting to PPP</a></li>
+  <li><a href="#converting-to-owin-object" id="toc-converting-to-owin-object" class="nav-link" data-scroll-target="#converting-to-owin-object">3.3 Converting to OWIN Object</a></li>
+  <li><a href="#combining-point-events-object-and-owin-object" id="toc-combining-point-events-object-and-owin-object" class="nav-link" data-scroll-target="#combining-point-events-object-and-owin-object">3.5 Combining point events object and OWIN object</a></li>
+  </ul></li>
+  <li><a href="#kde" id="toc-kde" class="nav-link" data-scroll-target="#kde">4. KDE</a>
+  <ul class="collapse">
+  <li><a href="#first-order-spatial-point-patterns-analysis" id="toc-first-order-spatial-point-patterns-analysis" class="nav-link" data-scroll-target="#first-order-spatial-point-patterns-analysis">4.1 First Order Spatial Point Patterns Analysis</a>
+  <ul class="collapse">
+  <li><a href="#kde-with-automatic-bandwith-selection-method" id="toc-kde-with-automatic-bandwith-selection-method" class="nav-link" data-scroll-target="#kde-with-automatic-bandwith-selection-method">4.1.1 KDE with automatic bandwith selection method</a></li>
+  <li><a href="#adaptive-bandwidth-kde" id="toc-adaptive-bandwidth-kde" class="nav-link" data-scroll-target="#adaptive-bandwidth-kde">4.1.2 Adaptive Bandwidth KDE</a></li>
+  <li><a href="#converting-kde-output-to-grid-object" id="toc-converting-kde-output-to-grid-object" class="nav-link" data-scroll-target="#converting-kde-output-to-grid-object">4.1.3 Converting KDE Output to Grid Object</a></li>
+  <li><a href="#converting-grid-to-raster" id="toc-converting-grid-to-raster" class="nav-link" data-scroll-target="#converting-grid-to-raster">4.1.4 Converting Grid to Raster</a></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">4.1.5 Visualization</a></li>
+  <li><a href="#testing-spatial-point-patterns-using-clark-and-evans-test" id="toc-testing-spatial-point-patterns-using-clark-and-evans-test" class="nav-link" data-scroll-target="#testing-spatial-point-patterns-using-clark-and-evans-test">4.1.6 Testing Spatial Point Patterns Using Clark and Evans Test</a></li>
+  </ul></li>
+  <li><a href="#network-constrained-spatial-point-pattern-analysis" id="toc-network-constrained-spatial-point-pattern-analysis" class="nav-link" data-scroll-target="#network-constrained-spatial-point-pattern-analysis">4.2 Network Constrained Spatial Point Pattern Analysis</a>
+  <ul class="collapse">
+  <li><a href="#preparing-road-objects" id="toc-preparing-road-objects" class="nav-link" data-scroll-target="#preparing-road-objects">4.2.1 Preparing Road Objects</a></li>
+  <li><a href="#nkde-for-origin" id="toc-nkde-for-origin" class="nav-link" data-scroll-target="#nkde-for-origin">4.2.2 NKDE for Origin</a></li>
+  <li><a href="#nkde-for-destination" id="toc-nkde-for-destination" class="nav-link" data-scroll-target="#nkde-for-destination">4.2.3 NKDE for Destination</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#kernel-density-maps-on-openstreetmap" id="toc-kernel-density-maps-on-openstreetmap" class="nav-link" data-scroll-target="#kernel-density-maps-on-openstreetmap">5. Kernel Density Maps on OpenStreetMap</a>
+  <ul class="collapse">
+  <li><a href="#defining-a-kernel-density-map-function" id="toc-defining-a-kernel-density-map-function" class="nav-link" data-scroll-target="#defining-a-kernel-density-map-function">5.1 Defining a Kernel Density Map Function</a></li>
+  <li><a href="#plotting-density-map" id="toc-plotting-density-map" class="nav-link" data-scroll-target="#plotting-density-map">5.2 Plotting Density Map</a></li>
+  </ul></li>
+  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">Reference</a></li>
+  <li><a href="#misc" id="toc-misc" class="nav-link" data-scroll-target="#misc">Misc</a>
+  <ul class="collapse">
+  <li><a href="#saving-data-to-rds" id="toc-saving-data-to-rds" class="nav-link" data-scroll-target="#saving-data-to-rds">Saving data to RDS</a></li>
+  <li><a href="#loading-data-from-rds" id="toc-loading-data-from-rds" class="nav-link" data-scroll-target="#loading-data-from-rds">Loading data from RDS</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -188,8 +265,11 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>#1. Overview ##1.1 Background Human mobility, the movement of human beings in space and time, reflects the spatial-temporal characteristics of human behavior. With the advancement Information and Communication Technologies (ICT) especially smart phone, a large volume of data related to human mobility have been collected. By using appropriate GIS analysis methods, these data are potentially useful in supporting smart city planning and management.</p>
+<p>#1. Overview</p>
+<section id="background-human-mobility-the-movement-of-human-beings-in-space-and-time-reflects-the-spatial-temporal-characteristics-of-human-behavior.-with-the-advancement-information-and-communication-technologies-ict-especially-smart-phone-a-large-volume-of-data-related-to-human-mobility-have-been-collected.-by-using-appropriate-gis-analysis-methods-these-data-are-potentially-useful-in-supporting-smart-city-planning-and-management." class="level2">
+<h2 class="anchored" data-anchor-id="background-human-mobility-the-movement-of-human-beings-in-space-and-time-reflects-the-spatial-temporal-characteristics-of-human-behavior.-with-the-advancement-information-and-communication-technologies-ict-especially-smart-phone-a-large-volume-of-data-related-to-human-mobility-have-been-collected.-by-using-appropriate-gis-analysis-methods-these-data-are-potentially-useful-in-supporting-smart-city-planning-and-management.">1.1 Background Human mobility, the movement of human beings in space and time, reflects the spatial-temporal characteristics of human behavior. With the advancement Information and Communication Technologies (ICT) especially smart phone, a large volume of data related to human mobility have been collected. By using appropriate GIS analysis methods, these data are potentially useful in supporting smart city planning and management.</h2>
 <p>In Singapore, one of the important source of data related to human mobility is from <a href="https://datamall.lta.gov.sg/content/datamall/en.html">Land Transport Authority (LTA) DataMall</a>. Two data sets related to human mobility are provided by the portal, they are: Passenger Volume by Origin Destination Train Stations and Passenger Volume by Origin Destination Bus Stops. One of the limitation of these data sets is that their location are biased to either bus stops or MRT/LRT stations. In 2020, another very interesting human mobility data set called <a href="https://engineering.grab.com/grab-posisi">Grab Posisi</a> was released by GRAB, one of the largest shared taxi operator in South-east Asia. There are two data sets been released and one of them is for Singapore.</p>
+</section>
 <section id="objectives" class="level2">
 <h2 class="anchored" data-anchor-id="objectives">1.2 Objectives</h2>
 <p>Geospatial analytics hold tremendous potential to address complex problems facing society. In this study, you are tasked to apply appropriate spatial point patterns analysis methods to discover the geographical and spatio-temporal distribution of Grab hailing services locations in Singapore.</p>
@@ -198,24 +278,25 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="tasks">1.3 Tasks</h2>
 <p>The specific tasks of this take-home exercise are as follows:</p>
 <ul>
-<li><h2 id="using-appropriate-function-of-sf-and-tidyverse-preparing-the-following-geospatial-data-layer-in-sf-tibble-data.frames" class="anchored">Using appropriate function of sf and tidyverse, preparing the following geospatial data layer in sf tibble data.frames:</h2>
-<pre><code>```         
-Grab taxi location points either by origins or destinations.
-```</code></pre>
+<li><p>Using appropriate function of sf and tidyverse, preparing the following geospatial data layer in sf tibble data.frames:</p>
 <ul>
-<li><pre><code>Road layer within Singapore excluding outer islands.</code></pre></li>
-<li><pre><code>Singapore boundary layer excluding outer islands</code></pre></li>
+<li>Grab taxi location points either by origins or destinations.</li>
+<li>Road layer within Singapore excluding outer islands.</li>
+<li>Singapore boundary layer excluding outer islands</li>
 </ul></li>
-<li>Using the extracted data, derive traditional Kernel Density Estimation layers.</li>
-<li>Using the extracted data, derive either Network Kernel Density Estimation (NKDE) or Temporal Network Kernel Density Estimation (TNKDE)</li>
-<li>Using appropriate tmap functions, display the kernel density layers on openstreetmap of Singapore.</li>
-<li>Describe the spatial patterns revealed by the kernel density maps.</li>
+<li><p>Using the extracted data, derive traditional Kernel Density Estimation layers.</p></li>
+<li><p>Using the extracted data, derive either Network Kernel Density Estimation (NKDE) or Temporal Network Kernel Density Estimation (TNKDE)</p></li>
+<li><p>Using appropriate tmap functions, display the kernel density layers on openstreetmap of Singapore.</p></li>
+<li><p>Describe the spatial patterns revealed by the kernel density maps.</p></li>
 </ul>
 </section>
 <section id="packages" class="level1">
 <h1>2. Packages</h1>
-<p>The R packages used in this project are: - sf: for importing, managing, and processing geospatial data. - tidyverse: a family of other R packages for performing data science tasks such as importing, wrangling, and visualising data. - tmap: creating thematic maps - maptools: a set of tools for manipulating geographic data - raster: reads, writes, manipulates, analyses, and model gridded spatial data (raster) - spatstat: for performing spatial point patterns analysis - spNetwork: for performing spatial analysis on network - arrow: to read parquet files</p>
+<p>The R packages used in this project are: - sf: for importing, managing, and processing geospatial data. - tidyverse: a family of other R packages for performing data science tasks such as importing, wrangling, and visualising data. - tmap: creating thematic maps - maptools: a set of tools for manipulating geographic data - raster: reads, writes, manipulates, analyses, and model gridded spatial data (raster) - spatstat: for performing spatial point patterns analysis - spNetwork: for performing spatial analysis on network - arrow: to read parquet files - data.table: to manipulate large tables faster</p>
 <p>We can load these packages with this code chunk:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(sf, spNetwork, tmap, arrow, tidyverse, spatstat, maptools, data.table, raster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="data" class="level1">
 <h1>3. Data</h1>
@@ -226,19 +307,905 @@ Grab taxi location points either by origins or destinations.
 <section id="grab-posisi" class="level3">
 <h3 class="anchored" data-anchor-id="grab-posisi">3.1.1 Grab-Posisi</h3>
 <p>We can load all the Grab-Posisi datasets with this code chunk:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>file_list <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">'./data/GrabPosisi'</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>combined <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq</span>(file_list)) {</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  data_name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">'grabposisi'</span>, i <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  temp <span class="ot">&lt;-</span> <span class="fu">read_parquet</span>(<span class="fu">paste0</span>(<span class="st">'data/GrabPosisi/'</span>, file_list[i]))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  combined[[i]] <span class="ot">&lt;-</span> temp</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>grabposisi <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(combined)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What the code chunk above does, is that it takes in the names of the files in the specified folder, turning it into a list.</p>
 <p>Now, we explore the grabposisi data</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(grabposisi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 30,329,685
+Columns: 9
+$ trj_id        &lt;chr&gt; "70014", "73573", "75567", "1410", "4354", "32630", "646…
+$ driving_mode  &lt;chr&gt; "car", "car", "car", "car", "car", "car", "car", "car", …
+$ osname        &lt;chr&gt; "android", "android", "android", "android", "android", "…
+$ pingtimestamp &lt;int&gt; 1554943236, 1555582623, 1555141026, 1555731693, 15555844…
+$ rawlat        &lt;dbl&gt; 1.342326, 1.321781, 1.327088, 1.262482, 1.283799, 1.3003…
+$ rawlng        &lt;dbl&gt; 103.8890, 103.8564, 103.8613, 103.8238, 103.8072, 103.90…
+$ speed         &lt;dbl&gt; 18.910000, 17.719076, 14.021548, 13.026521, 14.812943, 2…
+$ bearing       &lt;int&gt; 248, 44, 34, 181, 93, 73, 82, 321, 324, 31, 203, 50, 252…
+$ accuracy      &lt;dbl&gt; 3.900, 4.000, 3.900, 4.000, 3.900, 3.900, 3.000, 3.649, …</code></pre>
+</div>
+</div>
 <p>We noticed that pingtimestamp is an integer field, so we need to convert pingtimestamp field to a datetime format (POCIXCT)</p>
-<p>Now, we convert it into a geospatial data and add a coordinate reference system</p>
-<p>Now we can check how it looks like by plotting it</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>grabposisi<span class="sc">$</span>pingtimestamp <span class="ot">&lt;-</span> <span class="fu">as_datetime</span>(grabposisi<span class="sc">$</span>pingtimestamp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="origin" class="level4">
+<h4 class="anchored" data-anchor-id="origin">3.1.1.1 Origin</h4>
+<p>Now, we can extract the origin of a ride, based on trajectory id. We will group the rows based on trajectory id, and sort it in ascending order based on the timestamp. The first index of every trajectory id will be the starting point of that ride. After the extraction, we can use use st_as_sf() to convert it into an sf, with the parameter crs=4326 as the dataset is taken from GPS data, which typically uses the WGS-84. However, we need to use st_transform to set the crs to 3414, which is used in Singapore.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setDT</span>(grabposisi)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>grabposisi[, <span class="st">`</span><span class="at">:=</span><span class="st">`</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">weekday =</span> <span class="fu">wday</span>(pingtimestamp),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">starting_hour =</span> <span class="fu">factor</span>(<span class="fu">hour</span>(pingtimestamp)),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">day =</span> <span class="fu">factor</span>(<span class="fu">mday</span>(pingtimestamp))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)]</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>origin <span class="ot">&lt;-</span> grabposisi[<span class="fu">order</span>(trj_id, pingtimestamp)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  ][, .SD[<span class="dv">1</span>], by <span class="ot">=</span> .(trj_id)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  ] <span class="sc">|&gt;</span> <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">"rawlng"</span>, <span class="st">"rawlat"</span>), <span class="at">crs=</span><span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="dv">3414</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(origin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Coordinate Reference System:
+  User input: EPSG:3414 
+  wkt:
+PROJCRS["SVY21 / Singapore TM",
+    BASEGEOGCRS["SVY21",
+        DATUM["SVY21",
+            ELLIPSOID["WGS 84",6378137,298.257223563,
+                LENGTHUNIT["metre",1]]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["degree",0.0174532925199433]],
+        ID["EPSG",4757]],
+    CONVERSION["Singapore Transverse Mercator",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",1.36666666666667,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",103.833333333333,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",1,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",28001.642,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",38744.572,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["northing (N)",north,
+            ORDER[1],
+            LENGTHUNIT["metre",1]],
+        AXIS["easting (E)",east,
+            ORDER[2],
+            LENGTHUNIT["metre",1]],
+    USAGE[
+        SCOPE["Cadastre, engineering survey, topographic mapping."],
+        AREA["Singapore - onshore and offshore."],
+        BBOX[1.13,103.59,1.47,104.07]],
+    ID["EPSG",3414]]</code></pre>
+</div>
+</div>
+<p>Let’s filter so that we only have cars in the data</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>origin <span class="ot">&lt;-</span> <span class="fu">filter</span>(origin, driving_mode <span class="sc">==</span> <span class="st">'car'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, we can see what it looks like</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qtm</span>(origin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="destination" class="level4">
+<h4 class="anchored" data-anchor-id="destination">3.1.1.2 Destination</h4>
+<p>We can apply a similar logic to get the destination. The difference is that we need to sort it in descending order based on the timestamp.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setDT</span>(grabposisi)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>grabposisi[, <span class="st">`</span><span class="at">:=</span><span class="st">`</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">weekday =</span> <span class="fu">wday</span>(pingtimestamp),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">starting_hour =</span> <span class="fu">factor</span>(<span class="fu">hour</span>(pingtimestamp)),</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">day =</span> <span class="fu">factor</span>(<span class="fu">mday</span>(pingtimestamp))</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>)]</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>destination <span class="ot">&lt;-</span> grabposisi[<span class="fu">order</span>(trj_id, <span class="sc">-</span>pingtimestamp)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  ][, .SD[<span class="dv">1</span>], by <span class="ot">=</span> .(trj_id)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  ] <span class="sc">|&gt;</span> <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">"rawlng"</span>, <span class="st">"rawlat"</span>), <span class="at">crs=</span><span class="dv">4326</span>) <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="dv">3414</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(destination)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Coordinate Reference System:
+  User input: EPSG:3414 
+  wkt:
+PROJCRS["SVY21 / Singapore TM",
+    BASEGEOGCRS["SVY21",
+        DATUM["SVY21",
+            ELLIPSOID["WGS 84",6378137,298.257223563,
+                LENGTHUNIT["metre",1]]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["degree",0.0174532925199433]],
+        ID["EPSG",4757]],
+    CONVERSION["Singapore Transverse Mercator",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",1.36666666666667,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",103.833333333333,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",1,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",28001.642,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",38744.572,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["northing (N)",north,
+            ORDER[1],
+            LENGTHUNIT["metre",1]],
+        AXIS["easting (E)",east,
+            ORDER[2],
+            LENGTHUNIT["metre",1]],
+    USAGE[
+        SCOPE["Cadastre, engineering survey, topographic mapping."],
+        AREA["Singapore - onshore and offshore."],
+        BBOX[1.13,103.59,1.47,104.07]],
+    ID["EPSG",3414]]</code></pre>
+</div>
+</div>
+<p>Same as above, we can filter it</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>destination <span class="ot">&lt;-</span> <span class="fu">filter</span>(destination, driving_mode <span class="sc">==</span> <span class="st">'car'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And plot it</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qtm</span>(destination)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
 </section>
 <section id="geospatial-data" class="level3">
 <h3 class="anchored" data-anchor-id="geospatial-data">3.1.2 Geospatial Data</h3>
+<section id="mpsz" class="level4">
+<h4 class="anchored" data-anchor-id="mpsz">3.1.2.1 MPSZ</h4>
 <p>Now, we need to load the geospatial data. Let’s start with the 2019 Subzone Master Plan</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mpsz2019_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn=</span><span class="st">'data/Geospatial/MPSZ-2019'</span>, <span class="at">layer=</span><span class="st">'MPSZ-2019'</span>) <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs=</span><span class="dv">3414</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `MPSZ-2019' from data source 
+  `C:\Users\yozaf\SMUY3S2\Geospatial\IS415-GAA\Take-home_Ex01\data\Geospatial\MPSZ-2019' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 332 features and 6 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 103.6057 ymin: 1.158699 xmax: 104.0885 ymax: 1.470775
+Geodetic CRS:  WGS 84</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(mpsz2019_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Coordinate Reference System:
+  User input: EPSG:3414 
+  wkt:
+PROJCRS["SVY21 / Singapore TM",
+    BASEGEOGCRS["SVY21",
+        DATUM["SVY21",
+            ELLIPSOID["WGS 84",6378137,298.257223563,
+                LENGTHUNIT["metre",1]]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["degree",0.0174532925199433]],
+        ID["EPSG",4757]],
+    CONVERSION["Singapore Transverse Mercator",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",1.36666666666667,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",103.833333333333,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",1,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",28001.642,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",38744.572,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["northing (N)",north,
+            ORDER[1],
+            LENGTHUNIT["metre",1]],
+        AXIS["easting (E)",east,
+            ORDER[2],
+            LENGTHUNIT["metre",1]],
+    USAGE[
+        SCOPE["Cadastre, engineering survey, topographic mapping."],
+        AREA["Singapore - onshore and offshore."],
+        BBOX[1.13,103.59,1.47,104.07]],
+    ID["EPSG",3414]]</code></pre>
+</div>
+</div>
+<p>And see what it looks like on a plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qtm</span>(mpsz2019_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Notice that this includes the surrounding islands. To extract only the main island, we can filter out the surrounding islands with this code chunk below. The !grepl() function will find any of the rows that doesn’t include “ISLAND” in their PLN_AREA_N column. You can see the difference between the plots</p>
+<p>Notice that this includes the surrounding islands. To extract only the main island, we can filter out the surrounding islands with this code chunk below</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mpsz2019_sf <span class="ot">&lt;-</span> mpsz2019_sf[<span class="sc">!</span><span class="fu">grepl</span>(<span class="st">"ISLAND"</span>, mpsz2019_sf<span class="sc">$</span>PLN_AREA_N, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>), ]</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qtm</span>(mpsz2019_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Now, we can get the outline of Singapore’s main island with st_union()</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sg_sf <span class="ot">&lt;-</span> mpsz2019_sf <span class="sc">|&gt;</span> <span class="fu">st_union</span>()</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sg_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="road-data" class="level4">
+<h4 class="anchored" data-anchor-id="road-data">3.1.2.2 Road Data</h4>
 <p>After the Master Plan, we can move on to the Road Data Set</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>road_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">'data/Geospatial/malaysia-singapore-brunei-latest-free.shp'</span>, <span class="at">layer=</span><span class="st">'gis_osm_roads_free_1'</span>) <span class="sc">|&gt;</span> <span class="fu">st_transform</span>(<span class="at">crs=</span><span class="dv">3414</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `gis_osm_roads_free_1' from data source 
+  `C:\Users\yozaf\SMUY3S2\Geospatial\IS415-GAA\Take-home_Ex01\data\Geospatial\malaysia-singapore-brunei-latest-free.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 1765176 features and 10 fields
+Geometry type: LINESTRING
+Dimension:     XY
+Bounding box:  xmin: 99.66041 ymin: 0.8021131 xmax: 119.2601 ymax: 7.514393
+Geodetic CRS:  WGS 84</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(road_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Coordinate Reference System:
+  User input: EPSG:3414 
+  wkt:
+PROJCRS["SVY21 / Singapore TM",
+    BASEGEOGCRS["SVY21",
+        DATUM["SVY21",
+            ELLIPSOID["WGS 84",6378137,298.257223563,
+                LENGTHUNIT["metre",1]]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["degree",0.0174532925199433]],
+        ID["EPSG",4757]],
+    CONVERSION["Singapore Transverse Mercator",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",1.36666666666667,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",103.833333333333,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",1,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",28001.642,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",38744.572,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["northing (N)",north,
+            ORDER[1],
+            LENGTHUNIT["metre",1]],
+        AXIS["easting (E)",east,
+            ORDER[2],
+            LENGTHUNIT["metre",1]],
+    USAGE[
+        SCOPE["Cadastre, engineering survey, topographic mapping."],
+        AREA["Singapore - onshore and offshore."],
+        BBOX[1.13,103.59,1.47,104.07]],
+    ID["EPSG",3414]]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(road_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 1,765,176
+Columns: 11
+$ osm_id   &lt;chr&gt; "4386520", "4578273", "4579495", "4579533", "4579534", "45795…
+$ code     &lt;int&gt; 5113, 5114, 5122, 5122, 5122, 5122, 5141, 5122, 5122, 5122, 5…
+$ fclass   &lt;chr&gt; "primary", "secondary", "residential", "residential", "reside…
+$ name     &lt;chr&gt; "Orchard Road", "Jalan Bukit Bintang", "Jalan Nagasari", "Per…
+$ ref      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+$ oneway   &lt;chr&gt; "F", "F", "B", "B", "B", "F", "F", "F", "F", "F", "B", "B", "…
+$ maxspeed &lt;int&gt; 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0,…
+$ layer    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+$ bridge   &lt;chr&gt; "F", "F", "F", "F", "F", "F", "F", "F", "F", "F", "F", "F", "…
+$ tunnel   &lt;chr&gt; "F", "F", "F", "F", "F", "F", "T", "F", "F", "F", "F", "F", "…
+$ geometry &lt;LINESTRING [m]&gt; LINESTRING (27637.52 32038...., LINESTRING (-20666…</code></pre>
+</div>
+</div>
 </section>
 </section>
-<section id="converting-to-sp-and-ppp" class="level2">
-<h2 class="anchored" data-anchor-id="converting-to-sp-and-ppp">3.2 Converting to SP and PPP</h2>
+</section>
+<section id="converting-to-ppp" class="level2">
+<h2 class="anchored" data-anchor-id="converting-to-ppp">3.2 Converting to PPP</h2>
+<p>Since KDE requires the point data to be in ppp format, we will convert our origin and destination to ppp. To do this, we can convert it into a Spatial* object with as_Spatial(), then to an sp object with as(x, ‘SpatialPoints’), then finally to ppp with as(x, ‘ppp’)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>origin_spatial <span class="ot">&lt;-</span> <span class="fu">as_Spatial</span>(origin)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>origin_sp <span class="ot">&lt;-</span> <span class="fu">as</span>(origin_spatial, <span class="st">'SpatialPoints'</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>origin_ppp <span class="ot">&lt;-</span> <span class="fu">as</span>(origin_sp, <span class="st">'ppp'</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>destination_spatial <span class="ot">&lt;-</span> <span class="fu">as_Spatial</span>(destination)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>destination_sp <span class="ot">&lt;-</span> <span class="fu">as</span>(destination_spatial, <span class="st">'SpatialPoints'</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>destination_ppp <span class="ot">&lt;-</span> <span class="fu">as</span>(destination_sp, <span class="st">'ppp'</span>)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Alternatively, we can also use the commented codes below to directly convert to ppp</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># origin_ppp &lt;- as.ppp(origin)</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="co"># destination_ppp &lt;- as.ppp(destination)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Plot it to see how it looks like</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(origin_ppp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(destination_ppp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-17-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can check for duplicates</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(<span class="fu">duplicated</span>(origin_ppp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(<span class="fu">duplicated</span>(destination_ppp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+</div>
+<p>Since both origin_ppp and destination_ppp doesn’t have duplicates, we can move on to the next step</p>
+</section>
+<section id="converting-to-owin-object" class="level2">
+<h2 class="anchored" data-anchor-id="converting-to-owin-object">3.3 Converting to OWIN Object</h2>
+<p>We need to convert our sg_sf, which is the Singapore main island’s outline, to an OWIN object</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>sg_owin <span class="ot">&lt;-</span> <span class="fu">as.owin</span>(sg_sf)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sg_owin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="combining-point-events-object-and-owin-object" class="level2">
+<h2 class="anchored" data-anchor-id="combining-point-events-object-and-owin-object">3.5 Combining point events object and OWIN object</h2>
+<p>Before performing the analysis, we need to extract only points that are inside Singapore’s main island</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>origin_sg <span class="ot">&lt;-</span> origin_ppp[sg_owin]</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>destination_sg <span class="ot">&lt;-</span> destination_ppp[sg_owin]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Convert it to use kilometres as units, since what we have now is in terms of metres</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>origin_sg_km <span class="ot">&lt;-</span> <span class="fu">rescale</span>(origin_sg, <span class="dv">1000</span>, <span class="st">'km'</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>destination_sg_km <span class="ot">&lt;-</span> <span class="fu">rescale</span>(destination_sg, <span class="dv">1000</span>, <span class="st">'km'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="kde" class="level1">
+<h1>4. KDE</h1>
+<section id="first-order-spatial-point-patterns-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="first-order-spatial-point-patterns-analysis">4.1 First Order Spatial Point Patterns Analysis</h2>
+<section id="kde-with-automatic-bandwith-selection-method" class="level3">
+<h3 class="anchored" data-anchor-id="kde-with-automatic-bandwith-selection-method">4.1.1 KDE with automatic bandwith selection method</h3>
+<p>We will compare computations using these method: - bw.diggle() - bw.CvL() - bw.scott() - bw.ppl()</p>
+<section id="origin-1" class="level4">
+<h4 class="anchored" data-anchor-id="origin-1">Origin</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>kde_origin_diggle <span class="ot">&lt;-</span> <span class="fu">density</span>(origin_sg_km,</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">sigma=</span>bw.diggle,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">edge=</span><span class="cn">TRUE</span>,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>                              <span class="at">kernel=</span><span class="st">"gaussian"</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>kde_origin_cvl <span class="ot">&lt;-</span> <span class="fu">density</span>(origin_sg_km,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>                              <span class="at">sigma=</span>bw.CvL,</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>                              <span class="at">edge=</span><span class="cn">TRUE</span>,</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>                              <span class="at">kernel=</span><span class="st">"gaussian"</span>)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>kde_origin_scott <span class="ot">&lt;-</span> <span class="fu">density</span>(origin_sg_km,</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>                              <span class="at">sigma=</span>bw.scott,</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>                              <span class="at">edge=</span><span class="cn">TRUE</span>,</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>                              <span class="at">kernel=</span><span class="st">"gaussian"</span>)</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>kde_origin_ppl <span class="ot">&lt;-</span> <span class="fu">density</span>(origin_sg_km,</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>                              <span class="at">sigma=</span>bw.ppl,</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>                              <span class="at">edge=</span><span class="cn">TRUE</span>,</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>                              <span class="at">kernel=</span><span class="st">"gaussian"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can see the plot for comparison</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde_origin_diggle, <span class="at">main =</span> <span class="st">"bw.diggle"</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde_origin_cvl, <span class="at">main =</span> <span class="st">"bw.cvl"</span>)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde_origin_scott, <span class="at">main =</span> <span class="st">"bw.scott"</span>)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde_origin_ppl, <span class="at">main =</span> <span class="st">"bw.ppl"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="destination-1" class="level4">
+<h4 class="anchored" data-anchor-id="destination-1">Destination</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>kde_destination_diggle <span class="ot">&lt;-</span> <span class="fu">density</span>(destination_sg_km,</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">sigma=</span>bw.diggle,</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">edge=</span><span class="cn">TRUE</span>,</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>                              <span class="at">kernel=</span><span class="st">"gaussian"</span>)</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>kde_destination_cvl <span class="ot">&lt;-</span> <span class="fu">density</span>(destination_sg_km,</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>                              <span class="at">sigma=</span>bw.CvL,</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>                              <span class="at">edge=</span><span class="cn">TRUE</span>,</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>                              <span class="at">kernel=</span><span class="st">"gaussian"</span>)</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>kde_destination_scott <span class="ot">&lt;-</span> <span class="fu">density</span>(destination_sg_km,</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>                              <span class="at">sigma=</span>bw.scott,</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>                              <span class="at">edge=</span><span class="cn">TRUE</span>,</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>                              <span class="at">kernel=</span><span class="st">"gaussian"</span>)</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>kde_destination_ppl <span class="ot">&lt;-</span> <span class="fu">density</span>(destination_sg_km,</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>                              <span class="at">sigma=</span>bw.ppl,</span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>                              <span class="at">edge=</span><span class="cn">TRUE</span>,</span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>                              <span class="at">kernel=</span><span class="st">"gaussian"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can see the plot for comparison</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde_destination_diggle, <span class="at">main =</span> <span class="st">"bw.diggle"</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde_destination_cvl, <span class="at">main =</span> <span class="st">"bw.cvl"</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde_destination_scott, <span class="at">main =</span> <span class="st">"bw.scott"</span>)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde_destination_ppl, <span class="at">main =</span> <span class="st">"bw.ppl"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="adaptive-bandwidth-kde" class="level3">
+<h3 class="anchored" data-anchor-id="adaptive-bandwidth-kde">4.1.2 Adaptive Bandwidth KDE</h3>
+<p>The issue about fixed bandwidth is that less crowded areas, such as countrysides, tends to be less dense compared to more crowded areas like CBDs or city centres. Thus, we can use the adaptive.density() to help overcome this.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>kde_origin_adaptive <span class="ot">&lt;-</span> <span class="fu">adaptive.density</span>(origin_sg_km, <span class="at">method=</span><span class="st">"kernel"</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>kde_destination_adaptive <span class="ot">&lt;-</span> <span class="fu">adaptive.density</span>(destination_sg_km, <span class="at">method=</span><span class="st">"kernel"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can see the KDE through these plots</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde_origin_adaptive)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(kde_destination_adaptive)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="converting-kde-output-to-grid-object" class="level3">
+<h3 class="anchored" data-anchor-id="converting-kde-output-to-grid-object">4.1.3 Converting KDE Output to Grid Object</h3>
+<p>We can convert the output into a grid object for a more suitable mapping without changing the result</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>grid_kde_origin <span class="ot">&lt;-</span> <span class="fu">as.SpatialGridDataFrame.im</span>(kde_origin_adaptive)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spplot</span>(grid_kde_origin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>grid_kde_destination <span class="ot">&lt;-</span> <span class="fu">as.SpatialGridDataFrame.im</span>(kde_destination_adaptive)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spplot</span>(grid_kde_destination)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="converting-grid-to-raster" class="level3">
+<h3 class="anchored" data-anchor-id="converting-grid-to-raster">4.1.4 Converting Grid to Raster</h3>
+<p>Next, we will conver the grid to a RasterLayer object using the raster() function</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>kde_origin_raster <span class="ot">&lt;-</span> <span class="fu">raster</span>(kde_origin_adaptive)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>kde_origin_raster</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class      : RasterLayer 
+dimensions : 128, 128, 16384  (nrow, ncol, ncell)
+resolution : 0.4162063, 0.2250614  (x, y)
+extent     : 2.667538, 55.94194, 21.44847, 50.25633  (xmin, xmax, ymin, ymax)
+crs        : NA 
+source     : memory
+names      : layer 
+values     : -1.254928e-14, 2296.831  (min, max)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>kde_destination_raster <span class="ot">&lt;-</span> <span class="fu">raster</span>(kde_destination_adaptive)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>kde_destination_raster</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class      : RasterLayer 
+dimensions : 128, 128, 16384  (nrow, ncol, ncell)
+resolution : 0.4162063, 0.2250614  (x, y)
+extent     : 2.667538, 55.94194, 21.44847, 50.25633  (xmin, xmax, ymin, ymax)
+crs        : NA 
+source     : memory
+names      : layer 
+values     : -1.882384e-13, 1996.507  (min, max)</code></pre>
+</div>
+</div>
+<p>Since there is no crs property when we first make a RasterLayer object, we can assign it</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">projection</span>(kde_origin_raster) <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">"+init=EPSG:3414"</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>kde_origin_raster</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class      : RasterLayer 
+dimensions : 128, 128, 16384  (nrow, ncol, ncell)
+resolution : 0.4162063, 0.2250614  (x, y)
+extent     : 2.667538, 55.94194, 21.44847, 50.25633  (xmin, xmax, ymin, ymax)
+crs        : +proj=tmerc +lat_0=1.36666666666667 +lon_0=103.833333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs 
+source     : memory
+names      : layer 
+values     : -1.254928e-14, 2296.831  (min, max)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">projection</span>(kde_destination_raster) <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">"+init=EPSG:3414"</span>)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>kde_destination_raster</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class      : RasterLayer 
+dimensions : 128, 128, 16384  (nrow, ncol, ncell)
+resolution : 0.4162063, 0.2250614  (x, y)
+extent     : 2.667538, 55.94194, 21.44847, 50.25633  (xmin, xmax, ymin, ymax)
+crs        : +proj=tmerc +lat_0=1.36666666666667 +lon_0=103.833333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs 
+source     : memory
+names      : layer 
+values     : -1.882384e-13, 1996.507  (min, max)</code></pre>
+</div>
+</div>
+</section>
+<section id="visualization" class="level3">
+<h3 class="anchored" data-anchor-id="visualization">4.1.5 Visualization</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(kde_origin_raster) <span class="sc">+</span> </span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="st">"layer"</span>) <span class="sc">+</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">"right"</span>, <span class="st">"bottom"</span>), <span class="at">frame =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Variable(s) "layer" contains positive and negative values, so midpoint is set to 0. Set midpoint = NA to show the full spectrum of the color palette.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(kde_destination_raster) <span class="sc">+</span> </span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="st">"layer"</span>) <span class="sc">+</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">"right"</span>, <span class="st">"bottom"</span>), <span class="at">frame =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Variable(s) "layer" contains positive and negative values, so midpoint is set to 0. Set midpoint = NA to show the full spectrum of the color palette.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="testing-spatial-point-patterns-using-clark-and-evans-test" class="level3">
+<h3 class="anchored" data-anchor-id="testing-spatial-point-patterns-using-clark-and-evans-test">4.1.6 Testing Spatial Point Patterns Using Clark and Evans Test</h3>
+<section id="origin-2" class="level4">
+<h4 class="anchored" data-anchor-id="origin-2">Origin</h4>
+<p>The test hypotheses are:</p>
+<p>Ho = The distribution of grab origin points are randomly distributed.</p>
+<p>H1= The distribution of grab origin points are not randomly distributed.</p>
+<p>The 95% confident interval will be used.</p>
+<p>We can use the CLark-Evans test of aggregation using clarkevans.test() from statspat</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>origin_clarkevans <span class="ot">&lt;-</span> <span class="fu">clarkevans.test</span>(origin_ppp,</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">correction=</span><span class="st">"none"</span>,</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">clipregion=</span><span class="st">"sg_owin"</span>,</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">alternative=</span><span class="fu">c</span>(<span class="st">"clustered"</span>))</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>origin_clarkevans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Clark-Evans test
+    No edge correction
+    Z-test
+
+data:  origin_ppp
+R = 0.21648, p-value &lt; 2.2e-16
+alternative hypothesis: clustered (R &lt; 1)</code></pre>
+</div>
+</div>
+<p>The Clark-Evans test shows an R value that is much smaller than 1. This means that the points are very close to each other, implying that the points are clustered. The p-value also shows that we can reject the null hyphotesis that the distribution of grab origin points are randomly distributed</p>
+</section>
+<section id="destination-2" class="level4">
+<h4 class="anchored" data-anchor-id="destination-2">Destination</h4>
+<p>The test hypotheses are:</p>
+<p>Ho = The distribution of grab destination points are randomly distributed.</p>
+<p>H1= The distribution of grab destination points are not randomly distributed.</p>
+<p>The 95% confident interval will be used.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>destination_clarkevans <span class="ot">&lt;-</span> <span class="fu">clarkevans.test</span>(destination_ppp,</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">correction=</span><span class="st">"none"</span>,</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">clipregion=</span><span class="st">"sg_owin"</span>,</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">alternative=</span><span class="fu">c</span>(<span class="st">"clustered"</span>))</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>destination_clarkevans</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Clark-Evans test
+    No edge correction
+    Z-test
+
+data:  destination_ppp
+R = 0.23392, p-value &lt; 2.2e-16
+alternative hypothesis: clustered (R &lt; 1)</code></pre>
+</div>
+</div>
+<p>The Clark-Evans test shows an R value that is much smaller than 1. This means that the points are very close to each other, implying that the points are clustered. The p-value also shows that we can reject the null hyphotesis that the distribution of grab destination points are randomly distributed</p>
+</section>
+</section>
+</section>
+<section id="network-constrained-spatial-point-pattern-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="network-constrained-spatial-point-pattern-analysis">4.2 Network Constrained Spatial Point Pattern Analysis</h2>
+<p>For Network Constrained Spatial Point Pattern Analysis, we are taking into account the roads in Singapore.</p>
+<section id="preparing-road-objects" class="level3">
+<h3 class="anchored" data-anchor-id="preparing-road-objects">4.2.1 Preparing Road Objects</h3>
+<p>First, we prepare an object that contains roads in Singapore. We can use st_within to extract the roads from our dataset from OSM that matches/intersects with the MPSZ. Since we are only looking at roads that is suitable for cars, one way we can do it is by excluding rows where the max speed is 0</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>sg_road <span class="ot">&lt;-</span> road_sf[<span class="fu">st_contains</span>(sg_sf, road_sf, <span class="at">sparse =</span> <span class="cn">FALSE</span>), ] <span class="sc">|&gt;</span> <span class="fu">filter</span>(maxspeed <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qtm</span>(sg_road)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="nkde-for-origin" class="level3">
+<h3 class="anchored" data-anchor-id="nkde-for-origin">4.2.2 NKDE for Origin</h3>
+<p>First, let’s see how it looks like</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(sg_road) <span class="sc">+</span> <span class="fu">tm_lines</span>() <span class="sc">+</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin) <span class="sc">+</span> <span class="fu">tm_dots</span>(<span class="st">'red'</span>, <span class="at">size=</span><span class="fl">0.02</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="preparing-origin-lixels-and-line-centre-points" class="level4">
+<h4 class="anchored" data-anchor-id="preparing-origin-lixels-and-line-centre-points">4.2.2.1 Preparing Origin Lixels and Line Centre Points</h4>
+<p>We will also extract the origin to include only those who are inside the Singapore main island’s boundary</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>origin_events <span class="ot">&lt;-</span> origin[<span class="fu">st_contains</span>(sg_sf, origin, <span class="at">sparse =</span> <span class="cn">FALSE</span>), ]</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>origin_events <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(origin_events<span class="sc">$</span>trj_id, origin_events<span class="sc">$</span>geometry) <span class="sc">|&gt;</span> <span class="fu">st_as_sf</span>(<span class="at">crs=</span><span class="dv">3414</span>)</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(origin_events)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Coordinate Reference System:
+  User input: EPSG:3414 
+  wkt:
+PROJCRS["SVY21 / Singapore TM",
+    BASEGEOGCRS["SVY21",
+        DATUM["SVY21",
+            ELLIPSOID["WGS 84",6378137,298.257223563,
+                LENGTHUNIT["metre",1]]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["degree",0.0174532925199433]],
+        ID["EPSG",4757]],
+    CONVERSION["Singapore Transverse Mercator",
+        METHOD["Transverse Mercator",
+            ID["EPSG",9807]],
+        PARAMETER["Latitude of natural origin",1.36666666666667,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8801]],
+        PARAMETER["Longitude of natural origin",103.833333333333,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8802]],
+        PARAMETER["Scale factor at natural origin",1,
+            SCALEUNIT["unity",1],
+            ID["EPSG",8805]],
+        PARAMETER["False easting",28001.642,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",38744.572,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["northing (N)",north,
+            ORDER[1],
+            LENGTHUNIT["metre",1]],
+        AXIS["easting (E)",east,
+            ORDER[2],
+            LENGTHUNIT["metre",1]],
+    USAGE[
+        SCOPE["Cadastre, engineering survey, topographic mapping."],
+        AREA["Singapore - onshore and offshore."],
+        BBOX[1.13,103.59,1.47,104.07]],
+    ID["EPSG",3414]]</code></pre>
+</div>
+</div>
+<p>Before performing NKDE, we need to cut the sg_road into lixels. In this example, our lixels will have a length of 700 and minimum length of 350</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>origin_lixels <span class="ot">&lt;-</span> <span class="fu">lixelize_lines</span>(sg_road, </span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>                         <span class="dv">700</span>, </span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mindist =</span> <span class="dv">350</span>)</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>origin_samples <span class="ot">&lt;-</span> <span class="fu">lines_center</span>(origin_lixels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="performing-nkde" class="level4">
+<h4 class="anchored" data-anchor-id="performing-nkde">4.2.2.2 Performing NKDE</h4>
+<p>We will be using nkde.mc(), instead of the usual nkde(). The difference between the two functions is that when paired with the future package, nkde.mc allows for multiple workers to compute the nkde at the same time. We will also set the agg value to 20, which means that points within 20 metres of each other will be aggregrated. The grid_shape will also be set to c(16, 16) to indicate that we are splitting the data to a 16x16 grid that will be computated separately and combined together in the end. All these steps will help in making the runtime of the code a bit faster compared to using the usual default setup.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span><span class="fu">multisession</span>(<span class="at">workers=</span><span class="dv">4</span>))</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>origin_densities <span class="ot">&lt;-</span> <span class="fu">nkde.mc</span>(sg_road, </span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">events =</span> origin_events,</span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">w =</span> <span class="fu">rep</span>(<span class="dv">1</span>,<span class="fu">nrow</span>(origin_events)),</span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">samples =</span> origin_samples,</span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">kernel_name =</span> <span class="st">"quartic"</span>,</span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">bw =</span> <span class="dv">300</span>,</span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">adaptive =</span> <span class="cn">TRUE</span>, <span class="co"># we use here an adaptive bandwidth</span></span>
+<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">trim_bw =</span> <span class="dv">600</span>, <span class="co"># the maximum local values of bandwidth will be 600m</span></span>
+<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">div=</span> <span class="st">"bw"</span>,</span>
+<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a>                      <span class="at">method =</span> <span class="st">"simple"</span>, </span>
+<span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a>                      <span class="at">digits =</span> <span class="dv">1</span>, </span>
+<span id="cb67-15"><a href="#cb67-15" aria-hidden="true" tabindex="-1"></a>                      <span class="at">tol =</span> <span class="dv">1</span>,</span>
+<span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a>                      <span class="at">grid_shape =</span> <span class="fu">c</span>(<span class="dv">16</span>,<span class="dv">16</span>), </span>
+<span id="cb67-17"><a href="#cb67-17" aria-hidden="true" tabindex="-1"></a>                      <span class="at">max_depth =</span> <span class="dv">8</span>,</span>
+<span id="cb67-18"><a href="#cb67-18" aria-hidden="true" tabindex="-1"></a>                      <span class="at">agg =</span> <span class="dv">20</span>,</span>
+<span id="cb67-19"><a href="#cb67-19" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sparse =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb67-20"><a href="#cb67-20" aria-hidden="true" tabindex="-1"></a>                      <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb67-21"><a href="#cb67-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-22"><a href="#cb67-22" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">inherits</span>(future<span class="sc">::</span><span class="fu">plan</span>(), <span class="st">"sequential"</span>)) future<span class="sc">::</span><span class="fu">plan</span>(future<span class="sc">::</span>sequential)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="insert-densities-to-lixel-and-sample" class="level4">
+<h4 class="anchored" data-anchor-id="insert-densities-to-lixel-and-sample">4.2.2.3 Insert Densities to Lixel and Sample</h4>
+<p>After finishing the computation, we need to put the density value into the samples and lixels. Don’t forget to adjust the scale to kilometer</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>origin_samples<span class="sc">$</span>density <span class="ot">&lt;-</span> origin_densities<span class="sc">$</span>k</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>origin_lixels<span class="sc">$</span>density <span class="ot">&lt;-</span> origin_densities<span class="sc">$</span>k</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>origin_samples<span class="sc">$</span>density <span class="ot">&lt;-</span> origin_samples<span class="sc">$</span>density<span class="sc">*</span><span class="dv">1000</span></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>origin_lixels<span class="sc">$</span>density <span class="ot">&lt;-</span> origin_lixels<span class="sc">$</span>density<span class="sc">*</span><span class="dv">1000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualization-1" class="level4">
+<h4 class="anchored" data-anchor-id="visualization-1">4.2.2.4 Visualization</h4>
+<p>We can use tmaps to visualize the result of our NKDE</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(origin_lixels)<span class="sc">+</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>()<span class="sc">+</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(origin_samples)<span class="sc">+</span></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="st">"density"</span>, <span class="at">style=</span><span class="st">"kmeans"</span>, <span class="at">palette=</span><span class="st">"GnBu"</span>, <span class="at">n=</span><span class="dv">7</span>, <span class="at">size=</span><span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="nkde-for-destination" class="level3">
+<h3 class="anchored" data-anchor-id="nkde-for-destination">4.2.3 NKDE for Destination</h3>
+<p>For destination, we are doing the exact same process, but changing the event points to the destination points. To get the NKDE for Destination points, simply use the code for the Origin points, but change the dataset to the Destination dataset.</p>
+</section>
+</section>
+</section>
+<section id="kernel-density-maps-on-openstreetmap" class="level1">
+<h1>5. Kernel Density Maps on OpenStreetMap</h1>
+<p>Now we are aiming to plot our kernel density maps on OpenStreetMap to make describing spatial patterns more intuitive.</p>
+<section id="defining-a-kernel-density-map-function" class="level2">
+<h2 class="anchored" data-anchor-id="defining-a-kernel-density-map-function">5.1 Defining a Kernel Density Map Function</h2>
+<p>First, we can create a function called density_map, which can be called later on to visualize our maps.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>density_map <span class="ot">&lt;-</span> <span class="cf">function</span>(raster_object, map_title) {</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_basemap</span>(<span class="st">"OpenStreetMap"</span>) <span class="sc">+</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(raster_object) <span class="sc">+</span></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_raster</span>(<span class="st">"layer"</span>, <span class="at">alpha=</span><span class="fl">0.65</span>) <span class="sc">+</span> </span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">"right"</span>, <span class="st">"bottom"</span>), </span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.height =</span> <span class="fl">0.5</span>, </span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.width =</span> <span class="fl">0.4</span>,</span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title =</span> map_title,</span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.position =</span> <span class="st">'center'</span>,</span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.size =</span> <span class="dv">1</span>,</span>
+<span id="cb70-11"><a href="#cb70-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">frame =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb70-12"><a href="#cb70-12" aria-hidden="true" tabindex="-1"></a>  } </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plotting-density-map" class="level2">
+<h2 class="anchored" data-anchor-id="plotting-density-map">5.2 Plotting Density Map</h2>
+<p>To plot our density map, we can coll on the density_map function we defined before</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>origin_density_map <span class="ot">&lt;-</span> <span class="fu">density_map</span>(kde_origin_raster, <span class="st">"GrabPosisi Origin"</span>)</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>origin_density_map</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Variable(s) "layer" contains positive and negative values, so midpoint is set to 0. Set midpoint = NA to show the full spectrum of the color palette.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>destination_density_map <span class="ot">&lt;-</span> <span class="fu">density_map</span>(kde_destination_raster, <span class="st">"GrabPosisi Destination"</span>)</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>destination_density_map</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Variable(s) "layer" contains positive and negative values, so midpoint is set to 0. Set midpoint = NA to show the full spectrum of the color palette.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-45-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="reference" class="level1">
+<h1>Reference</h1>
+<ol type="1">
+<li>https://is415-msty.netlify.app/posts/2021-09-19-take-home-exercise-2/</li>
+<li>https://rdrr.io/cran/spNetwork/man/nkde.mc.html</li>
+<li>https://journal.r-project.org/archive/2021/RJ-2021-102/RJ-2021-102.pdf</li>
+<li>https://r4gdsa.netlify.app/chap07</li>
+<li>https://r4gdsa.netlify.app/chap04</li>
+</ol>
+</section>
+<section id="misc" class="level1">
+<h1>Misc</h1>
+<section id="saving-data-to-rds" class="level2">
+<h2 class="anchored" data-anchor-id="saving-data-to-rds">Saving data to RDS</h2>
+<p>We can use write_rds() to save our loaded data into an RDS file, making it easier to reload any data we might need again</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(origin, <span class="st">'data/rds/origin.rds'</span>)</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(destination, <span class="st">'data/rds/destination.rds'</span>)</span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(road_sf, <span class="st">'data/rds/road_sf.rds'</span>)</span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(mpsz2019_sf, <span class="st">'data/rds/mpsz2019_sf.rds'</span>)</span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(origin_lixels, <span class="st">'data/rds/origin_lixels.rds'</span>)</span>
+<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(destination_lixels, <span class="st">'data/rds/destination_lixels.rds'</span>)</span>
+<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(origin_samples, <span class="st">'data/rds/origin_samples.rds'</span>)</span>
+<span id="cb75-8"><a href="#cb75-8" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(destination_samples, <span class="st">'data/rds/destination_samples.rds'</span>)</span>
+<span id="cb75-9"><a href="#cb75-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(sg_road, <span class="st">'data/rds/sg_road.rds'</span>)</span>
+<span id="cb75-10"><a href="#cb75-10" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(origin_densities, <span class="st">'data/rds/origin_densities.rds'</span>)</span>
+<span id="cb75-11"><a href="#cb75-11" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(destination_densities, <span class="st">'data/rds/destination_densities.rds'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="loading-data-from-rds" class="level2">
+<h2 class="anchored" data-anchor-id="loading-data-from-rds">Loading data from RDS</h2>
+<p>We can use read_rds() to reload any saved RDS file</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>origin <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'data/rds/origin.rds'</span>)</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>destination <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'data/rds/destination.rds'</span>)</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>road_sf <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'data/rds/road_sf.rds'</span>)</span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>mpsz2019_sf <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'data/rds/mpsz2019_sf.rds'</span>)</span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a>sg_sf <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'data/rds/sg_sf.rds'</span>)</span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a>origin_densities <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'data/rds/origin_densities.rds'</span>)</span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a>destination_densities <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'data/rds/destination_densities.rds'</span>)</span>
+<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a>origin_lixels <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'data/rds/origin_lixels.rds'</span>)</span>
+<span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a>destination_lixels <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'data/rds/destination_lixels.rds'</span>)</span>
+<span id="cb76-10"><a href="#cb76-10" aria-hidden="true" tabindex="-1"></a>origin_samples <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'data/rds/origin_samples.rds'</span>)</span>
+<span id="cb76-11"><a href="#cb76-11" aria-hidden="true" tabindex="-1"></a>destination_samples <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">'data/rds/destination_samples.rds'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 </section>

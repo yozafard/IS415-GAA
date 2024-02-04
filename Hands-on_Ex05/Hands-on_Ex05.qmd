@@ -1,5 +1,5 @@
 ---
-title: "Hands On Exercise 4: Spatial Weights and Applications"
+title: "Hands On Exercise 5: Global and Local Measures of Spatial Autocorrelation"
 ---
 
 ```{r setup, include=FALSE}

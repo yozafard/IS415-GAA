@@ -40,12 +40,20 @@ The specific tasks of this take-home exercise are as follows:
 
 # 2. Packages
 
-The R packages used in this project are: - sf: for importing, managing, and processing geospatial data. - tidyverse: a family of other R packages for performing data science tasks such as importing, wrangling, and visualising data. - tmap: creating thematic maps - maptools: a set of tools for manipulating geographic data - raster: reads, writes, manipulates, analyses, and model gridded spatial data (raster) - spatstat: for performing spatial point patterns analysis - spNetwork: for performing spatial analysis on network - arrow: to read parquet files
+The R packages used in this project are: 
+  - sf: for importing, managing, and processing geospatial data. 
+  - tidyverse: a family of other R packages for performing data science tasks such as importing, wrangling, and visualising data. 
+  - tmap: creating thematic maps - maptools: a set of tools for manipulating geographic data 
+  - raster: reads, writes, manipulates, analyses, and model gridded spatial data (raster) 
+  - spatstat: for performing spatial point patterns analysis 
+  - spNetwork: for performing spatial analysis on network 
+  - arrow: to read parquet files
+  - data.table: to manipulate large tables faster
 
 We can load these packages with this code chunk:
 
 ```{r}
-pacman::p_load(sf, spNetwork, tmap, arrow, tidyverse, spatstat, maptools, data.table)
+pacman::p_load(sf, spNetwork, tmap, arrow, tidyverse, spatstat, maptools, data.table, raster)
 ```
 
 # 3. Data
@@ -74,10 +82,7 @@ for(i in seq(file_list)) {
 grabposisi <- bind_rows(combined)
 ```
 
-```{r}
-# file_list <- list.files('./data/GrabPosisi')
-# grabposisi <- read_parquet(paste0('data/GrabPosisi/', file_list[1]))
-```
+What the code chunk above does, is that it takes in the names of the files in the specified folder, turning it into a list. 
 
 Now, we explore the grabposisi data
 
@@ -99,18 +104,7 @@ st_crs(grabposisi_sf)
 
 ```
 
-Now we can check how it looks like by plotting it. To make the computations faster, we can take some sample since we are not doing in-depth analysis at this time.
 
-Making the sample:
-```{r}
-grabposisi_sample <- grabposisi_sf[seq(1, nrow(grabposisi_sf), by = 300), ]
-summary(grabposisi_sample)
-```
-
-Making the plot:
-```{r}
-tm_shape(grabposisi_sample) + tm_dots()
-```
 Now, we can extract the origin of a ride, based on trajectory id. We will group the rows based on trajectory id, and sort it in ascending order based on the timestamp. The first index of every trajectory id will be the starting point of that ride.
 
 ```{r}
@@ -130,6 +124,17 @@ origin <- grabposisi_sf[order(trj_id, pingtimestamp)
   ] |> st_as_sf()
 
 st_crs(origin)
+```
+
+Let's filter so that we only have cars in the data
+```{r}
+origin <- filter(origin, driving_mode == 'car')
+
+```
+
+Now, we can see what it looks like
+```{r}
+qtm(origin)
 ```
 
 We can apply a similar logic to get the destination. The difference is that we need to sort it in descending order based on the timestamp.
@@ -153,12 +158,21 @@ destination <- grabposisi_sf[order(trj_id, -pingtimestamp)
 st_crs(destination)
 ```
 
+Same as above, we can filter it
 ```{r}
-# tm_shape(origin_sf) + tm_dots() + tm_shape(destination_sf) + tm_dots()
+destination <- filter(destination, driving_mode == 'car')
+
 ```
+
+And plot it
+```{r}
+qtm(destination)
+```
+
 
 ### 3.1.2 Geospatial Data
 
+#### 3.1.2.1 MPSZ
 Now, we need to load the geospatial data. Let's start with the 2019 Subzone Master Plan
 
 ```{r}
@@ -166,10 +180,11 @@ mpsz2019_sf <- st_read(dsn='data/Geospatial/MPSZ-2019', layer='MPSZ-2019') |> st
 st_crs(mpsz2019_sf)
 ```
 
+And see what it looks like on a plot.
 ```{r}
 qtm(mpsz2019_sf)
 ```
-To extract only the main island, we can filter out the surrounding islands with this code chunk below
+Notice that this includes the surrounding islands. To extract only the main island, we can filter out the surrounding islands with this code chunk below
 
 ```{r}
 mpsz2019_sf <- mpsz2019_sf[!grepl("ISLAND", mpsz2019_sf$PLN_AREA_N, ignore.case = TRUE), ]
@@ -182,7 +197,7 @@ sg_sf <- mpsz2019_sf |> st_union()
 plot(sg_sf)
 
 ```
-
+#### 3.1.2.2 Road Data
 
 After the Master Plan, we can move on to the Road Data Set
 
@@ -191,15 +206,21 @@ road_sf <- st_read(dsn = 'data/Geospatial/malaysia-singapore-brunei-latest-free.
 st_crs(road_sf)
 glimpse(road_sf)
 ```
-
-
-
 ## 3.2 Converting to PPP
 
-Since KDE requires the point data to be in ppp format, we will convert our origin and destination to ppp
+Since KDE requires the point data to be in ppp format, we will convert our origin and destination to ppp. To do this, we can convert it into a Spatial* object with as_Spatial(), then to an sp object with as(x, 'SpatialPoints'), then finally to ppp with as(x, 'ppp')
 ```{r}
-origin_ppp <- as.ppp(origin)
-destination_ppp <- as.ppp(destination)
+origin_spatial <- as_Spatial(origin)
+origin_sp <- as(origin_spatial, 'SpatialPoints')
+origin_ppp <- as(origin_sp, 'ppp')
+
+destination_spatial <- as_Spatial(destination)
+destination_sp <- as(destination_spatial, 'SpatialPoints')
+destination_ppp <- as(destination_sp, 'ppp')
+
+#Alternatively, we can also use the commented codes below to directly convert to ppp
+# origin_ppp <- as.ppp(origin)
+# destination_ppp <- as.ppp(destination)
 ```
 
 Plot it to see how it looks like
@@ -345,11 +366,79 @@ kde_destination_adaptive <- adaptive.density(destination_sg_km, method="kernel")
 plot(kde_origin_adaptive)
 
 ```
+
 ```{r}
 plot(kde_destination_adaptive)
 
 ```
+### 4.1.3 Converting KDE Output to Grid Object
+We can convert the output into a grid object for a more suitable mapping
+```{r}
+grid_kde_origin <- as.SpatialGridDataFrame.im(kde_origin_ppl)
+spplot(grid_kde_origin)
+```
 
+```{r}
+grid_kde_destination <- as.SpatialGridDataFrame.im(kde_destination_ppl)
+spplot(grid_kde_destination)
+```
+### 4.1.4 Converting Grid to Raster
+```{r}
+kde_origin_raster <- raster(kde_origin_ppl)
+kde_origin_raster
+
+kde_destination_raster <- raster(kde_destination_ppl)
+kde_destination_raster
+```
+Since there is no crs property on the raster, we can assign it
+```{r}
+projection(kde_origin_raster) <- CRS("+init=EPSG:3414")
+kde_origin_raster
+
+projection(kde_destination_raster) <- CRS("+init=EPSG:3414")
+kde_destination_raster
+```
+
+### 4.1.5 Visualization
+```{r}
+tm_shape(kde_origin_raster) + 
+  tm_raster("layer") +
+  tm_layout(legend.position = c("right", "bottom"), frame = FALSE)
+```
+
+### 4.1.6 Testing Spatial Point Patterns Using Clark and Evans Test
+
+#### Origin
+The test hypotheses are:
+
+Ho = The distribution of grab origin points are randomly distributed.
+
+H1= The distribution of grab origin points are not randomly distributed.
+
+The 95% confident interval will be used.
+```{r}
+origin_clarkevans <- clarkevans.test(origin_ppp,
+                correction="none",
+                clipregion="sg_owin",
+                alternative=c("clustered"))
+origin_clarkevans
+```
+#### Destination
+The test hypotheses are:
+
+Ho = The distribution of grab destination points are randomly distributed.
+
+H1= The distribution of grab destination points are not randomly distributed.
+
+The 95% confident interval will be used.
+
+```{r}
+destination_clarkevans <- clarkevans.test(destination_ppp,
+                correction="none",
+                clipregion="sg_owin",
+                alternative=c("clustered"))
+destination_clarkevans
+```
 
 ## 4.2 Network Constrained Spatial Point Pattern Analysis
 
@@ -357,14 +446,31 @@ For Network Constrained Spatial Point Pattern Analysis, we are taking into accou
 
 ### 4.2.1 Preparing Road Objects
 
-First, we prepare an object that contains roads in Singapore. We can use st_intersection to extract the roads from our dataset from OSM that matches/intersects with the MPSZ.
-```{r}
-sg_road <- st_intersection(road_sf, sg_sf) |> st_as_sf()
+First, we prepare an object that contains roads in Singapore. We can use st_within to extract the roads from our dataset from OSM that matches/intersects with the MPSZ. Since we are only looking at roads that is suitable for cars, one way we can do it is by excluding rows where the max speed is 0
 
+```{r}
+sg_road <- road_sf[st_contains(sg_sf, road_sf, sparse = FALSE), ] |> filter(maxspeed > 0)
+qtm(sg_road)
 ```
+
 ### 4.2.2 NKDE for Origin
 
+First, let's see how it looks like
+
+```{r}
+tm_shape(sg_road) + tm_lines() +
+  tm_shape(origin) + tm_dots('red', size=0.02)
+```
+
 #### 4.2.2.1 Preparing Origin Lixels and Line Centre Points
+
+We will also extract the origin to include only those who are inside the Singapore main island's boundary
+
+```{r}
+origin_events <- origin[st_contains(sg_sf, origin, sparse = FALSE), ]
+origin_events <- origin_events[, c('osm_id', 'geometry')]
+```
+
 ```{r}
 origin_lixels <- lixelize_lines(sg_road, 
                          700, 
@@ -374,23 +480,32 @@ origin_lixels <- lixelize_lines(sg_road,
 origin_samples <- lines_center(origin_lixels)
 ```
 
+
 #### 4.2.2.2 Performing NKDE
 ```{r}
-origin_densities <- nkde(road_sf, 
-                  events = origin,
-                  w = rep(1,nrow(origin)),
-                  samples = origin_samples,
-                  kernel_name = "quartic",
-                  bw = 300, 
-                  div= "bw", 
-                  method = "simple", 
-                  digits = 1, 
-                  tol = 1,
-                  grid_shape = c(1,1), 
-                  max_depth = 8,
-                  agg = 5, #we aggregate events within a 5m radius (faster calculation)
-                  sparse = TRUE,
-                  verbose = FALSE)
+future::plan(future::multisession(workers=2))
+
+
+origin_densities <- nkde.mc(sg_road, 
+                      events = origin_events,
+                      w = rep(1,nrow(origin_events)),
+                      samples = origin_samples,
+                      kernel_name = "quartic",
+                      bw = 300,
+                      adaptive = TRUE, # we use here an adaptive bandwidth
+                      trim_bw = 600, # the maximum local values of bandwidth will be 600m
+                      div= "bw",
+                      method = "simple", 
+                      digits = 1, 
+                      tol = 1,
+                      grid_shape = c(16,16), 
+                      max_depth = 8,
+                      agg = 20,
+                      sparse = TRUE,
+                      verbose = FALSE)
+
+if (!inherits(future::plan(), "sequential")) future::plan(future::sequential)
+
 ```
 
 #### 4.2.2.3 Insert Densities to Lixel and Sample
@@ -406,7 +521,7 @@ origin_lixels$density <- origin_lixels$density*1000
 #### 4.2.2.4 Visualization
 ```{r}
 tm_shape(origin_lixels)+
-  tm_lines(col="origin_density")+
+  tm_lines()+
 tm_shape(origin)+
   tm_dots()
 ```
@@ -423,10 +538,16 @@ destination_lixels <- lixelize_lines(sg_road,
 destination_samples <- lines_center(destination_lixels)
 ```
 
+```{r}
+destination_events <- destination$geometry |> st_as_sf()
+class(destination_events)
+```
+
+
 #### 4.2.3.2 Performing NKDE
 ```{r}
-destination_densities <- nkde(road_sf, 
-                  events = destination,
+destination_densities <- nkde(sg_road, 
+                  events = destination_events,
                   w = rep(1,nrow(destination)),
                   samples = destination_samples,
                   kernel_name = "quartic",
@@ -437,7 +558,7 @@ destination_densities <- nkde(road_sf,
                   tol = 1,
                   grid_shape = c(1,1), 
                   max_depth = 8,
-                  agg = 5, #we aggregate events within a 5m radius (faster calculation)
+                  agg = 20,
                   sparse = TRUE,
                   verbose = FALSE)
 ```
@@ -460,14 +581,43 @@ tm_shape(destination)+
   tm_dots()
 ```
 
+# 5. Kernel Density Maps on OpenStreetMap
+Now we are aiming to plot our kernel density maps on OpenStreetMap to make describing spatial patterns more intuitive.
+## 5.1 Defining a Kernel Density Map Function
+```{r}
+density_map <- function(raster_object, map_title) {
+  tm_basemap("OpenStreetMap") +
+tm_shape(raster_object) +
+  tm_raster("layer", alpha=0.65) + 
+  tm_layout(legend.position = c("right", "bottom"), 
+            legend.height = 0.5, 
+            legend.width = 0.4,
+            main.title = map_title,
+            main.title.position = 'center',
+            main.title.size = 1,
+            frame = FALSE)
+  } 
+```
+
+## 5.2 Plotting Density Map
+```{r}
+origin_density_map <- density_map(kde_origin_raster, "GrabPosisi Origin")
+```
+
 # Misc
 ## Saving data to RDS
 ```{r}
 write_rds(origin, 'data/rds/origin.rds')
 write_rds(destination, 'data/rds/destination.rds')
 write_rds(road_sf, 'data/rds/road_sf.rds')
-write_rds(grabposisi_sf, 'data/rds/grabposisi_sf.rds')
 write_rds(mpsz2019_sf, 'data/rds/mpsz2019_sf.rds')
+write_rds(origin_lixels, 'data/rds/origin_lixels.rds')
+write_rds(destination_lixels, 'data/rds/destination_lixels.rds')
+write_rds(origin_samples, 'data/rds/origin_samples.rds')
+write_rds(destination_samples, 'data/rds/destination_samples.rds')
+write_rds(sg_road, 'data/rds/sg_road.rds')
+
+
 ```
 
 ## Loading data from RDS
@@ -476,6 +626,7 @@ origin <- read_rds('data/rds/origin.rds')
 destination <- read_rds('data/rds/destination.rds')
 road_sf <- read_rds('data/rds/road_sf.rds')
 mpsz2019_sf <- read_rds('data/rds/mpsz2019_sf.rds')
+sg_sf <- read_rds('data/rds/sg_sf.rds')
 ```
 
 

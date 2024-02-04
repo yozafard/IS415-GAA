@@ -1,14 +1,11 @@
 ---
 title: "In-Class Exercise 4: Spatial Weights and Applications"
+author: "Yozafard Harold Siauheming"
+execute:
+  eval: true
+  echo: false
+  warning: false
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, 
-                      eval = TRUE,
-                      message = FALSE,
-                      warning = FALSE)
-
-```
 ## Installing Packages
 ```{r}
 pacman::p_load(sf, spdep, tmap, tidyverse, knitr, GWmodel)

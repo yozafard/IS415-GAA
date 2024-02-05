@@ -1,6 +1,14 @@
 ---
 title: "IS415-GAA"
+listing:
+  contents: 
+    - "In-class_Ex/*.qmd"
+    - "Hands-on_Ex/*.qmd"
+    - "Take-home_Ex/*.qmd"
+  type: default
+  categories: true
 ---
+
 
 Welcome to IS415 Geospatial Analytics and Applications
 

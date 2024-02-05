@@ -1,0 +1,80 @@
+---
+title: "In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods"
+author: "Yozafard Harold Siauheming"
+date: "2/5/2024"
+category: "In-Class_Exercise"
+execute:
+  eval: true
+  echo: false
+  warning: false
+---
+
+# Packages
+
+We are using sfdep, not spdep
+```{r}
+pacman::p_load(sf, sfdep, tmap, tidyverse)
+```
+# Data
+
+## Loading Data
+
+```{r}
+hunan <- st_read(dsn="data/geospatial", layer='Hunan')
+hunan2012 <- read_csv('data/aspatial/Hunan_2012.csv')
+hunan_GDPPC <- read_csv('data/aspatial/Hunan_GDPPC.csv')
+```
+
+We can track to see which columns are the same for both dataset
+
+## Combining data using left_join
+```{r}
+hunan_GDPPC <- left_join(hunan,hunan2012) %>%
+  select(1:4, 7, 15) |>
+  left_join(hunan_GDPPC)
+```
+## Plot Coropleth
+```{r}
+tmap_mode('plot')
+tm_shape(hunan_GDPPC) +
+  tm_fill("GDPPC",
+          style = "quantile",
+          palette = "Blues",
+          title = "GDPPC") +
+  tm_layout(main.title = "Distribution of GDP per capita by county, Hunan Province")
+```
+
+# Contiguity Weights
+
+We can try using the tidyverse method so that it can run in one chunk
+```{r}
+wm_q <- hunan_GDPPC |>
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style='W'),
+         .before=1
+         )
+```
+
+This converges the nb and wt in one table so that it is easier to see for us visually, without using command lines
+
+# Computing Moran's I
+
+## Global Moran's I
+```{r}
+moranI <- global_moran(wm_q$GDPPC, wm_q$nb, wm_q$wt)
+moranI
+```
+```{r}
+global_moran_test(wm_q$GDPPC, wm_q$nb, wm_q$wt)
+```
+
+## Monte Carlo Global Moran'I Permutation test
+
+This performs simulation, making it more reliable compared to the normal Moran'I test that only checks for one test data. nsim=99 will run the simulation 100 times as it uses 0 based indexing
+
+```{r}
+set.seed(1234)
+global_moran_perm(wm_q$GDPPC, wm_q$nb, wm_q$wt, nsim=99)
+```
+

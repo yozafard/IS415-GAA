@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html",
+    "title": "In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods",
+    "section": "",
+    "text": "We are using sfdep, not spdep"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#loading-data",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#loading-data",
+    "title": "In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods",
+    "section": "Loading Data",
+    "text": "Loading Data\n\n\nReading layer `Hunan' from data source \n  `C:\\Users\\yozaf\\SMUY3S2\\Geospatial\\IS415-GAA\\In-class_Ex\\In-class_Ex05\\data\\geospatial' \n  using driver `ESRI Shapefile'\nSimple feature collection with 88 features and 7 fields\nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812\nGeodetic CRS:  WGS 84\n\n\nWe can track to see which columns are the same for both dataset"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#combining-data-using-left_join",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#combining-data-using-left_join",
+    "title": "In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods",
+    "section": "Combining data using left_join",
+    "text": "Combining data using left_join"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#plot-coropleth",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#plot-coropleth",
+    "title": "In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods",
+    "section": "Plot Coropleth",
+    "text": "Plot Coropleth"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#global-morans-i",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#global-morans-i",
+    "title": "In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods",
+    "section": "Global Moran’s I",
+    "text": "Global Moran’s I\n\n\n$I\n[1] 0.30075\n\n$K\n[1] 7.640659\n\n\n\n\n\n    Moran I test under randomisation\n\ndata:  x  \nweights: listw    \n\nMoran I statistic standard deviate = 4.7351, p-value = 1.095e-06\nalternative hypothesis: greater\nsample estimates:\nMoran I statistic       Expectation          Variance \n      0.300749970      -0.011494253       0.004348351"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#monte-carlo-global-morani-permutation-test",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#monte-carlo-global-morani-permutation-test",
+    "title": "In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods",
+    "section": "Monte Carlo Global Moran’I Permutation test",
+    "text": "Monte Carlo Global Moran’I Permutation test\nThis performs simulation, making it more reliable compared to the normal Moran’I test that only checks for one test data. nsim=99 will run the simulation 100 times as it uses 0 based indexing\n\n\n\n    Monte-Carlo simulation of Moran I\n\ndata:  x \nweights: listw  \nnumber of simulations + 1: 100 \n\nstatistic = 0.30075, observed rank = 100, p-value &lt; 2.2e-16\nalternative hypothesis: two.sided"
+  }
+]

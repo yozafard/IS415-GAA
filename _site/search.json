@@ -866,5 +866,61 @@
     "title": "Hands On Exercise 6: Global and Local Measures of Spatial Autocorrelation",
     "section": "Adaptive Distance",
     "text": "Adaptive Distance\n\nfips &lt;- order(hunan$County)\ngi.adaptive &lt;- localG(hunan$GDPPC, knn_lw)\nhunan.gi &lt;- cbind(hunan, as.matrix(gi.adaptive)) %&gt;%\n  rename(gstat_adaptive = as.matrix.gi.adaptive.)\n\nCombine it to hunan sf data frame\n\nhunan.gi &lt;- cbind(hunan, as.matrix(gi.adaptive)) %&gt;%\n  rename(gstat_adaptive = as.matrix.gi.adaptive.)\n\n\nMapping Gi Values\n\ngdppc&lt;- qtm(hunan, \"GDPPC\")\n\nGimap &lt;- tm_shape(hunan.gi) + \n  tm_fill(col = \"gstat_adaptive\", \n          style = \"pretty\", \n          palette=\"-RdBu\", \n          title = \"local Gi\") + \n  tm_borders(alpha = 0.5)\n\ntmap_arrange(gdppc, \n             Gimap, \n             asp=1, \n             ncol=2)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#computing-local-morans-i",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#computing-local-morans-i",
+    "title": "In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods",
+    "section": "Computing Local Moran’s I",
+    "text": "Computing Local Moran’s I\n\n\nSimple feature collection with 88 features and 21 fields\nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812\nGeodetic CRS:  WGS 84\n# A tibble: 88 × 22\n         ii        eii     var_ii    z_ii    p_ii p_ii_sim p_folded_sim skewness\n      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt;\n 1 -0.00147  0.00177   0.000418   -0.158  0.874       0.82         0.41   -0.812\n 2  0.0259   0.00641   0.0105      0.190  0.849       0.96         0.48   -1.09 \n 3 -0.0120  -0.0374    0.102       0.0796 0.937       0.76         0.38    0.824\n 4  0.00102 -0.0000349 0.00000437  0.506  0.613       0.64         0.32    1.04 \n 5  0.0148  -0.00340   0.00165     0.449  0.654       0.5          0.25    1.64 \n 6 -0.0388  -0.00339   0.00545    -0.480  0.631       0.82         0.41    0.614\n 7  3.37    -0.198     1.41        3.00   0.00266     0.08         0.04    1.46 \n 8  1.56    -0.265     0.804       2.04   0.0417      0.08         0.04    0.459\n 9  4.42     0.0450    1.79        3.27   0.00108     0.02         0.01    0.746\n10 -0.399   -0.0505    0.0859     -1.19   0.234       0.28         0.14   -0.685\n# ℹ 78 more rows\n# ℹ 14 more variables: kurtosis &lt;dbl&gt;, mean &lt;fct&gt;, median &lt;fct&gt;, pysal &lt;fct&gt;,\n#   nb &lt;nb&gt;, wt &lt;list&gt;, NAME_2 &lt;chr&gt;, ID_3 &lt;int&gt;, NAME_3 &lt;chr&gt;,\n#   ENGTYPE_3 &lt;chr&gt;, County &lt;chr&gt;, GDPPC &lt;dbl&gt;, Year &lt;dbl&gt;,\n#   geometry &lt;POLYGON [°]&gt;\n\n\n\nVisualizing Local Moran’s I\n\n\n\n\n\n\n\nVisualizing p-value of Local Moran’s I\n\n\n\n\n\n\n\nVisualizing LISA Map"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05-EHSA.html",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05-EHSA.html",
+    "title": "In-Class Exercise 5: Emerging Hot Spot Analysis: sfdep methods",
+    "section": "",
+    "text": "Emerging Hot Spot Analysis (EHSA) is a spatio-temporal analysis method for revealing and describing how hot spot and cold spot areas evolve over time. The analysis consist of four main steps:\n\nBuilding a space-time cube,\nCalculating Getis-Ord local Gi* statistic for each bin by using an FDR correction,\nEvaluating these hot and cold spot trends by using Mann-Kendall trend test,\nCategorising each study area location by referring to the resultant trend z-score and p-value 5. for each location with data, and with the hot spot z-score and p-value for each bin."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05-EHSA.html#loading-data",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05-EHSA.html#loading-data",
+    "title": "In-Class Exercise 5: Emerging Hot Spot Analysis: sfdep methods",
+    "section": "Loading Data",
+    "text": "Loading Data\n\n\nReading layer `Hunan' from data source \n  `C:\\Users\\yozaf\\SMUY3S2\\Geospatial\\IS415-GAA\\In-class_Ex\\In-class_Ex05\\data\\geospatial' \n  using driver `ESRI Shapefile'\nSimple feature collection with 88 features and 7 fields\nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812\nGeodetic CRS:  WGS 84"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#computing-local-gi-statistics",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#computing-local-gi-statistics",
+    "title": "In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods",
+    "section": "Computing Local Gi* Statistics",
+    "text": "Computing Local Gi* Statistics\n\n\nSimple feature collection with 88 features and 17 fields\nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812\nGeodetic CRS:  WGS 84\n# A tibble: 88 × 18\n   gi_star   e_gi    var_gi p_value   p_sim p_folded_sim skewness kurtosis nb   \n     &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;nb&gt; \n 1  0.0416 0.0114   6.41e-6  0.0493 9.61e-1         0.7      0.35    0.875 &lt;int&gt;\n 2 -0.333  0.0106   3.84e-6 -0.0941 9.25e-1         1        0.5     0.661 &lt;int&gt;\n 3  0.281  0.0126   7.51e-6 -0.151  8.80e-1         0.9      0.45    0.640 &lt;int&gt;\n 4  0.411  0.0118   9.22e-6  0.264  7.92e-1         0.6      0.3     0.853 &lt;int&gt;\n 5  0.387  0.0115   9.56e-6  0.339  7.34e-1         0.62     0.31    1.07  &lt;int&gt;\n 6 -0.368  0.0118   5.91e-6 -0.583  5.60e-1         0.72     0.36    0.594 &lt;int&gt;\n 7  3.56   0.0151   7.31e-6  2.61   9.01e-3         0.06     0.03    1.09  &lt;int&gt;\n 8  2.52   0.0136   6.14e-6  1.49   1.35e-1         0.2      0.1     1.12  &lt;int&gt;\n 9  4.56   0.0144   5.84e-6  3.53   4.17e-4         0.04     0.02    1.23  &lt;int&gt;\n10  1.16   0.0104   3.70e-6  1.82   6.86e-2         0.12     0.06    0.416 &lt;int&gt;\n# ℹ 78 more rows\n# ℹ 9 more variables: wts &lt;list&gt;, NAME_2 &lt;chr&gt;, ID_3 &lt;int&gt;, NAME_3 &lt;chr&gt;,\n#   ENGTYPE_3 &lt;chr&gt;, County &lt;chr&gt;, GDPPC &lt;dbl&gt;, Year &lt;dbl&gt;,\n#   geometry &lt;POLYGON [°]&gt;"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#visualizing-gi",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#visualizing-gi",
+    "title": "In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods",
+    "section": "Visualizing Gi*",
+    "text": "Visualizing Gi*"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#visualizing-p-value-of-hcsa",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#visualizing-p-value-of-hcsa",
+    "title": "In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods",
+    "section": "Visualizing p-value of HCSA",
+    "text": "Visualizing p-value of HCSA"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#visualizing-local-hcsa",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#visualizing-local-hcsa",
+    "title": "In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods",
+    "section": "Visualizing Local HCSA",
+    "text": "Visualizing Local HCSA"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#visualizing-hot-spot-and-cold-spot-areas",
+    "href": "In-class_Ex/In-class_Ex05/In-class_Ex05.html#visualizing-hot-spot-and-cold-spot-areas",
+    "title": "In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods",
+    "section": "Visualizing Hot Spot and Cold Spot Areas",
+    "text": "Visualizing Hot Spot and Cold Spot Areas"
   }
 ]

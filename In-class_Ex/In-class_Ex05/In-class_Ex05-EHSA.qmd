@@ -1,0 +1,159 @@
+---
+title: "In-Class Exercise 5: Emerging Hot Spot Analysis: sfdep methods"
+author: "Yozafard Harold Siauheming"
+date: "2/19/2024"
+category: "In-Class_Exercise"
+execute:
+  eval: true
+  echo: false
+  warning: false
+---
+
+# Overview
+
+Emerging Hot Spot Analysis (EHSA) is a spatio-temporal analysis method for revealing and describing how hot spot and cold spot areas evolve over time. The analysis consist of four main steps:
+
+1. Building a space-time cube,
+2. Calculating Getis-Ord local Gi* statistic for each bin by using an FDR correction,
+3. Evaluating these hot and cold spot trends by using Mann-Kendall trend test,
+4. Categorising each study area location by referring to the resultant trend z-score and p-value 5. for each location with data, and with the hot spot z-score and p-value for each bin.
+
+# Packages
+
+We are using sfdep, not spdep
+```{r}
+pacman::p_load(sf, sfdep, tmap, tidyverse, Kendall)
+```
+# Data
+
+## Loading Data
+
+```{r}
+hunan <- st_read(dsn="data/geospatial", layer='Hunan')
+GDPPC <- read_csv("data/aspatial/Hunan_GDPPC.csv")
+```
+
+# Creating Time Series Cube
+
+In the code chunk below, spacetime() of sfdep is used to create an spatio-temporal cube.
+
+
+```{r}
+GDPPC_st <- spacetime(GDPPC, hunan,
+                      .loc_col = "County",
+                      .time_col = "Year")
+```
+
+# Computing Gi*
+
+First, we will identify the neighbours and derive an inverse distance weight
+```{r}
+GDPPC_nb <- GDPPC_st %>%
+  activate("geometry") %>%
+  mutate(nb = include_self(st_contiguity(geometry)),
+         wt = st_inverse_distance(nb, geometry,
+                                  scale = 1,
+                                  alpha = 1),
+         .before = 1) %>%
+  set_nbs("nb") %>%
+  set_wts("wt")
+```
+
+```{r}
+glimpse(GDPPC_nb)
+```
+
+Then, we can calculate Gi* by grouping by Year and using local_gstar_perm() of sfdep package. After which, we use unnest() to unnest gi_star column of the newly created gi_starts data.frame.
+```{r}
+gi_stars <- GDPPC_nb %>% 
+  group_by(Year) %>% 
+  mutate(gi_star = local_gstar_perm(
+    GDPPC, nb, wt)) %>% 
+  tidyr::unnest(gi_star)
+```
+
+# Mann-Kendall Test
+
+The code chunk will perform Mann-Kendall Test for Changsa county
+```{r}
+cbg <- gi_stars %>% 
+  ungroup() %>% 
+  filter(County == "Changsha") |> 
+  select(County, Year, gi_star)
+```
+
+We can plot the result
+```{r}
+ggplot(data = cbg, 
+       aes(x = Year, 
+           y = gi_star)) +
+  geom_line() +
+  theme_light()
+```
+
+```{r}
+cbg %>%
+  summarise(mk = list(
+    unclass(
+      Kendall::MannKendall(gi_star)))) %>% 
+  tidyr::unnest_wider(mk)
+```
+
+
+To perform Mann-Kendall Test for every location with groupby()
+```{r}
+ehsa <- gi_stars %>%
+  group_by(County) %>%
+  summarise(mk = list(
+    unclass(
+      Kendall::MannKendall(gi_star)))) %>%
+  tidyr::unnest_wider(mk)
+```
+
+# Arrange to Show Significant Emerging Hot/Cold Spots
+
+```{r}
+emerging <- ehsa %>% 
+  arrange(sl, abs(tau)) %>% 
+  slice(1:5)
+```
+
+# Performing Emerging Hot Spot Analysis
+
+```{r}
+ehsa <- emerging_hotspot_analysis(
+  x = GDPPC_st, 
+  .var = "GDPPC", 
+  k = 1, 
+  nsim = 99
+)
+```
+We can visualize the distribution of EHSA Classes
+```{r}
+ggplot(data = ehsa,
+       aes(x = classification)) +
+  geom_bar()
+```
+
+# Visualizing EHSA
+
+First, we need to join EHSA with Hunan
+```{r}
+hunan_ehsa <- hunan %>%
+  left_join(ehsa,
+            by = join_by(County == location))
+```
+
+Then, we can plot it with tmap functions
+```{r}
+ehsa_sig <- hunan_ehsa  %>%
+  filter(p_value < 0.05)
+tmap_mode("plot")
+tm_shape(hunan_ehsa) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(ehsa_sig) +
+  tm_fill("classification") + 
+  tm_borders(alpha = 0.4)
+```
+

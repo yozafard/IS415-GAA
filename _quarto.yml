@@ -33,6 +33,8 @@ website:
             url: "https://is415-gaa-yozafard.netlify.app/in-class_ex/in-class_ex04/in-class_ex04" 
           - text: "In-class Exercise 5"
             href: "In-class_Ex/In-class_Ex05/In-class_Ex05.qmd"
+          - text: "In-class Exercise 5 - EHSA"
+            href: "In-class_Ex/In-class_Ex05/In-class_Ex05-EHSA.qmd"
       - text: "Take Home Exercise"
         menu:
           - text: "Take Home Exercise 1"

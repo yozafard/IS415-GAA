@@ -41,6 +41,10 @@ tm_shape(hunan_GDPPC) +
           style = "quantile",
           palette = "Blues",
           title = "GDPPC") +
+  tm_borders(alpha = 0.5) +
+  tm_compass(type="8star", size = 2) +
+  tm_scale_bar(width = 0.25) +
+  tm_grid(lwd = 0.1, alpha = 0.2) +
   tm_layout(main.title = "Distribution of GDP per capita by county, Hunan Province")
 ```
 
@@ -76,5 +80,128 @@ This performs simulation, making it more reliable compared to the normal Moran'I
 ```{r}
 set.seed(1234)
 global_moran_perm(wm_q$GDPPC, wm_q$nb, wm_q$wt, nsim=99)
+```
+## Computing Local Moran's I
+
+```{r}
+lisa <- wm_q %>% 
+  mutate(local_moran = local_moran(
+    GDPPC, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+lisa
+```
+
+### Visualizing Local Moran's I
+
+```{r}
+tmap_mode("plot")
+tm_shape(lisa) +
+  tm_fill("ii") + 
+  tm_borders(alpha = 0.5) +
+  tm_view(set.zoom.limits = c(6,8)) +
+  tm_layout(main.title = "local Moran's I of GDPPC",
+            main.title.size = 0.8)
+```
+
+### Visualizing p-value of Local Moran's I
+
+```{r}
+tmap_mode("plot")
+tm_shape(lisa) +
+  tm_fill("p_ii_sim") + 
+  tm_borders(alpha = 0.5) +
+   tm_layout(main.title = "p-value of local Moran's I",
+            main.title.size = 0.8)
+```
+
+### Visualizing LISA Map
+
+```{r}
+lisa_sig <- lisa  %>%
+  filter(p_ii < 0.05)
+tmap_mode("plot")
+tm_shape(lisa) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4)
+```
+# Hot Spot and Cold Spot Analysis (HCSA)
+
+## Computing Local Gi* Statistics
+
+```{r}
+wm_idw <- hunan_GDPPC %>%
+  mutate(nb = st_contiguity(geometry),
+         wts = st_inverse_distance(nb, geometry,
+                                   scale = 1,
+                                   alpha = 1),
+         .before = 1)
+```
+
+```{r}
+HCSA <- wm_idw %>% 
+  mutate(local_Gi = local_gstar_perm(
+    GDPPC, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_Gi)
+HCSA
+```
+
+## Visualizing Gi*
+
+```{r}
+tmap_mode("plot")
+tm_shape(HCSA) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.5) +
+  tm_view(set.zoom.limits = c(6,8))
+```
+
+## Visualizing p-value of HCSA
+
+```{r}
+tmap_mode("plot")
+tm_shape(HCSA) +
+  tm_fill("p_sim") + 
+  tm_borders(alpha = 0.5)
+```
+
+## Visualizing Local HCSA
+
+```{r}
+tmap_mode("plot")
+map1 <- tm_shape(HCSA) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.5) +
+  tm_view(set.zoom.limits = c(6,8)) +
+  tm_layout(main.title = "Gi* of GDPPC",
+            main.title.size = 0.8)
+
+map2 <- tm_shape(HCSA) +
+  tm_fill("p_value",
+          breaks = c(0, 0.001, 0.01, 0.05, 1),
+              labels = c("0.001", "0.01", "0.05", "Not sig")) + 
+  tm_borders(alpha = 0.5) +
+  tm_layout(main.title = "p-value of Gi*",
+            main.title.size = 0.8)
+
+tmap_arrange(map1, map2, ncol = 2)
+```
+
+## Visualizing Hot Spot and Cold Spot Areas
+
+```{r}
+HCSA_sig <- HCSA  %>%
+  filter(p_sim < 0.05)
+tmap_mode("plot")
+tm_shape(HCSA) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(HCSA_sig) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.4)
 ```
 

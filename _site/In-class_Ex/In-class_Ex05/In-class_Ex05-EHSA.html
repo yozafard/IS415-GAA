@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yozafard Harold Siauheming">
-<meta name="dcterms.date" content="2024-02-05">
+<meta name="dcterms.date" content="2024-02-19">
 
-<title>IS415-GAA - In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods</title>
+<title>IS415-GAA - In-Class Exercise 5: Emerging Hot Spot Analysis: sfdep methods</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -144,7 +144,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
         <li>
     <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex05/In-class_Ex05-EHSA.html" rel="" target="">
- <span class="dropdown-text">In-class Exercise 5</span></a>
+ <span class="dropdown-text">In-class Exercise 5 - EHSA</span></a>
   </li>  
     </ul>
   </li>
@@ -175,33 +175,18 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#packages" id="toc-packages" class="nav-link active" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
   <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a>
   <ul class="collapse">
   <li><a href="#loading-data" id="toc-loading-data" class="nav-link" data-scroll-target="#loading-data">Loading Data</a></li>
-  <li><a href="#combining-data-using-left_join" id="toc-combining-data-using-left_join" class="nav-link" data-scroll-target="#combining-data-using-left_join">Combining data using left_join</a></li>
-  <li><a href="#plot-coropleth" id="toc-plot-coropleth" class="nav-link" data-scroll-target="#plot-coropleth">Plot Coropleth</a></li>
   </ul></li>
-  <li><a href="#contiguity-weights" id="toc-contiguity-weights" class="nav-link" data-scroll-target="#contiguity-weights">Contiguity Weights</a></li>
-  <li><a href="#computing-morans-i" id="toc-computing-morans-i" class="nav-link" data-scroll-target="#computing-morans-i">Computing Moran’s I</a>
-  <ul class="collapse">
-  <li><a href="#global-morans-i" id="toc-global-morans-i" class="nav-link" data-scroll-target="#global-morans-i">Global Moran’s I</a></li>
-  <li><a href="#monte-carlo-global-morani-permutation-test" id="toc-monte-carlo-global-morani-permutation-test" class="nav-link" data-scroll-target="#monte-carlo-global-morani-permutation-test">Monte Carlo Global Moran’I Permutation test</a></li>
-  <li><a href="#computing-local-morans-i" id="toc-computing-local-morans-i" class="nav-link" data-scroll-target="#computing-local-morans-i">Computing Local Moran’s I</a>
-  <ul class="collapse">
-  <li><a href="#visualizing-local-morans-i" id="toc-visualizing-local-morans-i" class="nav-link" data-scroll-target="#visualizing-local-morans-i">Visualizing Local Moran’s I</a></li>
-  <li><a href="#visualizing-p-value-of-local-morans-i" id="toc-visualizing-p-value-of-local-morans-i" class="nav-link" data-scroll-target="#visualizing-p-value-of-local-morans-i">Visualizing p-value of Local Moran’s I</a></li>
-  <li><a href="#visualizing-lisa-map" id="toc-visualizing-lisa-map" class="nav-link" data-scroll-target="#visualizing-lisa-map">Visualizing LISA Map</a></li>
-  </ul></li>
-  </ul></li>
-  <li><a href="#hot-spot-and-cold-spot-analysis-hcsa" id="toc-hot-spot-and-cold-spot-analysis-hcsa" class="nav-link" data-scroll-target="#hot-spot-and-cold-spot-analysis-hcsa">Hot Spot and Cold Spot Analysis (HCSA)</a>
-  <ul class="collapse">
-  <li><a href="#computing-local-gi-statistics" id="toc-computing-local-gi-statistics" class="nav-link" data-scroll-target="#computing-local-gi-statistics">Computing Local Gi* Statistics</a></li>
-  <li><a href="#visualizing-gi" id="toc-visualizing-gi" class="nav-link" data-scroll-target="#visualizing-gi">Visualizing Gi*</a></li>
-  <li><a href="#visualizing-p-value-of-hcsa" id="toc-visualizing-p-value-of-hcsa" class="nav-link" data-scroll-target="#visualizing-p-value-of-hcsa">Visualizing p-value of HCSA</a></li>
-  <li><a href="#visualizing-local-hcsa" id="toc-visualizing-local-hcsa" class="nav-link" data-scroll-target="#visualizing-local-hcsa">Visualizing Local HCSA</a></li>
-  <li><a href="#visualizing-hot-spot-and-cold-spot-areas" id="toc-visualizing-hot-spot-and-cold-spot-areas" class="nav-link" data-scroll-target="#visualizing-hot-spot-and-cold-spot-areas">Visualizing Hot Spot and Cold Spot Areas</a></li>
-  </ul></li>
+  <li><a href="#creating-time-series-cube" id="toc-creating-time-series-cube" class="nav-link" data-scroll-target="#creating-time-series-cube">Creating Time Series Cube</a></li>
+  <li><a href="#computing-gi" id="toc-computing-gi" class="nav-link" data-scroll-target="#computing-gi">Computing Gi*</a></li>
+  <li><a href="#mann-kendall-test" id="toc-mann-kendall-test" class="nav-link" data-scroll-target="#mann-kendall-test">Mann-Kendall Test</a></li>
+  <li><a href="#arrange-to-show-significant-emerging-hotcold-spots" id="toc-arrange-to-show-significant-emerging-hotcold-spots" class="nav-link" data-scroll-target="#arrange-to-show-significant-emerging-hotcold-spots">Arrange to Show Significant Emerging Hot/Cold Spots</a></li>
+  <li><a href="#performing-emerging-hot-spot-analysis" id="toc-performing-emerging-hot-spot-analysis" class="nav-link" data-scroll-target="#performing-emerging-hot-spot-analysis">Performing Emerging Hot Spot Analysis</a></li>
+  <li><a href="#visualizing-ehsa" id="toc-visualizing-ehsa" class="nav-link" data-scroll-target="#visualizing-ehsa">Visualizing EHSA</a></li>
   </ul>
 </nav>
     </div>
@@ -210,7 +195,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods</h1>
+<h1 class="title">In-Class Exercise 5: Emerging Hot Spot Analysis: sfdep methods</h1>
 </div>
 
 
@@ -227,7 +212,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 5, 2024</p>
+      <p class="date">February 19, 2024</p>
     </div>
   </div>
   
@@ -237,6 +222,16 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<section id="overview" class="level1">
+<h1>Overview</h1>
+<p>Emerging Hot Spot Analysis (EHSA) is a spatio-temporal analysis method for revealing and describing how hot spot and cold spot areas evolve over time. The analysis consist of four main steps:</p>
+<ol type="1">
+<li>Building a space-time cube,</li>
+<li>Calculating Getis-Ord local Gi* statistic for each bin by using an FDR correction,</li>
+<li>Evaluating these hot and cold spot trends by using Mann-Kendall trend test,</li>
+<li>Categorising each study area location by referring to the resultant trend z-score and p-value 5. for each location with data, and with the hot spot z-score and p-value for each bin.</li>
+</ol>
+</section>
 <section id="packages" class="level1">
 <h1>Packages</h1>
 <p>We are using sfdep, not spdep</p>
@@ -257,191 +252,70 @@ Bounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812
 Geodetic CRS:  WGS 84</code></pre>
 </div>
 </div>
-<p>We can track to see which columns are the same for both dataset</p>
-</section>
-<section id="combining-data-using-left_join" class="level2">
-<h2 class="anchored" data-anchor-id="combining-data-using-left_join">Combining data using left_join</h2>
-</section>
-<section id="plot-coropleth" class="level2">
-<h2 class="anchored" data-anchor-id="plot-coropleth">Plot Coropleth</h2>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
 </section>
 </section>
-<section id="contiguity-weights" class="level1">
-<h1>Contiguity Weights</h1>
-<p>We can try using the tidyverse method so that it can run in one chunk</p>
-<p>This converges the nb and wt in one table so that it is easier to see for us visually, without using command lines</p>
+<section id="creating-time-series-cube" class="level1">
+<h1>Creating Time Series Cube</h1>
+<p>In the code chunk below, spacetime() of sfdep is used to create an spatio-temporal cube.</p>
 </section>
-<section id="computing-morans-i" class="level1">
-<h1>Computing Moran’s I</h1>
-<section id="global-morans-i" class="level2">
-<h2 class="anchored" data-anchor-id="global-morans-i">Global Moran’s I</h2>
+<section id="computing-gi" class="level1">
+<h1>Computing Gi*</h1>
+<p>First, we will identify the neighbours and derive an inverse distance weight</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>$I
-[1] 0.30075
-
-$K
-[1] 7.640659</code></pre>
+<pre><code>Rows: 1,496
+Columns: 5
+$ Year   &lt;dbl&gt; 2005, 2005, 2005, 2005, 2005, 2005, 2005, 2005, 2005, 2005, 200…
+$ County &lt;chr&gt; "Anxiang", "Hanshou", "Jinshi", "Li", "Linli", "Shimen", "Liuya…
+$ GDPPC  &lt;dbl&gt; 8184, 6560, 9956, 8394, 8850, 9244, 13406, 11687, 14659, 7423, …
+$ nb     &lt;list&gt; &lt;1, 2, 3, 4, 57, 85&gt;, &lt;1, 2, 57, 58, 78, 85&gt;, &lt;1, 3, 4, 5, 85&gt;…
+$ wt     &lt;list&gt; &lt;0.00000000, 0.01526149, 0.03515537, 0.02176677, 0.02836978, 0…</code></pre>
+</div>
+</div>
+<p>Then, we can calculate Gi* by grouping by Year and using local_gstar_perm() of sfdep package. After which, we use unnest() to unnest gi_star column of the newly created gi_starts data.frame.</p>
+</section>
+<section id="mann-kendall-test" class="level1">
+<h1>Mann-Kendall Test</h1>
+<p>The code chunk will perform Mann-Kendall Test for Changsa county</p>
+<p>We can plot the result</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="In-class_Ex05-EHSA_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>
-    Moran I test under randomisation
-
-data:  x  
-weights: listw    
-
-Moran I statistic standard deviate = 4.7351, p-value = 1.095e-06
-alternative hypothesis: greater
-sample estimates:
-Moran I statistic       Expectation          Variance 
-      0.300749970      -0.011494253       0.004348351 </code></pre>
+<pre><code># A tibble: 1 × 5
+    tau      sl     S     D  varS
+  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 0.485 0.00742    66  136.  589.</code></pre>
 </div>
 </div>
+<p>To perform Mann-Kendall Test for every location with groupby()</p>
 </section>
-<section id="monte-carlo-global-morani-permutation-test" class="level2">
-<h2 class="anchored" data-anchor-id="monte-carlo-global-morani-permutation-test">Monte Carlo Global Moran’I Permutation test</h2>
-<p>This performs simulation, making it more reliable compared to the normal Moran’I test that only checks for one test data. nsim=99 will run the simulation 100 times as it uses 0 based indexing</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Monte-Carlo simulation of Moran I
-
-data:  x 
-weights: listw  
-number of simulations + 1: 100 
-
-statistic = 0.30075, observed rank = 100, p-value &lt; 2.2e-16
-alternative hypothesis: two.sided</code></pre>
-</div>
-</div>
+<section id="arrange-to-show-significant-emerging-hotcold-spots" class="level1">
+<h1>Arrange to Show Significant Emerging Hot/Cold Spots</h1>
 </section>
-<section id="computing-local-morans-i" class="level2">
-<h2 class="anchored" data-anchor-id="computing-local-morans-i">Computing Local Moran’s I</h2>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Simple feature collection with 88 features and 21 fields
-Geometry type: POLYGON
-Dimension:     XY
-Bounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812
-Geodetic CRS:  WGS 84
-# A tibble: 88 × 22
-         ii        eii     var_ii    z_ii    p_ii p_ii_sim p_folded_sim skewness
-      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt;
- 1 -0.00147  0.00177   0.000418   -0.158  0.874       0.82         0.41   -0.812
- 2  0.0259   0.00641   0.0105      0.190  0.849       0.96         0.48   -1.09 
- 3 -0.0120  -0.0374    0.102       0.0796 0.937       0.76         0.38    0.824
- 4  0.00102 -0.0000349 0.00000437  0.506  0.613       0.64         0.32    1.04 
- 5  0.0148  -0.00340   0.00165     0.449  0.654       0.5          0.25    1.64 
- 6 -0.0388  -0.00339   0.00545    -0.480  0.631       0.82         0.41    0.614
- 7  3.37    -0.198     1.41        3.00   0.00266     0.08         0.04    1.46 
- 8  1.56    -0.265     0.804       2.04   0.0417      0.08         0.04    0.459
- 9  4.42     0.0450    1.79        3.27   0.00108     0.02         0.01    0.746
-10 -0.399   -0.0505    0.0859     -1.19   0.234       0.28         0.14   -0.685
-# ℹ 78 more rows
-# ℹ 14 more variables: kurtosis &lt;dbl&gt;, mean &lt;fct&gt;, median &lt;fct&gt;, pysal &lt;fct&gt;,
-#   nb &lt;nb&gt;, wt &lt;list&gt;, NAME_2 &lt;chr&gt;, ID_3 &lt;int&gt;, NAME_3 &lt;chr&gt;,
-#   ENGTYPE_3 &lt;chr&gt;, County &lt;chr&gt;, GDPPC &lt;dbl&gt;, Year &lt;dbl&gt;,
-#   geometry &lt;POLYGON [°]&gt;</code></pre>
-</div>
-</div>
-<section id="visualizing-local-morans-i" class="level3">
-<h3 class="anchored" data-anchor-id="visualizing-local-morans-i">Visualizing Local Moran’s I</h3>
+<section id="performing-emerging-hot-spot-analysis" class="level1">
+<h1>Performing Emerging Hot Spot Analysis</h1>
+<p>We can visualize the distribution of EHSA Classes</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+<p><img src="In-class_Ex05-EHSA_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
-<section id="visualizing-p-value-of-local-morans-i" class="level3">
-<h3 class="anchored" data-anchor-id="visualizing-p-value-of-local-morans-i">Visualizing p-value of Local Moran’s I</h3>
+<section id="visualizing-ehsa" class="level1">
+<h1>Visualizing EHSA</h1>
+<p>First, we need to join EHSA with Hunan</p>
+<p>Then, we can plot it with tmap functions</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
-<section id="visualizing-lisa-map" class="level3">
-<h3 class="anchored" data-anchor-id="visualizing-lisa-map">Visualizing LISA Map</h3>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
-</section>
-</section>
-<section id="hot-spot-and-cold-spot-analysis-hcsa" class="level1">
-<h1>Hot Spot and Cold Spot Analysis (HCSA)</h1>
-<section id="computing-local-gi-statistics" class="level2">
-<h2 class="anchored" data-anchor-id="computing-local-gi-statistics">Computing Local Gi* Statistics</h2>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Simple feature collection with 88 features and 17 fields
-Geometry type: POLYGON
-Dimension:     XY
-Bounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812
-Geodetic CRS:  WGS 84
-# A tibble: 88 × 18
-   gi_star   e_gi    var_gi p_value   p_sim p_folded_sim skewness kurtosis nb   
-     &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;nb&gt; 
- 1  0.0416 0.0114   6.41e-6  0.0493 9.61e-1         0.7      0.35    0.875 &lt;int&gt;
- 2 -0.333  0.0106   3.84e-6 -0.0941 9.25e-1         1        0.5     0.661 &lt;int&gt;
- 3  0.281  0.0126   7.51e-6 -0.151  8.80e-1         0.9      0.45    0.640 &lt;int&gt;
- 4  0.411  0.0118   9.22e-6  0.264  7.92e-1         0.6      0.3     0.853 &lt;int&gt;
- 5  0.387  0.0115   9.56e-6  0.339  7.34e-1         0.62     0.31    1.07  &lt;int&gt;
- 6 -0.368  0.0118   5.91e-6 -0.583  5.60e-1         0.72     0.36    0.594 &lt;int&gt;
- 7  3.56   0.0151   7.31e-6  2.61   9.01e-3         0.06     0.03    1.09  &lt;int&gt;
- 8  2.52   0.0136   6.14e-6  1.49   1.35e-1         0.2      0.1     1.12  &lt;int&gt;
- 9  4.56   0.0144   5.84e-6  3.53   4.17e-4         0.04     0.02    1.23  &lt;int&gt;
-10  1.16   0.0104   3.70e-6  1.82   6.86e-2         0.12     0.06    0.416 &lt;int&gt;
-# ℹ 78 more rows
-# ℹ 9 more variables: wts &lt;list&gt;, NAME_2 &lt;chr&gt;, ID_3 &lt;int&gt;, NAME_3 &lt;chr&gt;,
-#   ENGTYPE_3 &lt;chr&gt;, County &lt;chr&gt;, GDPPC &lt;dbl&gt;, Year &lt;dbl&gt;,
-#   geometry &lt;POLYGON [°]&gt;</code></pre>
-</div>
-</div>
-</section>
-<section id="visualizing-gi" class="level2">
-<h2 class="anchored" data-anchor-id="visualizing-gi">Visualizing Gi*</h2>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
-<section id="visualizing-p-value-of-hcsa" class="level2">
-<h2 class="anchored" data-anchor-id="visualizing-p-value-of-hcsa">Visualizing p-value of HCSA</h2>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
-<section id="visualizing-local-hcsa" class="level2">
-<h2 class="anchored" data-anchor-id="visualizing-local-hcsa">Visualizing Local HCSA</h2>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
-<section id="visualizing-hot-spot-and-cold-spot-areas" class="level2">
-<h2 class="anchored" data-anchor-id="visualizing-hot-spot-and-cold-spot-areas">Visualizing Hot Spot and Cold Spot Areas</h2>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+<p><img src="In-class_Ex05-EHSA_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

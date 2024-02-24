@@ -56,7 +56,6 @@ glimpse(mpsz)
 head(mpsz, n=5)
 ```
 
-
 ```{r}
 #Plotting mpsz data
 plot(mpsz)

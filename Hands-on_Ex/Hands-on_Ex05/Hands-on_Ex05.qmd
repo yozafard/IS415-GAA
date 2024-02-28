@@ -46,7 +46,7 @@ We will use left_join() to combine the two data
 
 ```{r}
 hunan <- left_join(hunan,hunan2012) %>%
-  select(1:4, 7, 15)
+  dplyr::select(1:4, 7, 15)
 ```
 
 ### Visualization

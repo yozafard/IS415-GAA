@@ -8,7 +8,8 @@ knitr::opts_chunk$set(echo = TRUE,
                       eval = TRUE,
                       message = TRUE,
                       warning = FALSE,
-                      fig.retina = 3)
+                      fig.retina = 3,
+                      freeze = TRUE)
 ```
 
 #1. Overview

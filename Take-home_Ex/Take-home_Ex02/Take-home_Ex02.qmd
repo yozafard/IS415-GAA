@@ -1,0 +1,173 @@
+---
+title: "Take-home Exercise 2: Application of Spatial and Spatio-temporal Analysis Methods to Discover the Distribution of Dengue Fever in Tainan City, Taiwan"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      eval = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+# Overview
+
+## Setting The Scene
+
+Dengue Hemorrhagic Fever (in short dengue fever) is one of the most widespread mosquito-borne diseases in the most tropical and subtropical regions. It is an acute disease caused by dengue virus infection which is transmitted by female Aedes aegypti and Aedes albopictus mosquitoes. In 2015, Taiwan had recorded the most severe dengue fever outbreak with more than 43,000 dengue cases and 228 deaths. Since then, the annual reported dengue fever cases were maintained at the level of not more than 200 cases. However, in 2023, Taiwan recorded 26703 dengue fever cases. More than 25,000 cases were reported at Tainan City, and more than 80% of the reported dengue fever cases occurred in the month August-November 2023 and epidemiology week 31-50.
+
+## Objectives
+
+As a curious geospatial analytics green horn, you are interested to discover:
+
+-   if the distribution of dengue fever outbreak at Tainan City, Taiwan are independent from space and space and time.
+-   If the outbreak is indeed spatial and spatio-temporal dependent, then, you would like to detect where are the clusters and outliers, and the emerging hot spot/cold spot areas.
+
+The Task The specific tasks of this take-home exercise are as follows:
+
+-   Using appropriate function of sf and tidyverse, preparing the following geospatial data layer:
+
+1.  a study area layer in sf polygon features. It must be at village level and confined to the D01, D02, D04, D06, D07, D08, D32 and D39 counties of Tainan City, Taiwan.
+2.  a dengue fever layer within the study area in sf point features. The dengue fever cases should be confined to epidemiology week 31-50, 2023.
+3.  a derived dengue fever layer in spacetime s3 class of sfdep. It should contain, among many other useful information, a data field showing number of dengue fever cases by village and by epidemiology week.
+4.  Using the extracted data, perform global spatial autocorrelation analysis by using sfdep methods.
+
+-   Using the extracted data, perform local spatial autocorrelation analysis by using sfdep methods.
+-   Using the extracted data, perform emerging hotspot analysis by using sfdep methods.
+-   Describe the spatial patterns revealed by the analysis above.
+
+## The Data
+
+For the purpose of this take-home exercise, two data sets are provided, they are:
+
+TAIWAN_VILLAGE_2020, a geospatial data of village boundary of Taiwan. It is in ESRI shapefile format. The data is in Taiwan Geographic Coordinate System. (Source: Historical map data of the village boundary: TWD97 longitude and latitude)
+
+Dengue_Daily.csv, an aspatial data of reported dengue cases in Taiwan since 1998. (Source: Dengue Daily Confirmed Cases Since 1998. Below are selected fields that are useful for this study:
+
+-   發病日: Onset date
+-   最小統計區中心點X: x-coordinate
+-   最小統計區中心點Y: y-coordinate Both data sets have been uploaded on eLearn. Students are required to download them from eLearn.
+
+# Getting Started
+
+## Loading Packages
+
+We can use this code chunk to load the required packages
+```{r}
+pacman::p_load(sf, tmap, tidyverse, sfdep)
+```
+
+## Loading Data and Data Wrangling
+
+### Aspatial Data
+
+We can load the dengue_daily data with the code chunk below. Since we are only stuyding cases from week 31-50, we can use filter() to get the dates from 31 July to 17 December, which is week 31-50
+```{r}
+dengue_daily <- read_csv('data/aspatial/Dengue_Daily.csv') |> 
+  filter(發病日 >= "2023-07-31" & 發病日 <= "2023-12-17")
+glimpse(dengue_daily)
+```
+In order to save up on computational resources and make it more readable, we will only take up the three fields mentioned above and rename it to English
+
+```{r}
+dengue_daily <- dengue_daily |> 
+  mutate(OnsetDate = 發病日,
+         X_Coordinate = 最小統計區中心點X,
+         Y_Coordinate = 最小統計區中心點Y) |>
+  dplyr::select(OnsetDate, X_Coordinate, Y_Coordinate)
+glimpse(dengue_daily)
+```
+Since the coordinates are still in chr format, we need to convert it to numeric first
+```{r}
+dengue_daily <- dengue_daily %>%
+  mutate(
+    X_Coordinate = as.numeric(X_Coordinate),
+    Y_Coordinate = as.numeric(Y_Coordinate)
+  )
+summary(dengue_daily)
+```
+Since the data still have some missing values, let's clean that up first
+```{r}
+dengue_daily <- na.omit(dengue_daily)
+summary(dengue_daily)
+```
+
+After the data is clean, we can convert it into sf. Remember to convert the crs to TWD97 (crs=3826)
+
+```{r}
+dengue_sf <- st_as_sf(dengue_daily, coords=c("X_Coordinate", "Y_Coordinate"), crs=4326) |> st_transform(crs=3824)
+glimpse(dengue_sf)
+```
+
+```{r}
+qtm(dengue_sf)
+```
+
+
+### Geospatial Data
+
+We can use st_read() to load the geospatial data, with an additional filter to get only the counties mentioned above. We can plot it to get a better understanding of the data
+
+```{r}
+tainan <- st_read('data/geospatial') |>
+  filter(TOWNID %in% c("D01", "D02", "D04", "D06", "D07", "D08", "D32", "D39"))
+glimpse(tainan)
+plot(tainan)
+```
+
+### Creating Spatiotemporal Layer
+
+
+```{r}
+dengue_by_village <- st_join(dengue_sf, tainan, join=st_within) |>
+  mutate(EpiWeek = isoweek(OnsetDate))
+
+dengue_by_village <- na.omit(subset(dengue_by_village, select=-c(NOTE)))
+
+summary(dengue_by_village)
+```
+
+
+```{r}
+dengue_summary <- dengue_by_village %>%
+  group_by(VILLNAME, EpiWeek) %>%
+  summarize(NumberOfCases = n(), .groups = 'drop')
+
+glimpse(dengue_summary)
+```
+
+
+```{r}
+dengue_spacetime <- as_spacetime(dengue_by_village, 'VILLCODE', 'EpiWeek')
+dengue_summary_spacetime <- as_spacetime(dengue_summary, '')
+```
+
+
+```{r}
+activate(dengue_spacetime, "data")
+```
+```{r}
+activate(dengue_spacetime, "geometry")
+```
+
+## Visualizing Data
+
+```{r}
+library(sf)
+library(dplyr)
+library(ggplot2)
+
+# Assuming dengue_by_village is the result of your spatial join and summarization
+# And that it contains a column 'NumberOfCases' with the count of cases per village
+
+# Plot the choropleth map
+ggplot(data = dengue_by_village) +
+  geom_sf(aes(fill = NumberOfCases), color = NA) +  # Fill based on number of cases, remove borders
+  scale_fill_viridis_c() +                           # Use a color scale that is perceptually uniform
+  labs(fill = 'Number of cases',                     # Label for the color scale
+       title = 'Distribution of Dengue Cases by Village') +  # Title of the map
+  theme_minimal()                                    # Use a minimal theme for the plot
+```
+
+
+
+

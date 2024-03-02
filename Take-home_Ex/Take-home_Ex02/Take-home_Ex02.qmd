@@ -53,7 +53,7 @@ Dengue_Daily.csv, an aspatial data of reported dengue cases in Taiwan since 1998
 
 We can use this code chunk to load the required packages
 ```{r}
-pacman::p_load(sf, tmap, tidyverse, sfdep)
+pacman::p_load(sf, tmap, tidyverse, sfdep, ggplot2)
 ```
 
 ## Loading Data and Data Wrangling
@@ -91,15 +91,11 @@ dengue_daily <- na.omit(dengue_daily)
 summary(dengue_daily)
 ```
 
-After the data is clean, we can convert it into sf. Remember to convert the crs to TWD97 (crs=3826)
+After the data is clean, we can convert it into sf. Remember to convert the crs to TWD97 (crs=3824)
 
 ```{r}
 dengue_sf <- st_as_sf(dengue_daily, coords=c("X_Coordinate", "Y_Coordinate"), crs=4326) |> st_transform(crs=3824)
 glimpse(dengue_sf)
-```
-
-```{r}
-qtm(dengue_sf)
 ```
 
 
@@ -114,9 +110,9 @@ glimpse(tainan)
 plot(tainan)
 ```
 
-### Creating Spatiotemporal Layer
+### Data Wrangling
 
-
+Now we join the two data with st_join. Here, we use EpiWeek to group together cases in the same week. Don't forget to handle missing values as well
 ```{r}
 dengue_by_village <- st_join(dengue_sf, tainan, join=st_within) |>
   mutate(EpiWeek = isoweek(OnsetDate))
@@ -125,49 +121,322 @@ dengue_by_village <- na.omit(subset(dengue_by_village, select=-c(NOTE)))
 
 summary(dengue_by_village)
 ```
-
+After joining, we can make a new sf data to store the summary of how many cases appear in a specific village in a specific week.
 
 ```{r}
 dengue_summary <- dengue_by_village %>%
-  group_by(VILLNAME, EpiWeek) %>%
+  group_by(VILLCODE, EpiWeek) %>%
   summarize(NumberOfCases = n(), .groups = 'drop')
 
-glimpse(dengue_summary)
+summary(dengue_summary)
 ```
-
+Now, to get the geometry of the villages, we can combine it with the tainan dataset. Before combining, we need to convert dengue_summary to df by dropping the geometry column. But, note that this df data does not contain rows where there are no case at all in a particular village in a particular week. To fix that, we can use complete() with the parameters in the chunk below. What it does is that it will automatically add a row for every combination of VILLCODE and EpiWeek possible, and if there are no cases for that particular combination, the fill argument will add a 0 instead of NA in the NumberOfCases column
 
 ```{r}
-dengue_spacetime <- as_spacetime(dengue_by_village, 'VILLCODE', 'EpiWeek')
-dengue_summary_spacetime <- as_spacetime(dengue_summary, '')
+dengue_summary_df <- dengue_summary |> st_drop_geometry() |> complete(VILLCODE, EpiWeek, fill=list(NumberOfCases = 0))
 ```
 
+Then, we can use left_join() to join the datasets based on the same "VILLCODE". We can use select() to retrieve only the columns we need. Remember to turn the joined data back to sf
+```{r}
+tainan_unique_df <- as.data.frame(tainan)
+dengue_summary_sf <- dengue_summary_df |>
+  left_join(tainan_unique_df, by = "VILLCODE")
+
+dengue_summary_sf <- dengue_summary_sf |> select(c(VILLCODE, EpiWeek, NumberOfCases, geometry)) |> st_as_sf()
+```
+
+Let's check the CRS of the new sf to make sure that its in the same reference system
 
 ```{r}
-activate(dengue_spacetime, "data")
+st_crs(dengue_summary_sf)
 ```
+
+### Creating Spatiotemporal Layer
+
+To create a spatiotemporal layer, we can use as_spacetime() for the dengue_summary_sf, with VILLCODE for the spatial column and EpiWeek to represent the temporal column
+
 ```{r}
-activate(dengue_spacetime, "geometry")
+dengue_summ <- as_spacetime(dengue_summary_sf, 'VILLCODE', 'EpiWeek')
+```
+
+To see the data, we can use activate() with 'data' for the second argument
+```{r}
+activate(dengue_summ, 'data')
+```
+
+On the other hand, the geometry values can be seen with activate() also, only with 'geometry' for the second argument
+```{r}
+activate(dengue_summ, 'geometry')
+```
+
+Before using the spacetime layer in further computations, we can check if it is a proper cube
+```{r}
+is_spacetime_cube(dengue_summ)
 ```
 
 ## Visualizing Data
 
+Now, we are plotting a choropleth to see the distribution of cases using tmap
+
 ```{r}
-library(sf)
-library(dplyr)
-library(ggplot2)
-
-# Assuming dengue_by_village is the result of your spatial join and summarization
-# And that it contains a column 'NumberOfCases' with the count of cases per village
-
-# Plot the choropleth map
-ggplot(data = dengue_by_village) +
-  geom_sf(aes(fill = NumberOfCases), color = NA) +  # Fill based on number of cases, remove borders
-  scale_fill_viridis_c() +                           # Use a color scale that is perceptually uniform
-  labs(fill = 'Number of cases',                     # Label for the color scale
-       title = 'Distribution of Dengue Cases by Village') +  # Title of the map
-  theme_minimal()                                    # Use a minimal theme for the plot
+tmap_mode('view')
+tm_shape(dengue_summary_sf) + 
+  tm_fill('NumberOfCases', style='quantile') + 
+  tm_borders(alpha = 0.5) +
+  tm_layout(main.title = "Distribution of Number of Cases by village, Tainan",
+            main.title.position = "center",
+            main.title.size = 1.2,
+            legend.height = 0.45, 
+            legend.width = 0.35,
+            frame = TRUE) +
+  tm_compass(type="8star", size = 2) +
+  tm_scale_bar() +
+  tm_grid(alpha =0.2)
+tmap_mode('plot')
 ```
 
 
+# Global Measures of Spatial Autocorrelation
 
+## Computing Contiguity Spatial Weights
+
+Before we can compute the global spatial autocorrelation statistics, we need to construct a spatial weights of the study area. The code chunk below will use sfdep methods to derive the contiguity weights
+
+```{r}
+wm_q <- dengue_summary_sf %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style = "W"),
+         .before = 1)
+
+wm_q$nb
+```
+## Computing Global Moran' I
+
+We can use global_moran() to compute the Global Moran' I value, which will return a tibble as an output
+
+```{r}
+moranI <- global_moran(wm_q$NumberOfCases,
+                       wm_q$nb,
+                       wm_q$wt)
+glimpse(moranI)
+```
+## Global Moran' I Test
+
+We will use global_moran_test() to perform the Moran' I test
+
+```{r}
+global_moran_test(wm_q$NumberOfCases,
+                       wm_q$nb,
+                       wm_q$wt)
+```
+
+## Global Moran'I Permutation Test
+
+In a realistic setting, we can use Monte Carlo simulation to perform the test. For reproducibility, we can set the seed in the start
+
+```{r}
+set.seed(1234)
+
+global_moran_perm(wm_q$NumberOfCases,
+                       wm_q$nb,
+                       wm_q$wt,
+                  nsim = 99)
+```
+The statistical report above show that the p-value is smaller than alpha value of 0.05. Hence, we have enough statistical evidence to reject the null hypothesis that the spatial distribution of cases resemble random distribution (i.e. independent from spatial). Because the Moran’s I statistics is greater than 0, We can infer that the spatial distribution shows sign of clustering.
+
+
+# Local Measures of Spatial Autocorrelation
+
+## Computing Local Moran' I
+
+To compute Local Moran' I, we can use local_moran() instead
+
+```{r}
+lisa <- wm_q %>% 
+  mutate(local_moran = local_moran(
+    NumberOfCases, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+```
+
+# Visualizing Local Moran' I
+
+Next, tmap can be used to make a choropleth using the "ii" field (local moran statistic)
+```{r}
+tmap_mode("plot")
+tm_shape(lisa) +
+  tm_fill("ii") + 
+  tm_borders(alpha = 0.5) +
+  tm_view(set.zoom.limits = c(6,8)) +
+  tm_layout(main.title = "local Moran's I of Number of Cases",
+            main.title.size = 0.8)
+```
+
+## Visualizing p-value of Local Moran' I
+
+tmap can also be used to plot the p-value in the "p_ii_sim" column
+
+```{r}
+tmap_mode("plot")
+tm_shape(lisa) +
+  tm_fill("p_ii_sim") + 
+  tm_borders(alpha = 0.5) +
+   tm_layout(main.title = "p-value of local Moran's I",
+            main.title.size = 0.8)
+```
+
+## Visualizing LISA Map
+LISA map is a categorical map showing outliers and clusters. In lisa sf data.frame, we can find three fields contain the LISA categories. They are mean, median and pysal. In general, classification in mean will be used as shown in the code chunk below.
+
+
+```{r}
+lisa_sig <- lisa  %>%
+  filter(p_ii < 0.05)
+tmap_mode("plot")
+tm_shape(lisa) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4)
+```
+Here is an explanation of the different categories:
+
+High-High (HH): The location has a high value and is surrounded by neighbors with high values.
+Low-Low (LL): The location has a low value and is surrounded by neighbors with low values.
+Low-High (LH): The location has a low value but is surrounded by neighbors with high values.
+High-Low (HL): The location has a high value but is surrounded by neighbors with low values.
+
+
+# Emerging Hot Spot Analysis
+
+Emerging Hot Spot Analysis (EHSA) is a spatio-temporal analysis method for revealing and describing how hot spot and cold spot areas evolve over time
+
+
+## Derive Spatial Weights
+
+In EHSA,we will use the space-time cube we created before. First, we derive distance weights using the code chunk below
+
+```{r}
+dengue_nb <- dengue_summ %>%
+  activate("geometry") %>%
+  mutate(nb = include_self(st_contiguity(geometry)),
+         wt = st_inverse_distance(nb, geometry,
+                                  scale = 1,
+                                  alpha = 1),
+         .before = 1) %>%
+  set_nbs("nb") %>%
+  set_wts("wt")
+```
+
+
+## Computing Gi*
+We can use these new columns to manually calculate the local Gi* for each location. We can do this by grouping by week and using local_gstar_perm() of sfdep package. After which, we use unnest() to unnest gi_star column of the newly created gi_starts data.frame.
+
+```{r}
+gi_stars <- dengue_nb %>% 
+  group_by(EpiWeek) %>% 
+  mutate(gi_star = local_gstar_perm(
+    NumberOfCases, nb, wt)) %>% 
+  tidyr::unnest(gi_star)
+```
+
+## Mann-Kendall Test
+
+With these Gi* measuers, we can perform a Mann-Kendall test to identify a trend. For this example, we can look at VILLCODE 67000270001
+```{r}
+cbg <- gi_stars %>% 
+  ungroup() %>% 
+  filter(VILLCODE == "67000270001") |> 
+  select(VILLCODE, EpiWeek, gi_star)
+```
+
+And plot the result using ggplot
+```{r}
+ggplot(data = cbg, 
+       aes(x = EpiWeek, 
+           y = gi_star)) +
+  geom_line()
+```
+
+```{r}
+cbg %>%
+  summarise(mk = list(
+    unclass(
+      Kendall::MannKendall(gi_star)))) %>% 
+  tidyr::unnest_wider(mk)
+```
+The cbg tells us that sl (p-value) is 0.5376031. This shows that there is a significant trend
+
+
+Now we can use group_by to perform the test for every location
+```{r}
+ehsa <- gi_stars %>%
+  group_by(VILLCODE) %>%
+  summarise(mk = list(
+    unclass(
+      Kendall::MannKendall(gi_star)))) %>%
+  tidyr::unnest_wider(mk)
+```
+
+## Arranging To Show Significant Emerging Hot/Cold Spots
+
+Use the code chunk to arrange to show significant emerging hot/cold spots
+
+```{r}
+emerging <- ehsa %>% 
+  arrange(sl, abs(tau)) %>% 
+  slice(1:5)
+```
+
+## Performing Emerging HotSpot Analysis
+
+Next, we can use emerging_hotspot_analysis() to perform EHSA. It takes in a spacetime object x, variable of interest y, number of time lags (set by default to 1), and nsim = 99 to indicate that there will be 99 simulations
+
+```{r}
+ehsa <- emerging_hotspot_analysis(
+  x = dengue_summ, 
+  .var = "NumberOfCases", 
+  k = 1, 
+  nsim = 99
+)
+```
+
+### Visualizing the Distribution of EHSA Classes
+
+We can use ggplot to see the distribution of EHSA classes
+```{r}
+ggplot(data = ehsa,
+       aes(x = classification)) +
+  geom_bar()
+```
+
+### Visualizing EHSA
+
+We will start on how to visualize the geographic distribution EHSA classes. First, we join the two tables together with left_join
+```{r}
+tainan_ehsa <- tainan %>%
+  left_join(ehsa,
+            by = join_by(VILLCODE == location))
+```
+
+Next, we can make a choropleth map
+```{r}
+ehsa_sig <- tainan_ehsa  %>%
+  filter(p_value < 0.05)
+tmap_mode("plot")
+tm_shape(tainan_ehsa) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(ehsa_sig) +
+  tm_fill("classification") + 
+  tm_borders(alpha = 0.4)
+```
+
+# References
+
+https://sfdep.josiahparry.com/reference/global_moran_test.html
+https://is415-gaa-tskam.netlify.app/in-class_ex/in-class_ex05/in-class_ex05-ehsa#do-it-yourself
+https://sfdep.josiahparry.com/articles/spacetime-s3#spacetime-cubes
 

@@ -6,7 +6,8 @@ title: "Take-home Exercise 2: Application of Spatial and Spatio-temporal Analysi
 knitr::opts_chunk$set(echo = FALSE, 
                       eval = TRUE,
                       message = FALSE,
-                      warning = FALSE)
+                      warning = FALSE,
+                      freeze = TRUE)
 ```
 
 # Overview

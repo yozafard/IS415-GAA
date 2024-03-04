@@ -9,7 +9,6 @@ listing:
   categories: false
 ---
 
-
 Welcome to IS415 Geospatial Analytics and Applications
 
 This is the course website of IS415 I study this term. You will find my course work on this website.

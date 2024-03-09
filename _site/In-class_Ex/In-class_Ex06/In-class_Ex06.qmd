@@ -6,7 +6,8 @@ title: "In-Class Exercise 6: Geographical Segmentation with Spatially Constraine
 knitr::opts_chunk$set(echo = FALSE, 
                       eval = TRUE,
                       message = FALSE,
-                      warning = FALSE)
+                      warning = FALSE,
+                      freeze = TRUE)
 ```
 
 # Overview
@@ -484,26 +485,16 @@ qtm(shan_sf_cluster, "CLUSTER")
 
 # Spatially Constrained Clustering: SKATER
 
-We will use skater() from spded
-
-## 1. Convert into SpatialPolygonsDataFrame
-
-skater() only supports sp objects
-
-```{r}
-shan_sp <- as_Spatial(shan_sf)
-```
-
-## 2. Compute Neighbour List
+## 1. Compute Neighbour List
 
 We will use poly2nd() to compute neighbours list
 
 ```{r}
-shan.nb <- poly2nb(shan_sp)
+shan.nb <- poly2nb(shan_sf)
 summary(shan.nb)
 ```
 
-## 3. Computing Minimum Spanning Tree
+## 2. Computing Minimum Spanning Tree
 
 First, we calculate the cost of each edge with nbcosts()
 
@@ -527,7 +518,7 @@ shan.mst <- mstree(shan.w)
 head(shan.mst)
 ```
 
-## 4. Compating Spatially Constrained Clusters With SKATER Method
+## 3. Comparing Spatially Constrained Clusters With SKATER Method
 
 ```{r}
 clust6 <- spdep::skater(edges = shan.mst[,1:2], 
@@ -577,6 +568,18 @@ shclust.map <- qtm(shan_sf_spatialcluster,
 
 tmap_arrange(hclust.map, shclust.map,
              asp=NA, ncol=2)
+```
+
+```{r}
+plot(st_geometry(shan_sf),
+     border=grey(.5))
+
+pts <- st_coordinates(st_centroid(shan_sf))
+
+plot(shan.nb,
+     pts,
+     col="blue",
+     add=TRUE)
 ```
 
 # Spatially Constrained Clustering: ClustGeo Method

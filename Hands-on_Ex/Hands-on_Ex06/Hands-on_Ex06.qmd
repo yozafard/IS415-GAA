@@ -6,7 +6,8 @@ title: "Hands On Exercise 6: Global and Local Measures of Spatial Autocorrelatio
 knitr::opts_chunk$set(echo = TRUE, 
                       eval = TRUE,
                       message = FALSE,
-                      warning = FALSE)
+                      warning = FALSE,
+                      freeze = TRUE)
 ```
 
 # Overview

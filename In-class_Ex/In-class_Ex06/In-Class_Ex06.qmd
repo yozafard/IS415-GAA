@@ -6,7 +6,8 @@ title: "In-Class Exercise 6: Geographical Segmentation with Spatially Constraine
 knitr::opts_chunk$set(echo = FALSE, 
                       eval = TRUE,
                       message = FALSE,
-                      warning = FALSE)
+                      warning = FALSE,
+                      freeze = TRUE)
 ```
 
 # Overview
@@ -484,13 +485,12 @@ qtm(shan_sf_cluster, "CLUSTER")
 
 # Spatially Constrained Clustering: SKATER
 
-
 ## 1. Compute Neighbour List
 
 We will use poly2nd() to compute neighbours list
 
 ```{r}
-shan.nb <- poly2nb(shan_sp)
+shan.nb <- poly2nb(shan_sf)
 summary(shan.nb)
 ```
 

@@ -4,7 +4,7 @@ title: "Hands On Exercise 9: Geographically Weighted Predictive Models"
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, 
-                      eval = TRUE,
+                      eval = FALSE,
                       message = FALSE,
                       warning = FALSE,
                       freeze = TRUE)
@@ -18,31 +18,37 @@ Geospatial predictive modelling is conceptually rooted in the principle that the
 
 # Data
 
-1. Aspatial dataset:
-- HDB Resale data: a list of HDB resale transacted prices in Singapore from Jan 2017 onwards. It is in csv format which can be downloaded from Data.gov.sg.
-2. Geospatial dataset:
-- MP14_SUBZONE_WEB_PL: a polygon feature data providing information of URA 2014 Master Plan Planning Subzone boundary data. It is in ESRI shapefile format. This data set was also downloaded from Data.gov.sg
-3. Locational factors with geographic coordinates:
-- Downloaded from Data.gov.sg.
-- Eldercare data is a list of eldercare in Singapore. It is in shapefile format.
-- Hawker Centre data is a list of hawker centres in Singapore. It is in geojson format.
-- Parks data is a list of parks in Singapore. It is in geojson format.
-- Supermarket data is a list of supermarkets in Singapore. It is in geojson format.
-- CHAS clinics data is a list of CHAS clinics in Singapore. It is in geojson format.
-- Childcare service data is a list of childcare services in Singapore. It is in geojson format.
-- Kindergartens data is a list of kindergartens in Singapore. It is in geojson format.
-- Downloaded from Datamall.lta.gov.sg.
-- MRT data is a list of MRT/LRT stations in Singapore with the station names and codes. It is in shapefile format.
-- Bus stops data is a list of bus stops in Singapore. It is in shapefile format.
-- Locational factors without geographic coordinates:
-- Downloaded from Data.gov.sg.
-- Primary school data is extracted from the list on General information of schools from data.gov portal. It is in csv format.
-- Retrieved/Scraped from other sources
-- CBD coordinates obtained from Google.
-- Shopping malls data is a list of Shopping malls in Singapore obtained from Wikipedia.
-- Good primary schools is a list of primary schools that are ordered in ranking in terms of popularity and this can be found at Local Salary Forum.
+1.  Aspatial dataset:
+
+-   HDB Resale data: a list of HDB resale transacted prices in Singapore from Jan 2017 onwards. It is in csv format which can be downloaded from Data.gov.sg.
+
+2.  Geospatial dataset:
+
+-   MP14_SUBZONE_WEB_PL: a polygon feature data providing information of URA 2014 Master Plan Planning Subzone boundary data. It is in ESRI shapefile format. This data set was also downloaded from Data.gov.sg
+
+3.  Locational factors with geographic coordinates:
+
+-   Downloaded from Data.gov.sg.
+-   Eldercare data is a list of eldercare in Singapore. It is in shapefile format.
+-   Hawker Centre data is a list of hawker centres in Singapore. It is in geojson format.
+-   Parks data is a list of parks in Singapore. It is in geojson format.
+-   Supermarket data is a list of supermarkets in Singapore. It is in geojson format.
+-   CHAS clinics data is a list of CHAS clinics in Singapore. It is in geojson format.
+-   Childcare service data is a list of childcare services in Singapore. It is in geojson format.
+-   Kindergartens data is a list of kindergartens in Singapore. It is in geojson format.
+-   Downloaded from Datamall.lta.gov.sg.
+-   MRT data is a list of MRT/LRT stations in Singapore with the station names and codes. It is in shapefile format.
+-   Bus stops data is a list of bus stops in Singapore. It is in shapefile format.
+-   Locational factors without geographic coordinates:
+-   Downloaded from Data.gov.sg.
+-   Primary school data is extracted from the list on General information of schools from data.gov portal. It is in csv format.
+-   Retrieved/Scraped from other sources
+-   CBD coordinates obtained from Google.
+-   Shopping malls data is a list of Shopping malls in Singapore obtained from Wikipedia.
+-   Good primary schools is a list of primary schools that are ordered in ranking in terms of popularity and this can be found at Local Salary Forum.
 
 # Packages
+
 ```{r}
 pacman::p_load(sf, spdep, GWmodel, SpatialML, 
                tmap, rsample, Metrics, tidyverse)
@@ -51,6 +57,7 @@ pacman::p_load(sf, spdep, GWmodel, SpatialML,
 # Data Preparation
 
 We can use read_rds to read the data
+
 ```{r}
 mdata <- read_rds("./data/aspatial/mdata.rds")
 ```
@@ -58,7 +65,6 @@ mdata <- read_rds("./data/aspatial/mdata.rds")
 ## Data Sampling
 
 The entire data are split into training and test data sets with 65% and 35% respectively by using initial_split() of rsample package. rsample is one of the package of tigymodels.
-
 
 ```{r}
 set.seed(1234)
@@ -69,6 +75,7 @@ test_data <- testing(resale_split)
 ```
 
 Save the split datasets to rds format
+
 ```{r}
 write_rds(train_data, "./data/aspatial/train_data.rds")
 write_rds(test_data, "./data/aspatial/test_data.rds")
@@ -77,7 +84,6 @@ write_rds(test_data, "./data/aspatial/test_data.rds")
 ## Computing Correlation Matrix
 
 Before loading the predictors into a predictive model, it is always a good practice to use correlation matrix to examine if there is sign of multicolinearity.
-
 
 ```{r}
 mdata_nogeo <- mdata %>%
@@ -104,6 +110,7 @@ price_mlr <- lm(resale_price ~ floor_area_sqm +
                 data=train_data)
 summary(price_mlr)
 ```
+
 ```{r}
 write_rds(price_mlr, "./data/model/price_mlr.rds" ) 
 ```
@@ -118,6 +125,7 @@ In this section, you will learn how to calibrate a model to predict HDB resale p
 train_data_sp <- as_Spatial(train_data)
 train_data_sp
 ```
+
 ## Computing adaptive bandwidth
 
 ```{r}
@@ -134,6 +142,7 @@ bw_adaptive <- bw.gwr(resale_price ~ floor_area_sqm +
                   adaptive=TRUE,
                   longlat=FALSE)
 ```
+
 ```{r}
 write_rds(bw_adaptive, "./data/model/bw_adaptive.rds")
 ```
@@ -164,8 +173,8 @@ write_rds(gwr_adaptive, "./data/model/gwr_adaptive.rds")
 gwr_adaptive
 ```
 
-
 ## Convert sf test data to SpatialPoint
+
 ```{r}
 test_data_sp <- test_data %>%
   as_Spatial()
@@ -175,6 +184,7 @@ test_data_sp
 ## Computing adaptive bandwidth for test data
 
 ```{r}
+#| eval: false
 gwr_bw_test_adaptive <- bw.gwr(resale_price ~ floor_area_sqm +
                   storey_order + remaining_lease_mths +
                   PROX_CBD + PROX_ELDERLYCARE + PROX_HAWKER +
@@ -188,7 +198,6 @@ gwr_bw_test_adaptive <- bw.gwr(resale_price ~ floor_area_sqm +
                   adaptive=TRUE,
                   longlat=FALSE)
 ```
-
 
 # Preparing coordinates data
 
@@ -240,12 +249,12 @@ write_rds(rf, "./data/model/rf.rds")
 
 In this section, you will learn how to calibrate a model to predict HDB resale price by using grf() of SpatialML package.
 
-
 ## Calibrating with training data
 
 The code chunk below calibrate a geographic ranform forest model by using grf() of SpatialML package.
 
 ```{r}
+#| eval: false
 set.seed(1234)
 gwRF_adaptive <- grf(formula = resale_price ~ floor_area_sqm + storey_order +
                        remaining_lease_mths + PROX_CBD + PROX_ELDERLYCARE +
@@ -259,7 +268,7 @@ gwRF_adaptive <- grf(formula = resale_price ~ floor_area_sqm + storey_order +
                      coords=coords_train)
 ```
 
-Let’s save the model output by using the code chunk below.
+Let's save the model output by using the code chunk below.
 
 ```{r}
 write_rds(gwRF_adaptive, "./data/model/gwRF_adaptive.rds")
@@ -277,6 +286,7 @@ test_data <- cbind(test_data, coords_test) %>%
 Next, predict.grf() of spatialML package will be used to predict the resale value by using the test data and gwRF_adaptive model calibrated earlier.
 
 ```{r}
+#| eval: false
 gwRF_pred <- predict.grf(gwRF_adaptive, 
                            test_data, 
                            x.var.name="X",
@@ -295,7 +305,6 @@ GRF_pred <- write_rds(gwRF_pred, "./data/model/GRF_pred.rds")
 
 The output of the predict.grf() is a vector of predicted values. It is wiser to convert it into a data frame for further visualisation and analysis.
 
-
 ```{r}
 GRF_pred <- read_rds("./data/model/GRF_pred.rds")
 GRF_pred_df <- as.data.frame(GRF_pred)
@@ -306,7 +315,6 @@ test_data_p <- cbind(test_data, GRF_pred_df)
 write_rds(test_data_p, "./data/model/test_data_p.rds")
 
 ```
-
 
 # Calculating Root Mean Square Error
 
@@ -327,6 +335,3 @@ ggplot(data = test_data_p,
            y = resale_price)) +
   geom_point()
 ```
-
-
-

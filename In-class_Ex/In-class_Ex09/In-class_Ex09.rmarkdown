@@ -1,0 +1,206 @@
+---
+title: "In-class Exercise 9: Geographical Segmentation with Spatially Constrained Clustering Techniques"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      eval = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      freeze = TRUE)
+```
+
+
+# Overview
+
+Geographically weighted regression (GWR) is a spatial statistical technique that takes non-stationary variables into consideration (e.g., climate; demographic factors; physical environment characteristics) and models the local relationships between these independent variables and an outcome of interest (also known as dependent variable). In this hands-on exercise, we will learn how to build hedonic pricing models by using GWR methods. The dependent variable is the resale prices of condominium in 2015. The independent variables are divided into either structural and locational.
+
+# Packages
+
+1.  olsrr for building OLS and performing diagnostic tests
+2.  GWmodel for calibrating geographical weighted family of models. GWmodel provides a collection of localised spatial statistical methods, namely: GW summary statistics, GW principal components analysis, GW discriminant analysis and various forms of GW regression. Commonly, outputs or parameters of the GWmodel are mapped to provide a useful exploratory tool, which can often precede (and direct) a more traditional or sophisticated statistical analysis
+3.  corrplot for multivariate data visualisation and analysis
+4.  sf for Spatial data handling -. tidyverse for Attribute data handling, especially readr, ggplot2 and dplyr
+5.  tmap for Choropleth mapping
+
+Use this code chunk to load the packages
+
+
+```{r}
+pacman::p_load(sf, spdep, GWmodel, SpatialML, tmap, rsample, tidyverse, tidymodels, gtsummary, rpart, rpart.plot, ggstatsplot, performance)
+```
+
+
+# Data
+
+
+
+```{r}
+rs_sf <- read_rds("data/rds/HDB_resale.rds")
+```
+
+
+Next, the code chunk below is used to reveal the properties of *rs_sf* object.  
+
+
+```{r}
+set.seed(1234) 
+resale_split <- initial_split(rs_sf, prop = 5/10,) 
+train_sf <- training(resale_split) 
+test_sf <- testing(resale_split)
+
+```
+
+```{r}
+train_df <- train_sf |> 
+  st_drop_geometry() |>
+  as.data.frame()
+
+test_df <- test_sf |> 
+  st_drop_geometry() |>
+  as.data.frame()
+```
+
+```{r}
+#| eval: false
+train_df |> write_rds('./data/rds/train_df.rds')
+test_df |> write_rds('./data/rds/test_df.rds')
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 12
+
+rs_sf1 <- rs_sf |>
+  st_drop_geometry()
+ggcorrmat(rs_sf1[,2:17])
+```
+
+```{r}
+rs_mlr <- lm(formula = RESALE_PRICE ~., data=train_df)
+```
+
+```{r}
+tbl_regression(rs_mlr, intercept = TRUE) |>
+  add_glance_source_note(
+    label = list(sigma ~ "\U03C3"),
+    include = c(r.squared, adj.r.squared, 
+                AIC, statistic,
+                p.value, sigma)
+  )
+  
+```
+
+## Revising mlr model
+
+```{r}
+train_df <- train_df |>
+  select(-c(PROX_CHAS))
+train_sf <- train_sf |>
+  select(-c(PROX_CHAS))
+test_df <- test_df |>
+  select(-c(PROX_CHAS))
+test_sf <- test_sf |>
+  select(-c(PROX_CHAS))
+```
+
+```{r}
+rs_mlr <- lm(formula = RESALE_PRICE ~., data=train_df)
+```
+
+```{r}
+rs_mlr |> write_rds('./data/models/rs_mlr.rds')
+```
+
+```{r}
+coords <- st_coordinates(rs_sf)
+coords_train <- st_coordinates(train_sf)
+coords_test <- st_coordinates(test_sf)
+```
+
+```{r}
+set.seed(1234)
+rs_rp <- rpart(RESALE_PRICE~., train_df)
+rs_rp
+```
+
+```{r}
+rpart.plot(rs_rp)
+```
+
+```{r}
+set.seed(1234)
+rs_rf <- ranger(RESALE_PRICE~., train_df, importance='impurity')
+rs_rf
+```
+
+```{r}
+vi <- as.data.frame(rs_rf$variable.importance)
+vi$variables <- rownames(vi)
+vi <- vi |> rename(vi = "rs_rf$variable.importance")
+```
+
+```{r}
+ggplot(vi,
+       aes(x = vi,
+           y = reorder(variables, vi))) +
+  geom_bar(stat = "identity")
+```
+
+```{r}
+grf_pred <- read_rds('data/models/grf_pred.rds')
+grf_pred_df <- as.data.frame(grf_pred)
+```
+
+```{r}
+test_pred <- test_df |>
+  select(RESALE_PRICE) |>
+  cbind(grf_pred_df)
+```
+
+```{r}
+rf_pred <- predict(rs_rf, test_df)
+```
+
+```{r}
+rf_pred_df <- as.data.frame(rf_pred$predictions) |>
+  rename(rf_pred = "rf_pred$predictions")
+```
+
+```{r}
+test_pred <- cbind(test_pred, rf_pred_df)
+```
+
+```{r}
+mlr_pred <- predict(rs_mlr, test_df)
+```
+
+```{r}
+mlr_pred_df <- as.data.frame(mlr_pred) |>
+  rename(mlr_pred = "mlr_pred")
+```
+
+```{r}
+test_pred <- cbind(test_pred, mlr_pred_df)
+```
+
+```{r}
+yardstick::rmse(test_pred, RESALE_PRICE, mlr_pred)
+```
+
+```{r}
+mc <- test_pred |> 
+  pivot_longer(
+    cols = c(2:4),
+    names_to = "models",
+    values_to = "predicted"
+  )
+```
+
+```{r}
+ggplot(test_pred,
+       aes(grf_pred,
+           RESALE_PRICE)) +
+  geom_point()
+```
+

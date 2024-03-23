@@ -1,0 +1,233 @@
+---
+title: "1st Order Spatial Point Pattern Analysis: Kernel Density Estimation"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      eval = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+# Overview
+
+We are using Spatial Point Pattern Analysis to answer these questions:
+1. Are the locations of room rentals in Jakarta randomly distributed?
+2. If not randomly distributed, where are the locations with high concentration of room rentals?
+
+# Packages
+
+```{r}
+pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse)
+```
+
+
+We are using five packages, loaded with the above chunk:
+1. sf to process geospatial data
+2. spatstat to perform the spatial point pattern analysis
+3. raster to convert the image output from spatstat into raster format
+4. maptools to handle ppp data
+5. tmap to plot the maps
+6. tidyverse for data wrangling
+
+# Data
+
+## Jakarta Data Loading
+```{r}
+jakarta <- st_read('./data/geospatial/rds', layer='jakarta')
+```
+Note that the data is in a WGS 84 + EGM2008 height CRS. We can convert it to WGS84 with the chunk below
+
+```{r}
+jakarta <- jakarta |> st_transform(4326)
+```
+
+We can use qtm() to get a simple map of the jakarta data
+
+```{r}
+qtm(jakarta)
+```
+## Mamikos Data Loading
+
+```{r}
+mamikos <- read_csv('./data/aspatial/mamikos_sample.csv')
+summary(mamikos)
+```
+Note that the mamikos data has its location in the latitude and longitude columns, which we can convert to geometry in an sf dataframe
+
+```{r}
+mamikos <- st_as_sf(mamikos, coords = c("longitude", "latitude"), crs = 4326)
+st_crs(mamikos)
+```
+We can plot the map with tmap
+
+```{r}
+tmap_mode("view")
+
+tm_shape(mamikos)+
+  tm_dots()
+tmap_mode("plot")
+```
+
+
+## Data Wrangling
+
+### Converting to ppp
+
+Since spatstat requires data in ppp object form, we can use as.ppp to directly convert sf to ppp. However, we have to change the CRS to 23833 or DGN95, which is Indonesia's CRS System, as ppp file requires projected geometries (not WGS84)
+
+```{r}
+mamikos_ppp <- as.ppp(mamikos |> st_transform(23833))
+```
+
+See how it looks like with plot
+```{r}
+plot(mamikos_ppp)
+```
+
+### Checking for duplicates
+
+
+```{r}
+any(duplicated(mamikos_ppp))
+```
+Since there are no duplicates, we can go on to the next step
+
+### Creating owin object
+
+We can make an owin object to confine our analysis to only Jakarta
+
+```{r}
+jkt_owin <- as(as_Spatial(jakarta |> st_transform(23833)), "owin")
+plot(jkt_owin)
+```
+### Combining Jakarta and Mamikos Data
+
+We will extract only rental rooms within the owin object
+
+```{r}
+mamikos_ppp = mamikos_ppp[jkt_owin]
+```
+
+
+# First-Order Spatial Point Analysis
+
+## Deriving Kernel Density Estimation
+
+We are using adaptive bandidth
+```{r}
+kde_mamikos <- adaptive.density(mamikos_ppp, method="kernel")
+plot(kde_mamikos)
+```
+
+### Converting output to grid
+```{r}
+kde_mamikos_grid <- as.SpatialGridDataFrame.im(kde_mamikos)
+spplot(kde_mamikos_grid)
+```
+
+### Converting grid to raster
+
+```{r}
+kde_mamikos_raster <- raster(kde_mamikos_grid)
+kde_mamikos_raster
+```
+
+Note that the CRS is NA, so we can assign the CRS by ourselves
+
+```{r}
+projection(kde_mamikos_raster) <- CRS("+init=EPSG:3414")
+kde_mamikos_raster
+```
+## Visualizing Output in Tmap
+
+```{r}
+tm_shape(kde_mamikos_raster) + 
+  tm_raster("v") +
+  tm_layout(legend.position = c("right", "bottom"), frame = FALSE)
+```
+
+# Comparing KDE in Different Cities in Jakarta
+
+First, we extract the 5 cities
+```{r}
+jkt_barat = jakarta[jakarta$WADMKK == "Kota Jakarta Barat", ]
+jkt_utara = jakarta[jakarta$WADMKK == "Kota Jakarta Utara", ]
+jkt_timur = jakarta[jakarta$WADMKK == "Kota Jakarta Timur", ]
+jkt_pusat = jakarta[jakarta$WADMKK == "Kota Jakarta Pusat", ]
+jkt_selatan = jakarta[jakarta$WADMKK == "Kota Jakarta Selatan", ]
+```
+
+Next, we convert them to owin
+
+```{r}
+jkt_barat_owin <- as(as_Spatial(jkt_barat |> st_transform(23833)), "owin")
+jkt_utara_owin <- as(as_Spatial(jkt_utara |> st_transform(23833)), "owin")
+jkt_timur_owin <- as(as_Spatial(jkt_timur |> st_transform(23833)), "owin")
+jkt_pusat_owin <- as(as_Spatial(jkt_pusat |> st_transform(23833)), "owin")
+jkt_selatan_owin <- as(as_Spatial(jkt_selatan |> st_transform(23833)), "owin")
+```
+
+And combine them with the mamikos data
+
+```{r}
+mamikos_barat = mamikos_ppp[jkt_barat_owin]
+mamikos_utara = mamikos_ppp[jkt_utara_owin]
+mamikos_timur = mamikos_ppp[jkt_timur_owin]
+mamikos_pusat = mamikos_ppp[jkt_pusat_owin]
+mamikos_selatan = mamikos_ppp[jkt_selatan_owin]
+```
+
+### KDE For 5 Cities
+
+```{r}
+par(mfrow=c(3,2))
+
+plot(kde_barat <- 
+       adaptive.density(
+         mamikos_barat, 
+         method="kernel"), 
+     main="Jakarta Barat")
+
+plot(kde_utara <- 
+       adaptive.density(
+         mamikos_utara, 
+         method="kernel"), 
+     main="Jakarta Utara")
+plot(kde_timur <- 
+       adaptive.density(
+         mamikos_timur, 
+         method="kernel"), 
+     main="Jakarta Timur")
+plot(kde_pusat <- 
+       adaptive.density(
+         mamikos_pusat, 
+         method="kernel"), 
+     main="Jakarta Pusat")
+plot(kde_selatan <- 
+       adaptive.density(
+         mamikos_selatan, 
+         method="kernel"), 
+     main="Jakarta Selatan")
+```
+
+# Nearest Neighbour Analysis: Clark-Evans Test
+
+We are performing Clark-Evans Test using clarkevans.test() of statspat.
+
+The test hypotheses are:
+
+Ho = The distribution of room rentals in Jakarta are randomly distributed.
+
+H1= The distribution of room rentals in Jakarta are not randomly distributed.
+
+The 95% confident interval will be used.
+
+```{r}
+clarkevans.test(mamikos_ppp,
+                correction="none",
+                clipregion="jkt_owin",
+                alternative=c("clustered"),
+                nsim=99)
+```
+

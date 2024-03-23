@@ -1587,5 +1587,124 @@
     "title": "Hands On Exercise 9: Geographically Weighted Predictive Models",
     "section": "Visualizing predicted values",
     "text": "Visualizing predicted values\nAlternatively, scatterplot can be used to visualise the actual resale price and the predicted resale price by using the code chunk below."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/data/geospatial/ELDERCARE.html",
+    "href": "Hands-on_Ex/Hands-on_Ex10/data/geospatial/ELDERCARE.html",
+    "title": "IS415-GAA",
+    "section": "",
+    "text": "&lt;!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’&gt;  ELDERCARE  ENG dataset\n\nELDERCARE\n\n                 0 0     false"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/data/geospatial/hexagons.html",
+    "href": "Hands-on_Ex/Hands-on_Ex10/data/geospatial/hexagons.html",
+    "title": "IS415-GAA",
+    "section": "",
+    "text": "&lt;!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’&gt;     dataset\n\n\n                 0 0     false"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "",
+    "text": "In this hands-on exercise, you will gain hands-on experience on how to model geographical accessibility by using R’s geospatial analysis packages."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#importing-geospatial-data",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#importing-geospatial-data",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "Importing geospatial data",
+    "text": "Importing geospatial data\nThree geospatial data will be imported from the data/geospatial sub-folder. They are MP14_SUBZONE_NO_SEA_PL, hexagons and ELDERCARE.\nThe code chunk below is used to import these three data sets shapefile by using st_read() of sf packages.\n\n\nReading layer `MP14_SUBZONE_NO_SEA_PL' from data source \n  `C:\\Users\\yozaf\\SMUY3S2\\Geospatial\\IS415-GAA\\Hands-on_Ex\\Hands-on_Ex10\\data\\geospatial' \n  using driver `ESRI Shapefile'\nSimple feature collection with 323 features and 15 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: 2667.538 ymin: 15748.72 xmax: 56396.44 ymax: 50256.33\nProjected CRS: SVY21\n\n\nReading layer `hexagons' from data source \n  `C:\\Users\\yozaf\\SMUY3S2\\Geospatial\\IS415-GAA\\Hands-on_Ex\\Hands-on_Ex10\\data\\geospatial' \n  using driver `ESRI Shapefile'\nSimple feature collection with 3125 features and 6 fields\nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: 2667.538 ymin: 21506.33 xmax: 50010.26 ymax: 50256.33\nProjected CRS: SVY21 / Singapore TM\n\n\nReading layer `ELDERCARE' from data source \n  `C:\\Users\\yozaf\\SMUY3S2\\Geospatial\\IS415-GAA\\Hands-on_Ex\\Hands-on_Ex10\\data\\geospatial' \n  using driver `ESRI Shapefile'\nSimple feature collection with 120 features and 19 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 14481.92 ymin: 28218.43 xmax: 41665.14 ymax: 46804.9\nProjected CRS: SVY21 / Singapore TM"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#updating-crs-information",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#updating-crs-information",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "Updating CRS information",
+    "text": "Updating CRS information\nThe code chunk below updates the newly imported mpsz with the correct ESPG code (i.e. 3414)\nAfter transforming the projection metadata, you can verify the projection of the newly transformed mpsz_svy21 by using st_crs() of sf package.\nThe code chunk below will be used to varify the newly transformed mpsz_svy21.\n\n\nCoordinate Reference System:\n  User input: EPSG:3414 \n  wkt:\nPROJCRS[\"SVY21 / Singapore TM\",\n    BASEGEOGCRS[\"SVY21\",\n        DATUM[\"SVY21\",\n            ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n                LENGTHUNIT[\"metre\",1]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        ID[\"EPSG\",4757]],\n    CONVERSION[\"Singapore Transverse Mercator\",\n        METHOD[\"Transverse Mercator\",\n            ID[\"EPSG\",9807]],\n        PARAMETER[\"Latitude of natural origin\",1.36666666666667,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8801]],\n        PARAMETER[\"Longitude of natural origin\",103.833333333333,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8802]],\n        PARAMETER[\"Scale factor at natural origin\",1,\n            SCALEUNIT[\"unity\",1],\n            ID[\"EPSG\",8805]],\n        PARAMETER[\"False easting\",28001.642,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8806]],\n        PARAMETER[\"False northing\",38744.572,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8807]]],\n    CS[Cartesian,2],\n        AXIS[\"northing (N)\",north,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1]],\n        AXIS[\"easting (E)\",east,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1]],\n    USAGE[\n        SCOPE[\"Cadastre, engineering survey, topographic mapping.\"],\n        AREA[\"Singapore - onshore and offshore.\"],\n        BBOX[1.13,103.59,1.47,104.07]],\n    ID[\"EPSG\",3414]]\n\n\nNotice that the EPSG: is indicated as 3414 now."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#cleaning-and-updating-attribute-fields-of-the-geospatial-data",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#cleaning-and-updating-attribute-fields-of-the-geospatial-data",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "Cleaning and updating attribute fields of the geospatial data",
+    "text": "Cleaning and updating attribute fields of the geospatial data\nThere are many redundant fields in the data tables of both eldercare and hexagons. The code chunks below will be used to exclude those redundant fields. At the same time, a new field called demand and a new field called capacity will be added into the data table of hexagons and eldercare sf data frame respectively. Both fields are derive using mutate() of dplyr package.\nNotice that for the purpose of this hands-on exercise, a constant value of 100 is used. In practice, actual demand of the hexagon and capacity of the eldercare centre should be used."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#importing-distance-matrix",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#importing-distance-matrix",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "Importing Distance Matrix",
+    "text": "Importing Distance Matrix\nThe code chunk below uses read_cvs() of readr package to import OD_Matrix.csv into RStudio. The imported object is a tibble data.frame called ODMatrix."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#tidying-distance-matrix",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#tidying-distance-matrix",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "Tidying distance matrix",
+    "text": "Tidying distance matrix\nThe code chunk below uses spread() of tidyr package is used to transform the O-D matrix from a thin format into a fat format.\nNote: Since tidyr version 1.0 a new function called pivot_wider() is introduce. You should use pivot_wider() instead of spread()\nCurrently, the distance is measured in metre because SVY21 projected coordinate system is used. The code chunk below will be used to convert the unit f measurement from metre to kilometre."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#computing-hansens-accessibility",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#computing-hansens-accessibility",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "Computing Hansen’s accessibility",
+    "text": "Computing Hansen’s accessibility\nNow, we ready to compute Hansen’s accessibility by using ac() of SpatialAcc package. Before getting started, you are encourage to read the arguments of the function at least once in order to ensure that the required inputs are available.\nThe code chunk below calculates Hansen’s accessibility using ac() of SpatialAcc and data.frame() is used to save the output in a data frame called acc_Handsen.\nThe default field name is very messy, we will rename it to accHansen by using the code chunk below.\nNotice that the field name is much more tidier now.\nNext, we will convert the data table into tibble format by using the code chunk below.\nLastly, bind_cols() of dplyr will be used to join the acc_Hansen tibble data frame with the hexagons simple feature data frame. The output is called hexagon_Hansen.\nNotice that hexagon_Hansen is a simple feature data frame and not a typical tibble data frame.\nActually, the steps above can be perform by using a single code chunk as shown below."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#visualising-hansens-accessibility",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#visualising-hansens-accessibility",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "Visualising Hansen’s accessibility",
+    "text": "Visualising Hansen’s accessibility\n\nExtracting map extend\nFirstly, we will extract the extend of hexagons simple feature data frame by by using st_bbox() of sf package.\nThe code chunk below uses a collection of mapping fucntions of tmap package to create a high cartographic quality accessibility to eldercare centre in Singapore."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#statistical-graphic-visualisation",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#statistical-graphic-visualisation",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "Statistical graphic visualisation",
+    "text": "Statistical graphic visualisation\nIn this section, we are going to compare the distribution of Hansen’s accessibility values by URA Planning Region.\nFirstly, we need to add the planning region field into haxegon_Hansen simple feature data frame by using the code chunk below.\nNext, ggplot() will be used to plot the distribution by using boxplot graphical method."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#computing-kd2sfcas-accessibility",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#computing-kd2sfcas-accessibility",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "Computing KD2SFCA’s accessibility",
+    "text": "Computing KD2SFCA’s accessibility\nIn this section, you are going to repeat most of the steps you had learned in previous section to perform the analysis. However, some of the codes will be combined into one code chunk. The code chunk below calculates Hansen’s accessibility using ac() of SpatialAcc and data.frame() is used to save the output in a data frame called acc_KD2SFCA. Notice that KD2SFCA is used for family argument."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#visualising-kd2sfcas-accessibility",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#visualising-kd2sfcas-accessibility",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "Visualising KD2SFCA’s accessibility",
+    "text": "Visualising KD2SFCA’s accessibility\nThe code chunk below uses a collection of mapping fucntions of tmap package to create a high cartographic quality accessibility to eldercare centre in Singapore. Notice that mapex is reused for bbox argument."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#statistical-graphic-visualisation-1",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#statistical-graphic-visualisation-1",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "Statistical graphic visualisation",
+    "text": "Statistical graphic visualisation\nNow, we are going to compare the distribution of KD2CFA accessibility values by URA Planning Region.\nFirstly, we need to add the planning region field into hexagon_KD2SFCA simple feature data frame by using the code chunk below.\nNext, ggplot() will be used to plot the distribution by using boxplot graphical method."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#computing-sam-accessibility",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#computing-sam-accessibility",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "Computing SAM accessibility",
+    "text": "Computing SAM accessibility\nIn this section, you are going to repeat most of the steps you had learned in previous section to perform the analysis. However, some of the codes will be combined into one code chunk. The code chunk below calculates Hansen’s accessibility using ac() of SpatialAcc and data.frame() is used to save the output in a data frame called acc_SAM. Notice that SAM is used for family argument."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#visualising-sams-accessibility",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#visualising-sams-accessibility",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "Visualising SAM’s accessibility",
+    "text": "Visualising SAM’s accessibility\nThe code chunk below uses a collection of mapping fucntions of tmap package to create a high cartographic quality accessibility to eldercare centre in Singapore. Notice that mapex is reused for bbox argument."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#statistical-graphic-visualisation-2",
+    "href": "Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html#statistical-graphic-visualisation-2",
+    "title": "Hands-on Exercise 10: Modelling Geographical Accessibility",
+    "section": "Statistical graphic visualisation",
+    "text": "Statistical graphic visualisation\nNow, we are going to compare the distribution of SAM accessibility values by URA Planning Region.\nFirstly, we need to add the planning region field into hexagon_SAM simple feature data frame by using the code chunk below.\nNext, ggplot() will be used to plot the distribution by using boxplot graphical method."
   }
 ]

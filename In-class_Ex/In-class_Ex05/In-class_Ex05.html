@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Yozafard Harold Siauheming">
+<meta name="dcterms.date" content="2024-02-05">
+
+<title>IS415-GAA - In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">IS415-GAA</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Hands-on Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/hands_on_1.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/hands_on_2.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/hands_on_3_1.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 3.1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/hands_on_3_2.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 3.2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 7</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 8</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 10</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">In-class Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex02/In-class_Ex02.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex03/In-class_Ex03.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex03/In-class_Ex03-Network.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 3 - Network</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://is415-gaa-yozafard.netlify.app/in-class_ex/in-class_ex04/in-class_ex04" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex05/In-class_Ex05.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex05/In-class_Ex05-EHSA.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 5 - EHSA</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex06/In-class_Ex06.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex07/In-class_Ex07.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 7</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex09/In-class_Ex09.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 9</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-take-home-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Take Home Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html" rel="" target="">
+ <span class="dropdown-text">Take Home Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html" rel="" target="">
+ <span class="dropdown-text">Take Home Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex03/Take-home_Ex03_KDE.html" rel="" target="">
+ <span class="dropdown-text">Take Home Exercise 3</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#packages" id="toc-packages" class="nav-link active" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a>
+  <ul class="collapse">
+  <li><a href="#loading-data" id="toc-loading-data" class="nav-link" data-scroll-target="#loading-data">Loading Data</a></li>
+  <li><a href="#combining-data-using-left_join" id="toc-combining-data-using-left_join" class="nav-link" data-scroll-target="#combining-data-using-left_join">Combining data using left_join</a></li>
+  <li><a href="#plot-coropleth" id="toc-plot-coropleth" class="nav-link" data-scroll-target="#plot-coropleth">Plot Coropleth</a></li>
+  </ul></li>
+  <li><a href="#contiguity-weights" id="toc-contiguity-weights" class="nav-link" data-scroll-target="#contiguity-weights">Contiguity Weights</a></li>
+  <li><a href="#computing-morans-i" id="toc-computing-morans-i" class="nav-link" data-scroll-target="#computing-morans-i">Computing Moran’s I</a>
+  <ul class="collapse">
+  <li><a href="#global-morans-i" id="toc-global-morans-i" class="nav-link" data-scroll-target="#global-morans-i">Global Moran’s I</a></li>
+  <li><a href="#monte-carlo-global-morani-permutation-test" id="toc-monte-carlo-global-morani-permutation-test" class="nav-link" data-scroll-target="#monte-carlo-global-morani-permutation-test">Monte Carlo Global Moran’I Permutation test</a></li>
+  <li><a href="#computing-local-morans-i" id="toc-computing-local-morans-i" class="nav-link" data-scroll-target="#computing-local-morans-i">Computing Local Moran’s I</a>
+  <ul class="collapse">
+  <li><a href="#visualizing-local-morans-i" id="toc-visualizing-local-morans-i" class="nav-link" data-scroll-target="#visualizing-local-morans-i">Visualizing Local Moran’s I</a></li>
+  <li><a href="#visualizing-p-value-of-local-morans-i" id="toc-visualizing-p-value-of-local-morans-i" class="nav-link" data-scroll-target="#visualizing-p-value-of-local-morans-i">Visualizing p-value of Local Moran’s I</a></li>
+  <li><a href="#visualizing-lisa-map" id="toc-visualizing-lisa-map" class="nav-link" data-scroll-target="#visualizing-lisa-map">Visualizing LISA Map</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#hot-spot-and-cold-spot-analysis-hcsa" id="toc-hot-spot-and-cold-spot-analysis-hcsa" class="nav-link" data-scroll-target="#hot-spot-and-cold-spot-analysis-hcsa">Hot Spot and Cold Spot Analysis (HCSA)</a>
+  <ul class="collapse">
+  <li><a href="#computing-local-gi-statistics" id="toc-computing-local-gi-statistics" class="nav-link" data-scroll-target="#computing-local-gi-statistics">Computing Local Gi* Statistics</a></li>
+  <li><a href="#visualizing-gi" id="toc-visualizing-gi" class="nav-link" data-scroll-target="#visualizing-gi">Visualizing Gi*</a></li>
+  <li><a href="#visualizing-p-value-of-hcsa" id="toc-visualizing-p-value-of-hcsa" class="nav-link" data-scroll-target="#visualizing-p-value-of-hcsa">Visualizing p-value of HCSA</a></li>
+  <li><a href="#visualizing-local-hcsa" id="toc-visualizing-local-hcsa" class="nav-link" data-scroll-target="#visualizing-local-hcsa">Visualizing Local HCSA</a></li>
+  <li><a href="#visualizing-hot-spot-and-cold-spot-areas" id="toc-visualizing-hot-spot-and-cold-spot-areas" class="nav-link" data-scroll-target="#visualizing-hot-spot-and-cold-spot-areas">Visualizing Hot Spot and Cold Spot Areas</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">In-Class Exercise 5: Global and Local Measuers of Spatial Autocorrelation - sfdep methods</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yozafard Harold Siauheming </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 5, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="packages" class="level1">
+<h1>Packages</h1>
+<p>We are using sfdep, not spdep</p>
+</section>
+<section id="data" class="level1">
+<h1>Data</h1>
+<section id="loading-data" class="level2">
+<h2 class="anchored" data-anchor-id="loading-data">Loading Data</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `Hunan' from data source 
+  `C:\Users\yozaf\SMUY3S2\Geospatial\IS415-GAA\In-class_Ex\In-class_Ex05\data\geospatial' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 88 features and 7 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812
+Geodetic CRS:  WGS 84</code></pre>
+</div>
+</div>
+<p>We can track to see which columns are the same for both dataset</p>
+</section>
+<section id="combining-data-using-left_join" class="level2">
+<h2 class="anchored" data-anchor-id="combining-data-using-left_join">Combining data using left_join</h2>
+</section>
+<section id="plot-coropleth" class="level2">
+<h2 class="anchored" data-anchor-id="plot-coropleth">Plot Coropleth</h2>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="contiguity-weights" class="level1">
+<h1>Contiguity Weights</h1>
+<p>We can try using the tidyverse method so that it can run in one chunk</p>
+<p>This converges the nb and wt in one table so that it is easier to see for us visually, without using command lines</p>
+</section>
+<section id="computing-morans-i" class="level1">
+<h1>Computing Moran’s I</h1>
+<section id="global-morans-i" class="level2">
+<h2 class="anchored" data-anchor-id="global-morans-i">Global Moran’s I</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$I
+[1] 0.30075
+
+$K
+[1] 7.640659</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Moran I test under randomisation
+
+data:  x  
+weights: listw    
+
+Moran I statistic standard deviate = 4.7351, p-value = 1.095e-06
+alternative hypothesis: greater
+sample estimates:
+Moran I statistic       Expectation          Variance 
+      0.300749970      -0.011494253       0.004348351 </code></pre>
+</div>
+</div>
+</section>
+<section id="monte-carlo-global-morani-permutation-test" class="level2">
+<h2 class="anchored" data-anchor-id="monte-carlo-global-morani-permutation-test">Monte Carlo Global Moran’I Permutation test</h2>
+<p>This performs simulation, making it more reliable compared to the normal Moran’I test that only checks for one test data. nsim=99 will run the simulation 100 times as it uses 0 based indexing</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Monte-Carlo simulation of Moran I
+
+data:  x 
+weights: listw  
+number of simulations + 1: 100 
+
+statistic = 0.30075, observed rank = 100, p-value &lt; 2.2e-16
+alternative hypothesis: two.sided</code></pre>
+</div>
+</div>
+</section>
+<section id="computing-local-morans-i" class="level2">
+<h2 class="anchored" data-anchor-id="computing-local-morans-i">Computing Local Moran’s I</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 88 features and 21 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812
+Geodetic CRS:  WGS 84
+# A tibble: 88 × 22
+         ii        eii     var_ii    z_ii    p_ii p_ii_sim p_folded_sim skewness
+      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt;
+ 1 -0.00147  0.00177   0.000418   -0.158  0.874       0.82         0.41   -0.812
+ 2  0.0259   0.00641   0.0105      0.190  0.849       0.96         0.48   -1.09 
+ 3 -0.0120  -0.0374    0.102       0.0796 0.937       0.76         0.38    0.824
+ 4  0.00102 -0.0000349 0.00000437  0.506  0.613       0.64         0.32    1.04 
+ 5  0.0148  -0.00340   0.00165     0.449  0.654       0.5          0.25    1.64 
+ 6 -0.0388  -0.00339   0.00545    -0.480  0.631       0.82         0.41    0.614
+ 7  3.37    -0.198     1.41        3.00   0.00266     0.08         0.04    1.46 
+ 8  1.56    -0.265     0.804       2.04   0.0417      0.08         0.04    0.459
+ 9  4.42     0.0450    1.79        3.27   0.00108     0.02         0.01    0.746
+10 -0.399   -0.0505    0.0859     -1.19   0.234       0.28         0.14   -0.685
+# ℹ 78 more rows
+# ℹ 14 more variables: kurtosis &lt;dbl&gt;, mean &lt;fct&gt;, median &lt;fct&gt;, pysal &lt;fct&gt;,
+#   nb &lt;nb&gt;, wt &lt;list&gt;, NAME_2 &lt;chr&gt;, ID_3 &lt;int&gt;, NAME_3 &lt;chr&gt;,
+#   ENGTYPE_3 &lt;chr&gt;, County &lt;chr&gt;, GDPPC &lt;dbl&gt;, Year &lt;dbl&gt;,
+#   geometry &lt;POLYGON [°]&gt;</code></pre>
+</div>
+</div>
+<section id="visualizing-local-morans-i" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-local-morans-i">Visualizing Local Moran’s I</h3>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="visualizing-p-value-of-local-morans-i" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-p-value-of-local-morans-i">Visualizing p-value of Local Moran’s I</h3>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="visualizing-lisa-map" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-lisa-map">Visualizing LISA Map</h3>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="hot-spot-and-cold-spot-analysis-hcsa" class="level1">
+<h1>Hot Spot and Cold Spot Analysis (HCSA)</h1>
+<section id="computing-local-gi-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="computing-local-gi-statistics">Computing Local Gi* Statistics</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 88 features and 17 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812
+Geodetic CRS:  WGS 84
+# A tibble: 88 × 18
+   gi_star   e_gi    var_gi p_value   p_sim p_folded_sim skewness kurtosis nb   
+     &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;nb&gt; 
+ 1  0.0416 0.0114   6.41e-6  0.0493 9.61e-1         0.7      0.35    0.875 &lt;int&gt;
+ 2 -0.333  0.0106   3.84e-6 -0.0941 9.25e-1         1        0.5     0.661 &lt;int&gt;
+ 3  0.281  0.0126   7.51e-6 -0.151  8.80e-1         0.9      0.45    0.640 &lt;int&gt;
+ 4  0.411  0.0118   9.22e-6  0.264  7.92e-1         0.6      0.3     0.853 &lt;int&gt;
+ 5  0.387  0.0115   9.56e-6  0.339  7.34e-1         0.62     0.31    1.07  &lt;int&gt;
+ 6 -0.368  0.0118   5.91e-6 -0.583  5.60e-1         0.72     0.36    0.594 &lt;int&gt;
+ 7  3.56   0.0151   7.31e-6  2.61   9.01e-3         0.06     0.03    1.09  &lt;int&gt;
+ 8  2.52   0.0136   6.14e-6  1.49   1.35e-1         0.2      0.1     1.12  &lt;int&gt;
+ 9  4.56   0.0144   5.84e-6  3.53   4.17e-4         0.04     0.02    1.23  &lt;int&gt;
+10  1.16   0.0104   3.70e-6  1.82   6.86e-2         0.12     0.06    0.416 &lt;int&gt;
+# ℹ 78 more rows
+# ℹ 9 more variables: wts &lt;list&gt;, NAME_2 &lt;chr&gt;, ID_3 &lt;int&gt;, NAME_3 &lt;chr&gt;,
+#   ENGTYPE_3 &lt;chr&gt;, County &lt;chr&gt;, GDPPC &lt;dbl&gt;, Year &lt;dbl&gt;,
+#   geometry &lt;POLYGON [°]&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="visualizing-gi" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-gi">Visualizing Gi*</h2>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="visualizing-p-value-of-hcsa" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-p-value-of-hcsa">Visualizing p-value of HCSA</h2>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="visualizing-local-hcsa" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-local-hcsa">Visualizing Local HCSA</h2>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="visualizing-hot-spot-and-cold-spot-areas" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-hot-spot-and-cold-spot-areas">Visualizing Hot Spot and Cold Spot Areas</h2>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

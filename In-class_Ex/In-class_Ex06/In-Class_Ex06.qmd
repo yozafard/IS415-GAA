@@ -4,7 +4,7 @@ title: "In-Class Exercise 6: Geographical Segmentation with Spatially Constraine
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, 
-                      eval = TRUE,
+                      eval = FALSE,
                       message = FALSE,
                       warning = FALSE,
                       freeze = TRUE)

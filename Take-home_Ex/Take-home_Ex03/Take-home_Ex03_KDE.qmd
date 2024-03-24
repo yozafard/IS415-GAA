@@ -6,14 +6,13 @@ title: "1st Order Spatial Point Pattern Analysis: Kernel Density Estimation"
 knitr::opts_chunk$set(echo = FALSE, 
                       eval = TRUE,
                       message = FALSE,
-                      warning = FALSE)
+                      warning = FALSE,
+                      freeze = TRUE)
 ```
 
 # Overview
 
-We are using Spatial Point Pattern Analysis to answer these questions:
-1. Are the locations of room rentals in Jakarta randomly distributed?
-2. If not randomly distributed, where are the locations with high concentration of room rentals?
+We are using Spatial Point Pattern Analysis to answer these questions: 1. Are the locations of room rentals in Jakarta randomly distributed? 2. If not randomly distributed, where are the locations with high concentration of room rentals?
 
 # Packages
 
@@ -21,21 +20,23 @@ We are using Spatial Point Pattern Analysis to answer these questions:
 pacman::p_load(maptools, sf, raster, spatstat, tmap, tidyverse)
 ```
 
-
 We are using five packages, loaded with the above chunk:
-1. sf to process geospatial data
-2. spatstat to perform the spatial point pattern analysis
-3. raster to convert the image output from spatstat into raster format
-4. maptools to handle ppp data
-5. tmap to plot the maps
-6. tidyverse for data wrangling
+
+1.  sf to process geospatial data
+2.  spatstat to perform the spatial point pattern analysis
+3.  raster to convert the image output from spatstat into raster format
+4.   maptools to handle ppp data
+5.  tmap to plot the maps
+6.  tidyverse for data wrangling
 
 # Data
 
 ## Jakarta Data Loading
+
 ```{r}
 jakarta <- st_read('./data/geospatial/rds', layer='jakarta')
 ```
+
 Note that the data is in a WGS 84 + EGM2008 height CRS. We can convert it to WGS84 with the chunk below
 
 ```{r}
@@ -47,18 +48,21 @@ We can use qtm() to get a simple map of the jakarta data
 ```{r}
 qtm(jakarta)
 ```
+
 ## Mamikos Data Loading
 
 ```{r}
 mamikos <- read_csv('./data/aspatial/mamikos_sample.csv')
 summary(mamikos)
 ```
+
 Note that the mamikos data has its location in the latitude and longitude columns, which we can convert to geometry in an sf dataframe
 
 ```{r}
 mamikos <- st_as_sf(mamikos, coords = c("longitude", "latitude"), crs = 4326)
 st_crs(mamikos)
 ```
+
 We can plot the map with tmap
 
 ```{r}
@@ -69,6 +73,21 @@ tm_shape(mamikos)+
 tmap_mode("plot")
 ```
 
+# School Data Loading
+
+Since we have an rds file containing locations of schools, we can load it with read_rds()
+
+```{r}
+school <- readRDS('./data/aspatial/combined_school_uni.rds')
+```
+
+```{r}
+tmap_mode("view")
+
+tm_shape(school)+
+  tm_dots()
+tmap_mode("plot")
+```
 
 ## Data Wrangling
 
@@ -78,19 +97,15 @@ Since spatstat requires data in ppp object form, we can use as.ppp to directly c
 
 ```{r}
 mamikos_ppp <- as.ppp(mamikos |> st_transform(23833))
-```
-
-See how it looks like with plot
-```{r}
-plot(mamikos_ppp)
+school_ppp <- as.ppp(school |> st_transform(23833))
 ```
 
 ### Checking for duplicates
 
-
 ```{r}
 any(duplicated(mamikos_ppp))
 ```
+
 Since there are no duplicates, we can go on to the next step
 
 ### Creating owin object
@@ -101,29 +116,46 @@ We can make an owin object to confine our analysis to only Jakarta
 jkt_owin <- as(as_Spatial(jakarta |> st_transform(23833)), "owin")
 plot(jkt_owin)
 ```
+
 ### Combining Jakarta and Mamikos Data
 
 We will extract only rental rooms within the owin object
 
 ```{r}
 mamikos_ppp = mamikos_ppp[jkt_owin]
+school_ppp = school_ppp[jkt_owin]
 ```
-
 
 # First-Order Spatial Point Analysis
 
 ## Deriving Kernel Density Estimation
 
-We are using adaptive bandidth
+We are using adaptive bandwidth
+
 ```{r}
 kde_mamikos <- adaptive.density(mamikos_ppp, method="kernel")
+
+kde_school <- adaptive.density(school_ppp, method="kernel")
+```
+
+```{r}
 plot(kde_mamikos)
+plot(kde_school)
+```
+
+```{r}
+plot(kde_mamikos)
+plot(kde_school, add=TRUE, col=alpha('red', 0.5))
 ```
 
 ### Converting output to grid
+
 ```{r}
 kde_mamikos_grid <- as.SpatialGridDataFrame.im(kde_mamikos)
 spplot(kde_mamikos_grid)
+
+kde_school_grid <- as.SpatialGridDataFrame.im(kde_school)
+spplot(kde_school_grid)
 ```
 
 ### Converting grid to raster
@@ -131,15 +163,21 @@ spplot(kde_mamikos_grid)
 ```{r}
 kde_mamikos_raster <- raster(kde_mamikos_grid)
 kde_mamikos_raster
+
+kde_school_raster <- raster(kde_school_grid)
+kde_school_raster
 ```
 
 Note that the CRS is NA, so we can assign the CRS by ourselves
 
 ```{r}
 projection(kde_mamikos_raster) <- CRS("+init=EPSG:3414")
-kde_mamikos_raster
+projection(kde_school_raster) <- CRS("+init=EPSG:3414")
 ```
+
 ## Visualizing Output in Tmap
+
+For the rooms
 
 ```{r}
 tm_shape(kde_mamikos_raster) + 
@@ -147,9 +185,29 @@ tm_shape(kde_mamikos_raster) +
   tm_layout(legend.position = c("right", "bottom"), frame = FALSE)
 ```
 
+For the schools
+
+```{r}
+tm_shape(kde_school_raster) + 
+  tm_raster("v") +
+  tm_layout(legend.position = c("right", "bottom"), frame = FALSE)
+```
+
+Overlay of both
+
+```{r}
+tm_shape(kde_mamikos_raster) + 
+  tm_raster("v") +
+  tm_layout(legend.position = c("right", "bottom"), frame = FALSE) +
+  tm_shape(kde_school_raster) + 
+  tm_raster("v") +
+  tm_layout(legend.position = c("right", "bottom"), frame = FALSE)
+```
+
 # Comparing KDE in Different Cities in Jakarta
 
 First, we extract the 5 cities
+
 ```{r}
 jkt_barat = jakarta[jakarta$WADMKK == "Kota Jakarta Barat", ]
 jkt_utara = jakarta[jakarta$WADMKK == "Kota Jakarta Utara", ]
@@ -176,58 +234,49 @@ mamikos_utara = mamikos_ppp[jkt_utara_owin]
 mamikos_timur = mamikos_ppp[jkt_timur_owin]
 mamikos_pusat = mamikos_ppp[jkt_pusat_owin]
 mamikos_selatan = mamikos_ppp[jkt_selatan_owin]
+
+school_barat = school_ppp[jkt_barat_owin]
+school_utara = school_ppp[jkt_utara_owin]
+school_timur = school_ppp[jkt_timur_owin]
+school_pusat = school_ppp[jkt_pusat_owin]
+school_selatan = school_ppp[jkt_selatan_owin]
 ```
 
-### KDE For 5 Cities
+### KDE For Jakarta Barat
 
 ```{r}
-par(mfrow=c(3,2))
-
-plot(kde_barat <- 
+plot(kde_mamikos_barat <- 
        adaptive.density(
          mamikos_barat, 
          method="kernel"), 
      main="Jakarta Barat")
 
-plot(kde_utara <- 
+plot(kde_school_barat <- 
        adaptive.density(
-         mamikos_utara, 
-         method="kernel"), 
-     main="Jakarta Utara")
-plot(kde_timur <- 
-       adaptive.density(
-         mamikos_timur, 
-         method="kernel"), 
-     main="Jakarta Timur")
-plot(kde_pusat <- 
-       adaptive.density(
-         mamikos_pusat, 
-         method="kernel"), 
-     main="Jakarta Pusat")
-plot(kde_selatan <- 
-       adaptive.density(
-         mamikos_selatan, 
-         method="kernel"), 
-     main="Jakarta Selatan")
+         school_barat, 
+         method="kernel"),
+     add=TRUE
+)
 ```
 
-# Nearest Neighbour Analysis: Clark-Evans Test
+# Storyboard
 
-We are performing Clark-Evans Test using clarkevans.test() of statspat.
+## User Inputs Sidebar
 
-The test hypotheses are:
+When implementing this to the Shiny App, we can make it dynamic by implementing this in our sidebar:
 
-Ho = The distribution of room rentals in Jakarta are randomly distributed.
+1.  Implementing input for cities: For analyzing Kernel Density Estimates with a specific city, instead of the whole DKI Jakarta, we can use a select input where users can choose which city they want, or Jakarta as a whole
 
-H1= The distribution of room rentals in Jakarta are not randomly distributed.
+2.  Educational Institutions: If users have any requirements regarding the educational institutions displayed (e.g: they only want to analyze nearby universities or wants to exclude primary schools), they can use a checkbox to select which levels will be analyzed.
 
-The 95% confident interval will be used.
+3.  Implementing Kernel methods. Users can choose which kernel methods they want for the KDE analysis using a dropdown
 
-```{r}
-clarkevans.test(mamikos_ppp,
-                correction="none",
-                clipregion="jkt_owin",
-                alternative=c("clustered"),
-                nsim=99)
-```
+## Main Panel
 
+The main panel will be displaying the KDE map, with three separate tabs to display:
+
+1.  The combined overlay of both Mamikos rooms and schools
+2.  Only the Mamikos rooms
+3.  Only schools
+
+![Storyboard]('./data/img/storyboard.jpg'){fig-align="center"}

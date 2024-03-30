@@ -1888,5 +1888,152 @@
     "title": "IS415-GAA",
     "section": "",
     "text": "&lt;!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’&gt;     dataset\n\n\n                 0 0     false"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "",
+    "text": "Spatial Interaction Models (SIMs) are mathematical models for estimating flows between spatial entities developed by Alan Wilson in the late 1960s and early 1970, with considerable uptake and refinement for transport modelling since then Boyce and Williams (2015).\nThere are four main types of traditional SIMs (Wilson 1971):\nUnconstrained Production-constrained Attraction-constrained Doubly-constrained\nOrdinary least square (OLS), log-normal, Poisson and negative binomial (NB) regression methods have been used extensively to calibrate OD flow models by processing flow data as different types of dependent variables. In this chapter, you will gain hands-on experiences on using appropriate R packages to calibrate SIM by using there four regression methods."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#converting-from-sf-data.table-to-spatialpolygonsdataframe",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#converting-from-sf-data.table-to-spatialpolygonsdataframe",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Converting from sf data.table to SpatialPolygonsDataFrame",
+    "text": "Converting from sf data.table to SpatialPolygonsDataFrame\nThere are at least two ways to compute the required distance matrix. One is based on sf and the other is based on sp. Past experience shown that computing distance matrix by using sf function took relatively longer time that sp method especially the data set is large. In view of this, sp method is used in the code chunks below.\nFirst as.Spatial() will be used to convert mpsz from sf tibble data frame to SpatialPolygonsDataFrame of sp object as shown in the code chunk below."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#computing-the-distance-matrix",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#computing-the-distance-matrix",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Computing the distance matrix",
+    "text": "Computing the distance matrix\nNext, spDists() of sp package will be used to compute the Euclidean distance between the centroids of the planning subzones.\nNotice that the output dist is a matrix object class of R. Also notice that the column heanders and row headers are not labeled with the planning subzone codes."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#labelling-column-and-row-heanders-of-a-distance-matrix",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#labelling-column-and-row-heanders-of-a-distance-matrix",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Labelling column and row heanders of a distance matrix",
+    "text": "Labelling column and row heanders of a distance matrix\nFirst, we will create a list sorted according to the the distance matrix by planning sub-zone code.\nNext we will attach SUBZONE_C to row and column for distance matrix matching ahead"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#pivoting-distance-value-by-subzone_c",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#pivoting-distance-value-by-subzone_c",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Pivoting distance value by SUBZONE_C",
+    "text": "Pivoting distance value by SUBZONE_C\nNext, we will pivot the distance matrix into a long table by using the row and column subzone codes as show in the code chunk below.\nNotice that the within zone distance is 0."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#updating-intra-zonal-distances",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#updating-intra-zonal-distances",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Updating intra-zonal distances",
+    "text": "Updating intra-zonal distances\nIn this section, we are going to append a constant value to replace the intra-zonal distance of 0.\nFirst, we will select and find out the minimum value of the distance by using summary().\nNext, a constant distance value of 50m is added into intra-zones distance.\nThe code chunk below will be used to check the result data.frame.\nThe code chunk below is used to rename the origin and destination fields.\nLastly, the code chunk below is used to save the dataframe for future use."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#separating-intra-flow-from-passenger-volume-df",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#separating-intra-flow-from-passenger-volume-df",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Separating intra-flow from passenger volume df",
+    "text": "Separating intra-flow from passenger volume df\nCode chunk below is used to add three new fields in flow_data dataframe."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#combining-passenger-volume-data-with-distance-value",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#combining-passenger-volume-data-with-distance-value",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Combining passenger volume data with distance value",
+    "text": "Combining passenger volume data with distance value\nBefore we can join flow_data and distPair, we need to convert data value type of ORIGIN_SZ and DESTIN_SZ fields of flow_data dataframe into factor data type.\nNow, left_join() of dplyr will be used to flow_data dataframe and distPair dataframe. The output is called flow_data1."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#importing-population-data",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#importing-population-data",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Importing population data",
+    "text": "Importing population data"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#preparing-origin-attribute",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#preparing-origin-attribute",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Preparing origin attribute",
+    "text": "Preparing origin attribute"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#preparing-destination-attribute",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#preparing-destination-attribute",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Preparing destination attribute",
+    "text": "Preparing destination attribute\nWe will called the output data file SIM_data. it is in rds data file format."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#importing-the-modelling-data",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#importing-the-modelling-data",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Importing the modelling data",
+    "text": "Importing the modelling data\nFirstly, let us import the modelling data by using the code chunk below."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#visualising-the-dependent-variable",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#visualising-the-dependent-variable",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Visualising the dependent variable",
+    "text": "Visualising the dependent variable\nFirstly, let us plot the distribution of the dependent variable (i.e. TRIPS) by using histogram method by using the code chunk below.\nNotice that the distribution is highly skewed and not resemble bell shape or also known as normal distribution.\nNext, let us visualise the relation between the dependent variable and one of the key independent variable in Spatial Interaction Model, namely distance.\nNotice that their relationship hardly resemble linear relationship.\nOn the other hand, if we plot the scatter plot by using the log transformed version of both variables, we can see that their relationship is more resemble linear relationship."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#checking-for-variables-with-zero-values",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#checking-for-variables-with-zero-values",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Checking for variables with zero values",
+    "text": "Checking for variables with zero values\nSince Poisson Regression is based of log and log 0 is undefined, it is important for us to ensure that no 0 values in the explanatory variables.\nIn the code chunk below, summary() of Base R is used to compute the summary statistics of all variables in SIM_data data frame\nThe print report above reveals that variables ORIGIN_AGE7_12, ORIGIN_AGE13_24, ORIGIN_AGE25_64,DESTIN_AGE7_12, DESTIN_AGE13_24, DESTIN_AGE25_64 consist of 0 values.\nIn view of this, code chunk below will be used to replace zero values to 0.99.\nYou can run the summary() again.\nNotice that all the 0 values have been replaced by 0.99."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#unconstrained-spatial-interaction-model",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#unconstrained-spatial-interaction-model",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Unconstrained Spatial Interaction Model",
+    "text": "Unconstrained Spatial Interaction Model\nIn this section, you will learn how to calibrate an unconstrained spatial interaction model by using glm() of Base Stats. The explanatory variables are origin population by different age cohort, destination population by different age cohort (i.e. ORIGIN_AGE25_64) and distance between origin and destination in km (i.e. dist).\nThe code chunk used to calibrate to model is shown below:"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#r-squared-function",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#r-squared-function",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "R-squared function",
+    "text": "R-squared function\nIn order to measure how much variation of the trips can be accounted by the model we will write a function to calculate R-Squared value as shown below.\nNext, we will compute the R-squared of the unconstrained SIM by using the code chunk below."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#origin-production-constrained-sim",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#origin-production-constrained-sim",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Origin (Production) constrained SIM",
+    "text": "Origin (Production) constrained SIM\nIn this section, we will fit an origin constrained SIM by using the code3 chunk below.\nWe can examine how the constraints hold for destinations this time."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#destination-constrained",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#destination-constrained",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Destination constrained",
+    "text": "Destination constrained\nIn this section, we will fit a destination constrained SIM by using the code chunk below.\nWe can examine how the constraints hold for destinations this time."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#doubly-constrained",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#doubly-constrained",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Doubly constrained",
+    "text": "Doubly constrained\nIn this section, we will fit a doubly constrained SIM by using the code chunk below.\nWe can examine how the constraints hold for destinations this time.\nNotice that there is a relatively greater improvement in the R^2 value."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#model-comparison",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#model-comparison",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Model comparison",
+    "text": "Model comparison\nAnother useful model performance measure for continuous dependent variable is Root Mean Squared Error. In this sub-section, you will learn how to use compare_performance() of performance package\nFirst of all, let us create a list called model_list by using the code chun below.\nNext, we will compute the RMSE of all the models in model_list file by using the code chunk below.\nThe print above reveals that doubly constrained SIM is the best model among all the four SIMs because it has the smallest RMSE value of 1487.111."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#visualising-fitted-values",
+    "href": "Hands-on_Ex/Hands-on_Ex11/Hands-on_Ex11.html#visualising-fitted-values",
+    "title": "Hands-on Exercise 11: Calibrating Spatial Interaction Models with R",
+    "section": "Visualising fitted values",
+    "text": "Visualising fitted values\nIn this section, you will learn how to visualise the observed values and the fitted values.\nFirstly we will extract the fitted values from each model by using the code chunk below.\nNext, we will join the values to SIM_data data frame.\nRepeat the same step by for Origin Constrained SIM (i.e. orcSIM)\nRepeat the same step by for Destination Constrained SIM (i.e. decSIM)\nRepeat the same step by for Doubly Constrained SIM (i.e. dbcSIM)\nNow, we will put all the graphs into a single visual for better comparison by using the code chunk below."
   }
 ]
